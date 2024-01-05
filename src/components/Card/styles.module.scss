@@ -1,0 +1,23 @@
+@use "../../scss/abstract/" as *;
+
+.sectionCard{
+    background-color: rgb(182, 182, 182);
+    border-radius: 4px;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+.h2Card{
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+.pCard{
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+.divBtnCard{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
