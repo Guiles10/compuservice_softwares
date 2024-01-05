@@ -1,0 +1,24 @@
+@use "../../scss/abstract/" as *;
+
+.lateralMenuMain{
+    background-color: rgb(143, 143, 143);
+    width: 20%;
+    height: 250px;
+}
+
+.pMenu{
+    padding: 5px;
+    font-size: 18px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+.pMenu:hover{
+    font-size: 19px;
+    font-weight: 700;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 15px;
+    cursor: pointer;
+}
