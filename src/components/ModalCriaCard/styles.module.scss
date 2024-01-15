@@ -1,4 +1,5 @@
-@use "../../../scss/abstract/" as *;
+@use "../../scss/abstract/" as *;
+
 
 .modal{
     position: fixed;
@@ -10,23 +11,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
-}
-.form{
-    border-radius: 8px;
-    max-width: 95%;
-    max-height: 90%;
-    overflow: auto;
 }
 .modalCard{
     background-color: white;
     border-radius: 8px;
     text-align: center;
     width: 700px;
-    max-width: 100%;
-
+    max-width: 95%;
+    max-height: 95%;
+    overflow-y: auto;
 }
-
 .divHeader{
     max-width: 100%;
     border-radius: 8px 8px 0 0;
@@ -37,11 +31,10 @@
     align-items: center;
     justify-content: space-between;
 }
-.title{
+.inputTitle{
     display: flex;
     justify-content: center;
-    font-size: 18px;
-    font-weight: 600;
+    padding: 8px;
 }
 .btnFecha{
     font-size: 14px;
@@ -169,10 +162,6 @@
         font-weight: 600;
     }
 }
-.newLabol{
-    color: green;
-}
-
 .divExcluir{
     display: flex;
     align-items: center;
@@ -181,8 +170,8 @@
 }
 
 
-.excluir{
-    color: red;
+.salvar{
+    color: green;
     padding: 8px;
     margin: 10
     px;

@@ -1,10 +1,10 @@
 @use "../../scss/abstract/" as *;
 
 .sectionCard{
-    background-color: rgb(182, 182, 182);
+    background-color: rgb(192, 192, 192);
     border-radius: 4px;
     margin-bottom: 5px;
-    padding: 5px;
+    padding: 8px;
 }
 .h2Card{
     font-size: 18px;
@@ -20,4 +20,17 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
+    padding: 4px 0;
+}
+.btnMov{
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px;
+    border-radius: 4px;
+}
+.btnEdit{
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px;
+    border-radius: 4px;
 }
