@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '../scss/main.scss'
-import { ProviderAtividade } from '@/context/context'
+import { SupProvider } from '@/context/sup.context'
+import { AuthProvider } from '@/context/auth.context'
+import { NextRouter } from 'next/router'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,15 +14,18 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode;
+  router: NextRouter;
 }
 
-export default function RootLayout({children}: RootLayoutProps) {
+export default function RootLayout({ children, router }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-          <ProviderAtividade>
+        <AuthProvider router={router}>
+          <SupProvider>
             {children}
-          </ProviderAtividade>
+          </SupProvider>
+        </AuthProvider>
         </body>
     </html>
   )

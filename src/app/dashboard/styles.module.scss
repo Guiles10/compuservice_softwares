@@ -1,0 +1,17 @@
+@use "../../scss/abstract/" as *;
+
+.main{
+    max-width: 1300px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.secBody{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.secSup{
+    width: 79%;
+    display: flex;
+}
