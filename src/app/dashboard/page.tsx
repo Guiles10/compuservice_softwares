@@ -14,8 +14,6 @@ import { AuthContext } from '@/context/auth.context';
 
 const Dashboard = () => {
 
-  const { } = useContext(AuthContext);
-
   const [selectedMenu, setSelectedMenu] = useState(null);
 
   const handleMenuClick = (menu: any) => {

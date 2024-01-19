@@ -11,19 +11,18 @@ export const ModalCriaCards = () => {
 
     const { setOpenModal, creatCardSup } = useContext(SupContext);
 
+    const [novaTarefa, setNovaTarefa] = useState('');
+    const [tarefas, setTarefas] = useState<string[]>([]);
+
     const { register, handleSubmit, formState: { errors } } = useForm<supCardSchemaType>({
         resolver: zodResolver(supCardSchema),
       });
     
     const onSubmit = (dataForm: iDataForm) => {
-        dataForm.tasks = tarefas;
-        creatCardSup(dataForm)
+        creatCardSup(dataForm, tarefas)
         setOpenModal(false)
     };
 
-
-    const [novaTarefa, setNovaTarefa] = useState('');
-    const [tarefas, setTarefas] = useState<string[]>([]);
     const adicionarTarefa = () => {
         if (novaTarefa.trim()) {
             setTarefas((prevTarefas) => [...prevTarefas, novaTarefa]);
@@ -44,19 +43,27 @@ export const ModalCriaCards = () => {
       return (
         <section className={styled.modal}>
             <div className={styled.modalCard}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form className={styled.form} onSubmit={handleSubmit(onSubmit)}>
                     <div className={styled.divHeader}>
-                        <div className={styled.divInput}>
-                            <input className={styled.input} id="title" type="text" {...register("title")} placeholder="Digite um título aqui"/>
+                        <div className={styled.divInputTitle}>
+                            <input className={styled.inputTitle} id="title" type="text" {...register("title")} placeholder="Digite o Titulo"/>
                             {errors.title?.message && ( <p className={styled.pError}>{errors.title.message}</p> )}
                         </div>
                         <button className={styled.btnFecha} onClick={() => setOpenModal(false)}>Fechar</button>
                     </div>
+                    <div className={styled.divSelect}>
+                        <p className={styled.pDesc}>Urgencia: </p>
+                        <select className={styled.select} id="opcoes" {...register('priority')}>
+                            <option value="Basica">Basica</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Urgente">Urgente</option>
+                            <option value="Muito Urgente">Muito Urgente</option>
+                        </select>
+                    </div>
                     <div className={styled.divDesc}>
                         <p className={styled.pDesc}>Descrição</p>
                         <div>
-                            <input className={styled.input} id="descriptin" type="text" {...register("description")} placeholder="Digite a descrição"/>
-                            {errors.description?.message && ( <p className={styled.pError}>{errors.description.message}</p> )}
+                            <textarea className={styled.textarea} id="descriptin" {...register("description")} placeholder="Digite a descrição"/>
                         </div>
                     </div>
                     <div className={styled.divTarefas}>
@@ -66,7 +73,7 @@ export const ModalCriaCards = () => {
                         <div className={styled.divInput}>
                             <div className={styled.divAddTarefa}>
                                 <input type="text" value={novaTarefa} onChange={(e) => setNovaTarefa(e.target.value)} placeholder="Digite a nova tarefa"/>
-                                <button type="button" onClick={adicionarTarefa}>criar</button>
+                                <button type="button" onClick={adicionarTarefa}>Criar</button>
                             </div>
                             <div className={styled.divUl}>
                                 <ul className={styled.ul}>
@@ -85,19 +92,10 @@ export const ModalCriaCards = () => {
                     <div className={styled.divDesc}>
                         <p className={styled.pDesc}>Solução</p>
                         <div>
-                            <input className={styled.input} id="solution" type="text" {...register("solution")} placeholder="Digite a solução"/>
-                            {errors.solution?.message && ( <p className={styled.pError}>{errors.solution.message}</p> )}
+                            <textarea className={styled.textarea} id="solution" {...register("solution")} placeholder="Digite a solução"/>
                         </div>
                     </div>
-                    <div>
-                        <select id="opcoes" {...register('priority')}>
-                            <option value="Muito Urgente">Muito Urgente</option>
-                            <option value="Urgente">Urgente</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Basica">Basica</option>
-                        </select>
-                    </div>
-                    <div className={styled.divExcluir}>
+                    <div className={styled.divSalvar}>
                         <button type='submit' className={styled.salvar}>Salvar</button>
                     </div>
                 </form>

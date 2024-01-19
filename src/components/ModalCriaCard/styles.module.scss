@@ -21,12 +21,19 @@
     max-height: 95%;
     overflow-y: auto;
 }
+.form{
+    border-radius: 8px;
+    max-height: 90%;
+    overflow: auto;
+}
+
+
+/********************************************HEADER**********************************************/
 .divHeader{
     max-width: 100%;
     border-radius: 8px 8px 0 0;
-    padding: 10px;
     background-color: rgb(220, 220, 220);
-
+    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -34,33 +41,37 @@
 .inputTitle{
     display: flex;
     justify-content: center;
-    padding: 8px;
+    width: 300px;
+    max-width: 95%;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+.pError{
+    display: flex;
+    margin: 5px 0;
+    font-size: 12px;
+    color: red;
 }
 .btnFecha{
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     padding: 5px;
     border-radius: 4px;
+    color: black;
+    border: 2px solid black;
 }
 .btnFecha:hover{
-    font-weight: 600;
     color: red;
-}
-/************************TIME******************************/
-.divTime{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-top: 5px;
-    >p{
-        font-size: 12px;
-    }
+    border: 2px solid red;
+    background-color: rgba(255, 0, 0, 0.1);
 }
 
-/************************DESCRICÃO******************************/
+/********************************************DESCRICÃO - SOLUÇÂO **********************************************/
 .divDesc{
+    padding: 8px;
     max-width: 100%;
-    padding: 5px 10px 15px 5px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -76,23 +87,24 @@
     border-radius: 4px;
 }
 .textarea{
+    font-size: 15px;
     width: 650px;
     max-width: 95%;
     height: 150px;
     resize: none;
     overflow-y: auto;
     padding: 8px;
+    border-radius: 4px;
     border: 1px solid black;
 }
+
+/********************************************TAREFAS**********************************************/
 .divTarefas{
+    padding: 8px;
     max-width: 100%;
-    padding: 0 10px;
     display: flex;
     flex-direction: column;
 }
-
-
-/************************TAREFAS******************************/
 .divTitleTarefas{
     max-width: 100%;
     margin-top: 8px;
@@ -101,17 +113,18 @@
     justify-content: space-between;
 }
 .divInput{
-    padding: 5px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 .divAddTarefa{
+    padding: 0 5px;
     display: flex;
     align-items: center;
     justify-content: center;
     input{
         padding: 8px;
+        border-radius: 4px;
         width: 400px;
     }
     button {
@@ -123,7 +136,7 @@
     }
     button:hover{
         color: green;
-        font-weight: 600;
+        font-weight: 500;
         border: 2px solid green;
     }
 }
@@ -145,7 +158,9 @@
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
 
     > div {
         display: flex;
@@ -160,6 +175,7 @@
     }
     > button:hover{
         font-weight: 600;
+        background-color: rgba(255, 0, 0, 0.1);
     }
 }
 .divExcluir{
@@ -170,24 +186,37 @@
 }
 
 
-.salvar{
-    color: green;
-    padding: 8px;
-    margin: 10
-    px;
-}
-.spanExcluir{
-    margin-right: 10px;
-    padding: 5px;
-    border: 1px dashed red;
+/********************************************SELECT**********************************************/
+.divSelect{
     display: flex;
-    flex-direction: column;
     align-items: center;
-    div{
-        width: 50%;
-        display: flex;
-        padding: 5px 0 0 0;
-        align-items: stretch;
-        justify-content: space-around;
-    }
+    flex-direction: row;
+    margin: 8px 0;
+    padding: 8px;
+}
+.select{
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 5px;
+    margin-bottom: 5px;
+    width: 150px;
+}
+
+
+/********************************************BOTÂO SALVAR**********************************************/
+.salvar{
+    font-size: 20px;
+    font-weight: 600;
+    color: green;
+    height: 50px;
+    margin: 10px;
+    border-radius: 4px;
+    width: 170px;
+    max-width: 90%;
+    border: 2px solid green;
+}
+.salvar:hover{
+    font-size: 24px;
+    font-weight: 700;
+    background-color: rgba(0, 128, 0, 0.3);
 }
