@@ -12,13 +12,16 @@ export const Header = () => {
         <header className={styled.header} id="header-top">
             <section className={styled.secHeader}>
                 <figure className={styled.figureLogo}>
-                    <Image src={Logo} width={180} height={100} alt="Logo Compuservice"/>
+                    <Image src={Logo} width={200} height={120} alt="Logo Compuservice"/>
                 </figure>
-                <button onClick={() => logout()}>Sair</button>
                 <div className={styled.divInfo}>
-                    <h2 className={styled.name}>{infoUser?.name}</h2>
-                    <p className={styled.cargo}>{infoUser?.function}</p>
-                    <p className={styled.email}>{infoUser?.email}</p>
+                    <div>
+                        <h2 className={styled.name}>{infoUser?.name}</h2>
+                        <p className={styled.email}>{infoUser?.email}</p>
+                        <p className={styled.cargo}>{infoUser?.function}</p>
+                    </div>
+                    <button className={styled.btnSair} onClick={() => logout()}>Sair</button>
+
                 </div>
             </section>
         </header>

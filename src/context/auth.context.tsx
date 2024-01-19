@@ -65,16 +65,17 @@ export const AuthProvider = ({ children}: iAuthProviderChildren & { router: Next
       toast.error("E-mail ou senha incorreto!");
     }
   }
-  
+
+  const cookies = parseCookies();
+  const token = cookies['@token'];
+  const userId = cookies['@id'];
+ 
   const logout = () => {
     destroyCookie(null, '@token');
     destroyCookie(null, '@id');
     router.push('/');
   };
 
-  const cookies = parseCookies();
-  const token = cookies['@token'];
-  const userId = cookies['@id'];
 
   useEffect(() => {
     const findUser = async (id: string) => {
@@ -89,12 +90,22 @@ export const AuthProvider = ({ children}: iAuthProviderChildren & { router: Next
         console.error(error);
       }
     };
-
     if (userId) {
       findUser(userId);
     }
   }, [token]);
 
+
+  useEffect(() => {
+    const protectRoutes = () => {
+      if (!token) {
+        router.push("/");
+      } else {
+        router.push("/dashboard");
+      }
+    };
+  protectRoutes()
+  }, []);
 
 
   return (
