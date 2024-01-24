@@ -18,7 +18,7 @@ export interface iUser {
   id: string
   isAdmin: boolean
   name: string
-};
+}
 interface iInfoUserToken {
   user: iUser;
   token: string;
@@ -29,11 +29,13 @@ export interface iInfoLogin {
 }
 
 interface iProviderValue {
+  allUser: iUser[] | null
   token: string;
+  userId: string;
   loginFunction(infoLogin: iInfoLogin): Promise<void>;
   logout: () => void
   infoUser: iUser | null
-
+  protectRoutes: () => void
 }
 
 export const AuthProvider = ({ children}: iAuthProviderChildren & { router: NextRouter }) => {
@@ -46,12 +48,12 @@ export const AuthProvider = ({ children}: iAuthProviderChildren & { router: Next
       const response = await axios.post('http://localhost:3001/login', infoLogin);
 
       setCookie(null, "@token", response.data.token, {
-        maxAge: 60 * 5000,
+        maxAge: 60 * 610,
         path: "/",
       });
   
       setCookie(null, "@id", response.data.user.id, {
-        maxAge: 60 * 5000,
+        maxAge: 60 * 610,
         path: "/",
       });
       
@@ -69,12 +71,28 @@ export const AuthProvider = ({ children}: iAuthProviderChildren & { router: Next
   const cookies = parseCookies();
   const token = cookies['@token'];
   const userId = cookies['@id'];
- 
+
   const logout = () => {
     destroyCookie(null, '@token');
     destroyCookie(null, '@id');
-    router.push('/');
+
+    router.push("/");
+    window.location.reload();
   };
+
+
+  const [allUser, setAllUser] = useState<iUser[]| null>(null);
+  const userAll = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/users/`);
+      setAllUser(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    userAll()
+  }, [token]);
 
 
   useEffect(() => {
@@ -96,25 +114,27 @@ export const AuthProvider = ({ children}: iAuthProviderChildren & { router: Next
   }, [token]);
 
 
-  useEffect(() => {
-    const protectRoutes = () => {
-      if (!token) {
-        router.push("/");
-      } else {
+  const protectRoutes = () => {
+    if (!token) {
+      router.push("/");
+    } else {
+      setTimeout(() => {
         router.push("/dashboard");
-      }
-    };
-  protectRoutes()
-  }, []);
-
+      }, 2000);
+    }
+  };
+    protectRoutes()
 
   return (
     <AuthContext.Provider
       value={{
+        allUser,
         token,
+        userId,
         loginFunction,
         logout,
         infoUser,
+        protectRoutes
       }}
     >
       {children}

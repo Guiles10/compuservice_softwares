@@ -10,16 +10,22 @@
     padding: 15px;
     border-radius: 6px;
 }
-.divTitle{
+.divTitleHeader{
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
+    justify-content: space-between;
+    width: 100%;
+}
+.divTitle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .h1Title{
-    font-size: 22px;
+    font-size: 30px;
     font-weight: 600;
-    margin-left: 15px;
-    margin-right: 25px;
+    margin-bottom: 16px;
 }
 .divSup{
     display: flex;
@@ -54,5 +60,52 @@
     border-radius: 4px;
 }
 .btnCriar:hover{
+    background-color: rgb(210, 210, 210);
+}
+
+
+
+.divShare{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 35px;
+    background-color: rgb(210, 210, 210);
+    border-radius: 4px;
+    padding: 5px;
+}
+.pShare{
+    font-size: 18px;
     font-weight: 600;
+    margin-bottom: 4px;
+}
+.divInputs{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.divShareInput{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 4px;
+    > p {
+        margin-bottom: 4px;
+        font-size: 14px;
+    }
+}
+.inputShare{
+    padding: 7px;
+    border-radius: 4px;
+    border: 1px solid black;
+}
+.btnShare{
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 20px;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+.btnShare:hover{
+    background-color: rgb(210, 210, 210);
 }

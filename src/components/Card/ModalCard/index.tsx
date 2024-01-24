@@ -5,10 +5,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { supEditCardSchema, supEditCardSchemaType } from '@/schema/supCard.schema';
 import { Dispatch, SetStateAction } from 'react';
+import { AuthContext } from '@/context/auth.context';
 
 
 export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCardSup, setOpenModalEdit: Dispatch<SetStateAction<boolean>> }) => {
 
+    const { allUser } = useContext(AuthContext);
     const { excluirSupCard, editarCard, excluirTask } = useContext(SupContext);
 
     
@@ -45,13 +47,47 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCardSu
         setTasksDB(novaListaTarefas);
     };
 
+
+    
+    const [workersApi, setWorkersApi] = useState<any | []>(infoCard.workers! || []);
+    const [selectedUserIds, setSelectedUserIds] = useState<any>([]);
+    
+    const handleUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const userId = event.target.value;
+        if (userId !== '') {
+            if (!selectedUserIds.includes(userId)) {
+                if (!workersApi.some((user: any) => user.id === userId)) {
+                    setSelectedUserIds([...selectedUserIds, userId]);
+                }
+            }
+        }
+    };
+    
+
+    const handleRemoveUser = (userIdToRemove: string) => {
+        const updatedSelectedUserIds = selectedUserIds.filter((id: any) => id !== userIdToRemove);
+        console.log(updatedSelectedUserIds)
+        setSelectedUserIds(updatedSelectedUserIds);
+    };
+
+    const handleRemoveUserAPI = (userIdToRemove: string) => {
+        const updatedWorkersApi: any = workersApi.filter((user: any) => user.id !== userIdToRemove);
+        console.log(updatedWorkersApi)
+        setWorkersApi(updatedWorkersApi);
+    }
+
     const { register, handleSubmit, formState: { errors } } = useForm<supEditCardSchemaType>({
         resolver: zodResolver(supEditCardSchema),
     });
-    const onSubmit = (dataForm: iDataForm) => {
-        editarCard(infoCard.id, dataForm, tasksDB)
-        setOpenModalEdit(false)
+
+    const onSubmit = (form: iDataForm) => {
+        const allIds = workersApi.map((user: any) => user.id);
+        const combinedArray = [...allIds, ...selectedUserIds];
+        const dataForm = { ...form, workers: combinedArray };
+        editarCard(infoCard.id, dataForm, tasksDB);
+        setOpenModalEdit(false);
     };
+
 
     return (
         <section className={styled.modal}>
@@ -65,15 +101,48 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCardSu
                         <h3 className={styled.h3Name}>{infoCard.user?.name}</h3>
                         <h3 className={styled.h3Data}>{infoCard.createdAt}</h3>
                     </div>
+
                     <div className={styled.divSelect}>
-                        <p className={styled.pDesc}>Urgencia: </p>
-                        <select className={styled.select} id="opcoes" {...register('priority')} defaultValue={infoCard.priority || 'Normal'}>
-                            <option value="Basica">Basica</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Urgente">Urgente</option>
-                            <option value="Muito Urgente">Muito Urgente</option>
-                        </select>
+                        <div className={styled.divPriority}>
+                            <p className={styled.pDesc}>Prioridade: </p>
+                            <select className={styled.select} id="opcoes" {...register('priority')} defaultValue={infoCard.priority || 'Normal'}>
+                                <option value="Basica">Basica</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Urgente">Urgente</option>
+                                <option value="Muito Urgente">Muito Urgente</option>
+                            </select>
+                        </div>
+
+                        <div className={styled.divWorkes}>
+                            <div className={styled.divWorkesUser}>
+                                <p>Usuário:</p>
+                                <div className={styled.divUserSelect}>
+                                    <select className={styled.select} onBlur={handleUserChange}>
+                                        <option value=''>-</option>
+                                        {allUser && allUser.map((user) => (
+                                            <option key={user.id} value={user.id}>{user.name}</option>
+                                            ))}
+                                    </select>
+                                    <button type='button'>Add</button>
+                                </div>
+                            </div>
+                            <div className={styled.divWorkesUserAPI}>
+                                {workersApi.map((user: any) => (
+                                    <div key={user.id} className={styled.divNameWorkes}>
+                                        <p>{user.name}</p>
+                                        <button type='button' onClick={() => handleRemoveUserAPI(user.id)}>X</button>
+                                    </div>
+                                ))}
+                                {selectedUserIds.map((userId: any) => (
+                                    <div key={userId} className={styled.divNameWorkes}>
+                                        {allUser!.find((user: any) => user.id === userId)?.name}
+                                        <button type='button' onClick={() => handleRemoveUser(userId)}>X</button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
+
                     <div className={styled.divDesc}>
                         <p className={styled.pDesc}>Descrição</p>
                         <textarea className={styled.textarea} id="descriptin" {...register("description")} defaultValue={infoCard.description || ''}></textarea>
