@@ -39,9 +39,7 @@
 }
 .title{
     display: flex;
-    justify-content: center;
     max-width: 90%;
-    padding: 10px;
     font-size: 16px;
     font-weight: 600;
     border-radius: 4px;
@@ -80,16 +78,60 @@
 /********************************************SELECT**********************************************/
 .divSelect{
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    flex-direction: row;
     margin: 8px 0;
     padding: 8px;
+}
+.divPriority{
+    display: flex;
+    flex-direction: column;
+}
+
+.divWorkes{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 400px;
+
+    .divWorkesUser{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .divUserSelect{
+            display: flex;
+            align-items: center;
+
+            > button{
+                border-radius: 4px;
+                margin-left: 5px;
+                padding: 3px;
+            }
+        }
+    }
+    .divWorkesUserAPI{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-right: 10px;
+
+        .divNameWorkes{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgb(220, 220, 220);;
+            border-radius: 4px;
+            padding: 3px;
+            margin-top: 3px;
+            width: 100%;
+        }
+    }
 }
 .select{
     font-size: 14px;
     border-radius: 4px;
     padding: 5px;
-    margin-bottom: 5px;
     width: 150px;
 }
 
@@ -297,3 +339,9 @@
 .btnNao:hover{
     background-color: rgba(128, 128, 128, 0.3);
 }
+
+
+
+
+
+

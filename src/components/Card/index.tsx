@@ -34,10 +34,11 @@ export const Cards = ({ item }: { item: iCardSup }) => {
                 </div>
                 <div className={styled.divNomeData}>
                     <h3 className={styled.h3Name}>{item.user?.name}</h3>
-                    <h3 className={styled.h3Data}>{item.createdAt}</h3>
+                    <h3 className={styled.h3Data}>Criado: {item.createdAt!.slice(0, 10)} - {item.createdAt!.slice(10, -3)}</h3>
+                    <h3 className={styled.h3Data}>Editado: {item.updatedAt!.slice(0, 10)} - {item.updatedAt!.slice(10, -3)}</h3>
                 </div>
                 <p className={styled.pCard}>
-                    {item.description && item.description.length > 120 ? `${item.description.substring(0, 120)}...` : item.description}
+                    {item.description && item.description.length > 110 ? `${item.description.substring(0, 110)}...` : item.description}
                 </p>
                 <div className={styled.divBtnCard}>
                     <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item, item.id)}>&lt;&lt;</button>

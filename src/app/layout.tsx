@@ -4,6 +4,7 @@ import '../scss/main.scss'
 import { SupProvider } from '@/context/sup.context'
 import { AuthProvider } from '@/context/auth.context'
 import { NextRouter } from 'next/router'
+import { CommentProvider } from '@/context/comment.context'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 interface RootLayoutProps {
   children: React.ReactNode;
   router: NextRouter;
-}
+} 
 
 export default function RootLayout({ children, router }: RootLayoutProps) {
   return (
@@ -23,7 +24,9 @@ export default function RootLayout({ children, router }: RootLayoutProps) {
       <body className={inter.className}>
         <AuthProvider router={router}>
           <SupProvider>
-            {children}
+            <CommentProvider>
+              {children}
+            </CommentProvider>
           </SupProvider>
         </AuthProvider>
         </body>

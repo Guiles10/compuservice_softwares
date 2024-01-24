@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Login() {
   
-  const { loginFunction } = useContext(AuthContext);
+  const { loginFunction, protectRoutes } = useContext(AuthContext);
 
   const { register, handleSubmit, formState: { errors }} = useForm<loginSchemaType>({
     mode: "onBlur",

@@ -2,8 +2,8 @@
 
 import axios from "axios";
 import { parseCookies } from "nookies";
-import React, { createContext, useEffect, useState } from "react";
-import { iUser } from "./auth.context";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { AuthContext, iUser } from "./auth.context";
 
 export const SupContext = createContext({} as iProviderValue);
 interface iAuthProviderChildren {
@@ -22,13 +22,15 @@ export interface iCardSup {
   updatedAt?: string | null
   userId?: string
   user: iUser
+  workers?: String[]
 }
 export interface iDataForm {
   title?: String,
   descriptin?: String,
   solution?: String,
   priority?: String,
-  tasks?: String[]
+  tasks?: String[],
+  workers?: String[],
 }
 export interface iTask{
   id: string
@@ -60,9 +62,7 @@ interface iProviderValue {
 
 export const SupProvider = ({ children }: iAuthProviderChildren) => {
 
-  const cookies = parseCookies();
-  const token = cookies['@token'];
-  const userId = cookies['@id'];
+  const { userId, token} = useContext(AuthContext);
 
   const [allCardsSup, setAllCardsSup] = useState<iCardSup[]>([])
 
@@ -99,6 +99,7 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
         }
         responseCard.data.tasks = createTesks
         setAllCardsSup([...allCardsSup, responseCard.data]);
+        getAllCardsSup()
       } catch (error) {
         console.error(error);
       }
