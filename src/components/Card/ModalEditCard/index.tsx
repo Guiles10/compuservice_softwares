@@ -46,8 +46,6 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCardSu
         }
         setTasksDB(novaListaTarefas);
     };
-
-
     
     const [workersApi, setWorkersApi] = useState<any | []>(infoCard.workers! || []);
     const [selectedUserIds, setSelectedUserIds] = useState<any>([]);
@@ -62,7 +60,6 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCardSu
             }
         }
     };
-    
 
     const handleRemoveUser = (userIdToRemove: string) => {
         const updatedSelectedUserIds = selectedUserIds.filter((id: any) => id !== userIdToRemove);

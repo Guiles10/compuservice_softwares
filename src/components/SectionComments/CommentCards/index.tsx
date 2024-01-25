@@ -6,9 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '@/context/auth.context';
 
-export const CardComment = ({ item }: { item: iComment }) => {
+export const CommentCard = ({ item }: { item: iComment }) => {
   
-  const { userId, token} = useContext(AuthContext);
+  const { userId, token } = useContext(AuthContext);
   const { editarComment, excluirComment} = useContext(CommentContext);
 
 

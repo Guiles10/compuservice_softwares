@@ -1,7 +1,6 @@
 'use client'
 
 import axios from "axios";
-import { parseCookies } from "nookies";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext, iUser } from "./auth.context";
 
@@ -48,8 +47,8 @@ interface iProviderValue {
   creatCardSup: (dataForm: iDataForm, tarefas: string[]) => Promise<void>
   getAllCardsSup: () => Promise<void>
 
-  moveCard: (card: iCardSup, idCard: string) => void
-  moveCardReves: (card: iCardSup, idCard: string) => Promise<void>
+  moveCard: (cardStatus: String, idCard: string) => void
+  moveCardReves: (cardStatus: String, idCard: string) => Promise<void>
 
   openModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -105,16 +104,16 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
       }
     };
 
-    const moveCard = async (card: iCardSup, idCard: string) => {
+    const moveCard = async (cardStatus: String, idCard: string) => {
       let novoStatus = ''
-      if (card.status === 'A Fazer') {
+      if (cardStatus === 'A Fazer') {
         novoStatus = 'Em Andamento'
-      } else if (card.status === 'Em Andamento') {
+      } else if (cardStatus === 'Em Andamento') {
         novoStatus = 'Concluido'
-      } else if (card.status === 'Concluido') {
+      } else if (cardStatus === 'Concluido') {
         return
       }
-      const cardAtualizado = { ...card, status: novoStatus }
+      const cardAtualizado = {status: novoStatus }
         try {
           const response = await axios.patch(`http://localhost:3001/suport_card/${idCard}`, cardAtualizado, {
               headers: {
@@ -128,16 +127,16 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
           console.error(error)
         }
     }
-    const moveCardReves = async (card: iCardSup, idCard: string) => {
+    const moveCardReves = async (cardStatus: String, idCard: string) => {
       let novoStatus = ''
-      if (card.status === 'Concluido') {
+      if (cardStatus === 'Concluido') {
         novoStatus = 'Em Andamento'
-      } else if (card.status === 'Em Andamento') {
+      } else if (cardStatus === 'Em Andamento') {
         novoStatus = 'A Fazer'
-      } else if (card.status === 'A Fazer') {
+      } else if (cardStatus === 'A Fazer') {
         return
       }
-      const cardAtualizado = { ...card, status: novoStatus };
+      const cardAtualizado = {status: novoStatus };
         try {
           const response = await axios.patch(`http://localhost:3001/suport_card/${idCard}`, cardAtualizado, {
               headers: {
