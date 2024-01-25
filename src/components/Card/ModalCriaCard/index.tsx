@@ -5,8 +5,6 @@ import { supCardSchema, supCardSchemaType } from '@/schema/supCard.schema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-
-
 export const ModalCriaCards = () => {
 
     const { setOpenModal, creatCardSup } = useContext(SupContext);

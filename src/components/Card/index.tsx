@@ -1,10 +1,10 @@
 
 import styled from './styles.module.scss'
 import { useContext, useEffect, useState } from 'react';
-import { ModalEditCard } from './ModalCard';
+import { ModalEditCard } from './ModalEditCard';
 import { SupContext, iCardSup } from '@/context/sup.context';
 
-export const Cards = ({ item }: { item: iCardSup }) => {
+export const SupCards = ({ item }: { item: iCardSup }) => {
 
     const { moveCardReves, moveCard } = useContext(SupContext);
 
@@ -41,9 +41,9 @@ export const Cards = ({ item }: { item: iCardSup }) => {
                     {item.description && item.description.length > 110 ? `${item.description.substring(0, 110)}...` : item.description}
                 </p>
                 <div className={styled.divBtnCard}>
-                    <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item, item.id)}>&lt;&lt;</button>
+                    <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item.status!, item.id)}>&lt;&lt;</button>
                     <button className={styled.btnEdit} onClick={() => setOpenModalEdit(true)}>Editar</button>
-                    <button className={styled.btnMov} type='button' onClick={() => moveCard(item, item.id)} >&gt;&gt;</button>
+                    <button className={styled.btnMov} type='button' onClick={() => moveCard(item.status!, item.id)} >&gt;&gt;</button>
                 </div>
             </div>
             {openModalEdit && <ModalEditCard infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}

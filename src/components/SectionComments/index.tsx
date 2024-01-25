@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import styled from './styles.module.scss';
 import { CommentContext, iComment } from '@/context/comment.context';
-import { CardComment } from '../CardComments';
+import { CommentCard } from './CommentCards';
 import { commentSchema, commentSchemaType } from '@/schema/comment.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -90,7 +90,7 @@ const onSubmit = (dataForm: any) => {
           </div>
         </form>
       )}
-      {sortedComments.map((item: iComment) => (<CardComment key={item.id} item={item} />))}
+      {sortedComments.map((item: iComment) => (<CommentCard key={item.id} item={item} />))}
     </section>
   );
 };
