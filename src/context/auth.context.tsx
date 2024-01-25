@@ -80,7 +80,6 @@ export const AuthProvider = ({ children}: iAuthProviderChildren & { router: Next
     window.location.reload();
   };
 
-
   const [allUser, setAllUser] = useState<iUser[]| null>(null);
   const userAll = async () => {
     try {

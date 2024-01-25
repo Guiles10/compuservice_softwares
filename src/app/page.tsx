@@ -43,7 +43,7 @@ export default function Login() {
       <section className={styled.secLogin}>
         <div className={styled.divLogin}>
             <figure className={styled.figure}>
-                <Image src={Logo} width={180} height={100} alt="Logo Compuservice"/>
+                <Image src={Logo} width={240} height={150} alt="Logo Compuservice"/>
             </figure>
             <form className={styled.form} onSubmit={handleSubmit(loginFunction)}>
                 <h1 className={styled.h1Login}>Login</h1>

@@ -20,7 +20,8 @@
 .divInfo{
     display: flex;
     align-items: center;
-    width: 70%;
+    justify-content: space-between;
+    width: 100%;
     margin-left: 15px;
     .divName{
         .pName{
@@ -30,10 +31,13 @@
         }
         .pData{
             font-size: 12px;
+            margin: 0 10px;
+        }
+        > div {
+            display: flex;
         }
     }
     .divDate{
-        margin-left: 35px;
         .pPriority{
             font-size: 14px;
         }
@@ -44,6 +48,7 @@
 .divBtn{
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     padding: 5px 15px;
 
     .btnEdita{
@@ -73,7 +78,6 @@
     }   
 }
 .spanExcluir{
-    margin-top: 3px;
     padding: 3px;
     border: 1px dashed red;
     display: flex;
@@ -128,14 +132,14 @@
         margin-right: 15px;
         padding: 3px;
         width: 80px;
-        border: 2px solid rgba(0, 0, 0, 0.5);
+        border: 2px solid rgba(0, 128, 0);
     }
     .btnCancelar{
         font-size: 16px;
         font-weight: 600;
         padding: 3px;
         width: 80px;
-        border: 2px solid rgba(0, 0, 0, 0.5);
+        border: 2px solid rgba(128, 0, 0);
     }
     .btnSalvar:hover{
         border: 2px solid rgba(0, 128, 0, 0.7);

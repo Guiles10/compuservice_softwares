@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import styled from './styles.module.scss';
 import { SupContext } from '@/context/sup.context';
-import { ModalCriaCards } from '../Card/ModalCriaCard';
-import { SupCards } from '../Card';
 import { iUser } from '@/context/auth.context';
+import { ModalCriaCards } from './ModalCriaCard';
+import { SupCards } from './SupCard';
 
 interface iPropity {
   'Muito Urgente': number;
@@ -27,6 +27,7 @@ interface iCardSupPropity {
 }
 
 export const SectionSup = () => {
+
   const { allCardsSup, openModal, setOpenModal } = useContext(SupContext);
   const [filter, setFilter] = useState({
     date: '',

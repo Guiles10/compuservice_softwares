@@ -47,8 +47,8 @@ interface iProviderValue {
   creatCardSup: (dataForm: iDataForm, tarefas: string[]) => Promise<void>
   getAllCardsSup: () => Promise<void>
 
-  moveCard: (cardStatus: String, idCard: string) => void
-  moveCardReves: (cardStatus: String, idCard: string) => Promise<void>
+  moveCard: (item: iCardSup, idCard: string) => void
+  moveCardReves: (item: iCardSup, idCard: string) => Promise<void>
 
   openModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -104,16 +104,17 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
       }
     };
 
-    const moveCard = async (cardStatus: String, idCard: string) => {
+    const moveCard = async (item: iCardSup, idCard: string) => {
       let novoStatus = ''
-      if (cardStatus === 'A Fazer') {
+      if (item.status === 'A Fazer') {
         novoStatus = 'Em Andamento'
-      } else if (cardStatus === 'Em Andamento') {
+      } else if (item.status === 'Em Andamento') {
         novoStatus = 'Concluido'
-      } else if (cardStatus === 'Concluido') {
+      } else if (item.status === 'Concluido') {
         return
       }
-      const cardAtualizado = {status: novoStatus }
+      const cardAtualizado = { ...item, status: novoStatus };
+
         try {
           const response = await axios.patch(`http://localhost:3001/suport_card/${idCard}`, cardAtualizado, {
               headers: {
@@ -121,22 +122,22 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
               },
             }
           );
-          setAllCardsSup([...allCardsSup, response.data]);
+          // setAllCardsSup([...allCardsSup, response.data]);
           getAllCardsSup()
         } catch (error) {
           console.error(error)
         }
     }
-    const moveCardReves = async (cardStatus: String, idCard: string) => {
+    const moveCardReves = async (item: iCardSup, idCard: string) => {
       let novoStatus = ''
-      if (cardStatus === 'Concluido') {
+      if (item.status === 'Concluido') {
         novoStatus = 'Em Andamento'
-      } else if (cardStatus === 'Em Andamento') {
+      } else if (item.status === 'Em Andamento') {
         novoStatus = 'A Fazer'
-      } else if (cardStatus === 'A Fazer') {
+      } else if (item.status === 'A Fazer') {
         return
       }
-      const cardAtualizado = {status: novoStatus };
+      const cardAtualizado = {... item, status: novoStatus }
         try {
           const response = await axios.patch(`http://localhost:3001/suport_card/${idCard}`, cardAtualizado, {
               headers: {
@@ -144,7 +145,7 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
               },
             }
           );
-          setAllCardsSup([...allCardsSup, response.data]);
+          // setAllCardsSup([...allCardsSup, response.data]);
           getAllCardsSup()
         } catch (error) {
           console.error(error);

@@ -1,12 +1,14 @@
 
 import styled from './styles.module.scss'
 import { useContext, useEffect, useState } from 'react';
-import { ModalEditCard } from './ModalEditCard';
+import { ModalEditCard } from '../ModalEditCard';
 import { SupContext, iCardSup } from '@/context/sup.context';
+import { AuthContext } from '@/context/auth.context';
 
 export const SupCards = ({ item }: { item: iCardSup }) => {
 
     const { moveCardReves, moveCard } = useContext(SupContext);
+    const { userId } = useContext(AuthContext);
 
     const [openModalEdit, setOpenModalEdit] = useState(false); 
 
@@ -23,6 +25,13 @@ export const SupCards = ({ item }: { item: iCardSup }) => {
         }
     }; 
 
+    const isWorker = item.workers && item.workers.some((worker: any) => worker.id === userId);
+    const isOwner = item.userId === userId;
+    const authorized = isWorker || isOwner;
+
+    const idsDosTrabalhadores = item.workers!.map((worker: any) => worker.id);
+    const AjusteItem = {...item, workers: idsDosTrabalhadores}
+    
     return (
         <section className={styled.sectionCard} id="header-top">
             <div  className={styled.divCard}>
@@ -40,11 +49,17 @@ export const SupCards = ({ item }: { item: iCardSup }) => {
                 <p className={styled.pCard}>
                     {item.description && item.description.length > 110 ? `${item.description.substring(0, 110)}...` : item.description}
                 </p>
-                <div className={styled.divBtnCard}>
-                    <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item.status!, item.id)}>&lt;&lt;</button>
-                    <button className={styled.btnEdit} onClick={() => setOpenModalEdit(true)}>Editar</button>
-                    <button className={styled.btnMov} type='button' onClick={() => moveCard(item.status!, item.id)} >&gt;&gt;</button>
-                </div>
+                {!authorized ? (
+                    <div className={styled.divBtnCard}>
+                        <button className={styled.btnEdit} onClick={() => setOpenModalEdit(true)}>Visualizar</button>
+                    </div>
+                ): (
+                    <div className={styled.divBtnCard}>
+                        <button className={styled.btnMov} type='button' onClick={() => moveCardReves(AjusteItem, item.id)}>&lt;&lt;</button>
+                        <button className={styled.btnEdit} onClick={() => setOpenModalEdit(true)}>Visualizar/Editar</button>
+                        <button className={styled.btnMov} type='button' onClick={() => moveCard(AjusteItem, item.id)} >&gt;&gt;</button>
+                    </div>
+                )}
             </div>
             {openModalEdit && <ModalEditCard infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
         </section>
