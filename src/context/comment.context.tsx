@@ -31,7 +31,7 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
 
   const { userId, token} = useContext(AuthContext);
 
-    const [allCommentsSup, setAllCommentsSup] = useState<iComment[]>([])
+  const [allCommentsSup, setAllCommentsSup] = useState<iComment[]>([])
 
     const getAllComments = async () => {
       try {
@@ -62,7 +62,6 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
         const response = await axios.patch(`http://localhost:3001/comments/${itemId}`, dataForm, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log(response)
       } catch (error) {
         console.error(error);
       }

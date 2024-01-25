@@ -17,7 +17,7 @@
     flex-direction: column;
     border-radius: 16px;
     margin: 0 auto;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 .figure{
     display: flex;
@@ -29,7 +29,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
 }
 .h1Login{
     font-size: 22px;
@@ -48,19 +48,34 @@
     margin-top: 15px;
 }
 .input{
+    margin-left: 10px;
     font-size: 18px;
     font-weight: 500;
     padding: 8px;
     border-radius: 6px;
+    border: 1px solid blue;
+}
+.input:focus{
+    border: 2px solid blue; /* Altera a borda ao focar */
+    outline: none; /* Remove a borda padrão ao focar */
+    box-shadow: 0 0 5px blue; /* Adiciona uma sombra ao focar */
 }
 .btnLogar{
     margin-top: 35px;
-    width: 100%;
+    width: 50%;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 600;
     padding: 8px;
     border-radius: 6px;
+    color: green;
+    border: 2px solid green;
 }
+.btnLogar:hover{
+    font-weight: 700;
+    background-color: rgba(0, 128, 0, 0.2);
+    box-shadow: 0 0 5px green;
+}
+
 .pError{
     color: red;
     font-size: 14px;
