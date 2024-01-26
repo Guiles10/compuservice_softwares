@@ -1,0 +1,129 @@
+@use "../../scss/abstract/" as *;
+
+
+.secSup{
+    background-color: rgb(235, 233, 233);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    padding: 15px;
+    border-radius: 6px;
+}
+.divTitleHeader{
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    justify-content: space-between;
+    width: 100%;
+}
+.divTitle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.h1Title{
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+.divSup{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.divTarefa{
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(240, 240, 240);
+    border-radius: 6px;
+    box-shadow: 9px 14px 31px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    > h1{
+        display: flex;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 600;
+        padding: 8px 0;
+        margin-bottom: 15px;
+        background-color: rgb(210, 210, 210);
+    }
+}
+
+.btnCriar{
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 20px;
+    border-radius: 4px;
+}
+.btnCriar:hover{
+    background-color: rgb(210, 210, 210);
+}
+
+.divShare{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 35px;
+    background-color: rgb(210, 210, 210);
+    border-radius: 4px;
+    padding: 5px;
+}
+.pShare{
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.divInputs{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.divShareInput{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 4px;
+    > p {
+        margin-bottom: 4px;
+        font-size: 14px;
+    }
+}
+.inputShare{
+    padding: 7px;
+    border-radius: 4px;
+    border: 1px solid black;
+}
+.btnShare{
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 20px;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+.btnShare:hover{
+    background-color: rgb(210, 210, 210);
+}
+
+
+@media (max-width: 1248px) {
+    .divTarefa{
+        width: 280px;
+    }
+}
+@media (max-width: 1165px) {
+    .divTarefa{
+        width: 240px;
+    }
+}
+@media (max-width: 1024px) {
+    .divTarefa{
+        width: 230px;
+    }
+    .divInputs{
+        flex-direction: column;
+    }
+}
