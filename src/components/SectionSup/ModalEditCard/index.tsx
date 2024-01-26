@@ -99,6 +99,7 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCardSu
                     <div className={styled.divNomeData}>
                         <h3 className={styled.h3Name}>{infoCard.user?.name}</h3>
                         <h3 className={styled.h3Data}>{infoCard.createdAt}</h3>
+                        <h3 className={styled.h3Data}>{infoCard.updatedAt}</h3>
                     </div>
                     {!authorized && (
                         <p className={styled.pAuthorized}>Você não é autorizado a fazer edições</p>

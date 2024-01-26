@@ -63,16 +63,16 @@ const onSubmit = (dataForm: any) => {
           <p className={styled.pShare}>Filtro</p>
           <div className={styled.divInputs}>
             <div className={styled.divShareInput}>
-              <p>Data:</p>
-              <input  placeholder="Digite uma Data" value={filter.date} onChange={(e) => setFilter({ ...filter, date: e.target.value })}/>
+              <p>Comentário:</p>
+              <input placeholder="Digite um Comentário" value={filter.comment} onChange={(e) => setFilter({ ...filter, comment: e.target.value })}/>
             </div>
             <div className={styled.divShareInput}>
               <p>Criador:</p>
               <input  placeholder="Digite um Nome" value={filter.creator} onChange={(e) => setFilter({ ...filter, creator: e.target.value })}/>
             </div>
             <div className={styled.divShareInput}>
-              <p>Comentário:</p>
-              <input placeholder="Digite um Comentário" value={filter.comment} onChange={(e) => setFilter({ ...filter, comment: e.target.value })}/>
+              <p>Data:</p>
+              <input  placeholder="Digite uma Data" value={filter.date} onChange={(e) => setFilter({ ...filter, date: e.target.value })}/>
             </div>
           </div>
         </div>

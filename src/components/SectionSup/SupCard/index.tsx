@@ -43,20 +43,20 @@ export const SupCards = ({ item }: { item: iCardSup }) => {
                 </div>
                 <div className={styled.divNomeData}>
                     <h3 className={styled.h3Name}>{item.user?.name}</h3>
-                    <h3 className={styled.h3Data}>Criado: {item.createdAt!.slice(0, 10)} - {item.createdAt!.slice(10, -3)}</h3>
-                    <h3 className={styled.h3Data}>Editado: {item.updatedAt!.slice(0, 10)} - {item.updatedAt!.slice(10, -3)}</h3>
+                    <h3 className={styled.h3Data}>{item.createdAt!.slice(0, 10)} - {item.createdAt!.slice(10, -3)}</h3>
+                    {/* <h3 className={styled.h3Data}>Editado: {item.updatedAt!.slice(0, 10)} - {item.updatedAt!.slice(10, -3)}</h3> */}
                 </div>
-                <p className={styled.pCard}>
+                {/* <p className={styled.pCard}>
                     {item.description && item.description.length > 110 ? `${item.description.substring(0, 110)}...` : item.description}
-                </p>
+                </p> */}
                 {!authorized ? (
                     <div className={styled.divBtnCard}>
-                        <button className={styled.btnEdit} onClick={() => setOpenModalEdit(true)}>Visualizar</button>
+                        <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)}>Visualizar</button>
                     </div>
                 ): (
                     <div className={styled.divBtnCard}>
                         <button className={styled.btnMov} type='button' onClick={() => moveCardReves(AjusteItem, item.id)}>&lt;&lt;</button>
-                        <button className={styled.btnEdit} onClick={() => setOpenModalEdit(true)}>Visualizar/Editar</button>
+                        <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)}>Visualizar</button>
                         <button className={styled.btnMov} type='button' onClick={() => moveCard(AjusteItem, item.id)} >&gt;&gt;</button>
                     </div>
                 )}

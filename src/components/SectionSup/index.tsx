@@ -76,17 +76,18 @@ export const SectionSup = () => {
           <p className={styled.pShare}>Filtro</p>
           <div className={styled.divInputs}>
             <div className={styled.divShareInput}>
-              <p>Data:</p>
-              <input className={styled.inputShare} placeholder="Digite uma Data" value={filter.date} onChange={(e) => setFilter({ ...filter, date: e.target.value })}/>
+              <p>Título:</p>
+              <input className={styled.inputShare} placeholder="Digite um Título" value={filter.title} onChange={(e) => setFilter({ ...filter, title: e.target.value })}/>
             </div>
             <div className={styled.divShareInput}>
               <p>Criador:</p>
               <input className={styled.inputShare} placeholder="Digite um Nome" value={filter.creator} onChange={(e) => setFilter({ ...filter, creator: e.target.value })}/>
             </div>
             <div className={styled.divShareInput}>
-              <p>Título:</p>
-              <input className={styled.inputShare} placeholder="Digite um Título" value={filter.title} onChange={(e) => setFilter({ ...filter, title: e.target.value })}/>
+              <p>Data:</p>
+              <input className={styled.inputShare} placeholder="Digite uma Data" value={filter.date} onChange={(e) => setFilter({ ...filter, date: e.target.value })}/>
             </div>
+           
           </div>
         </div>
       </div>

@@ -63,8 +63,6 @@
     background-color: rgb(210, 210, 210);
 }
 
-
-
 .divShare{
     display: flex;
     flex-direction: column;
@@ -108,4 +106,24 @@
 }
 .btnShare:hover{
     background-color: rgb(210, 210, 210);
+}
+
+
+@media (max-width: 1248px) {
+    .divTarefa{
+        width: 280px;
+    }
+}
+@media (max-width: 1165px) {
+    .divTarefa{
+        width: 240px;
+    }
+}
+@media (max-width: 1024px) {
+    .divTarefa{
+        width: 230px;
+    }
+    .divInputs{
+        flex-direction: column;
+    }
 }
