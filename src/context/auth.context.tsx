@@ -38,7 +38,8 @@ interface iProviderValue {
   protectRoutes: () => void
 }
 
-export const AuthProvider = ({ children}: iAuthProviderChildren & { router: NextRouter }) => {
+export const AuthProvider = ({ children }: iAuthProviderChildren) => {
+
   const router = useRouter();
 
   const [infoUser, setInfoUser] = useState<iUser | null>(null);
@@ -93,7 +94,6 @@ export const AuthProvider = ({ children}: iAuthProviderChildren & { router: Next
     userAll()
   }, [token]);
 
-
   useEffect(() => {
     const findUser = async (id: string) => {
       try {
@@ -110,7 +110,7 @@ export const AuthProvider = ({ children}: iAuthProviderChildren & { router: Next
     if (userId) {
       findUser(userId);
     }
-  }, [token]);
+  }, [token, userId]);
 
 
   const protectRoutes = () => {

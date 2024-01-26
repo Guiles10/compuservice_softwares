@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { SupProvider } from '@/context/sup.context'
 import { AuthProvider } from '@/context/auth.context'
-import { useRouter, NextRouter } from 'next/router';
+import { NextRouter } from 'next/router'
 
 import { CommentProvider } from '@/context/comment.context'
 
@@ -14,16 +14,17 @@ export const metadata: Metadata = {
   description: 'Compuservice Softwares',
 }
 
-export interface RootLayoutProps {
+interface RootLayoutProps {
   children: React.ReactNode;
-  router: NextRouter;
-} 
+}
 
-export function RootLayout({ children, router }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
+
+  
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider router={router}>
+        <AuthProvider>
           <SupProvider>
             <CommentProvider>
               {children}
