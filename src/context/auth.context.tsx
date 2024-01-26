@@ -39,7 +39,7 @@ interface iProviderValue {
 }
 
 export const AuthProvider = ({ children }: iAuthProviderChildren) => {
-  
+
   const router = useRouter();
 
   const [infoUser, setInfoUser] = useState<iUser | null>(null);
@@ -93,7 +93,6 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   useEffect(() => {
     userAll()
   }, [token]);
-
 
   useEffect(() => {
     const findUser = async (id: string) => {
