@@ -14,12 +14,12 @@ export const metadata: Metadata = {
   description: 'Compuservice Softwares',
 }
 
-interface RootLayoutProps {
+export interface RootLayoutProps {
   children: React.ReactNode;
   router: NextRouter;
 } 
 
-export default function RootLayout({ children, router }: RootLayoutProps) {
+export function RootLayout({ children, router }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
