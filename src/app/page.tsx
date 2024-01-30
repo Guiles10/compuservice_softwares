@@ -17,13 +17,13 @@ import { useRouter } from 'next/navigation';
 
 export default function Login() {
   
-  const { loginFunction, protectRoutes } = useContext(AuthContext);
+
+  const { loginFunction } = useContext(AuthContext);
 
   const { register, handleSubmit, formState: { errors }} = useForm<loginSchemaType>({
     mode: "onBlur",
     resolver: zodResolver(loginSchema),
   });
-
 
   return (
     <>

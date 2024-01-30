@@ -1,10 +1,16 @@
 @use "../../scss/abstract/" as *;
 
 .main{
-    max-width: 1300px;
+    max-width: 1240px;
     width: 100%;
     display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+.divHeaderSec{
+    display: flex;
     flex-direction: column;
+    width: 100%;
 }
 .secBody{
     display: flex;
