@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import styled from './styles.module.scss';
-import { SupContext } from '@/context/sup.context';
+import { CardsContext } from '@/context/cards.context';
 import { iUser } from '@/context/auth.context';
 import { ModalCriaCards } from './ModalCriaCard';
 import { SupCards } from './SupCard';
@@ -28,7 +28,8 @@ interface iCardSupPropity {
 
 export const SectionSup = () => {
 
-  const { allCardsSup, openModal, setOpenModal } = useContext(SupContext);
+  const { allCardsSup, openModal, setOpenModal } = useContext(CardsContext);
+
   const [filter, setFilter] = useState({
     date: '',
     creator: '',
@@ -47,7 +48,6 @@ export const SectionSup = () => {
         priorityOrder[a.priority] - priorityOrder[b.priority]
     );
   };
-
   const filterCards = (cards: iCardSupPropity[]) => {
     return cards.filter(
       (item) =>
@@ -56,6 +56,7 @@ export const SectionSup = () => {
         item.title?.toLowerCase().includes(filter.title.toLowerCase())
     );
   };
+
 
   const cardsAfa: any = allCardsSup.filter((item) => item.status === 'A Fazer');
   const cardsEa: any = allCardsSup.filter((item) => item.status === 'Em Andamento');
@@ -67,13 +68,14 @@ export const SectionSup = () => {
 
   return (
     <section className={styled.secSup}>
+
       <div className={styled.divTitleHeader}>
         <div className={styled.divTitle}>
             <h1 className={styled.h1Title}>SUPORTE</h1>
             <button className={styled.btnCriar} onClick={() => setOpenModal(true)}>Nova Tarefa</button>
         </div>
         <div className={styled.divShare}>
-          <p className={styled.pShare}>Filtro</p>
+          <p className={styled.pShare}>Filtro: </p>
           <div className={styled.divInputs}>
             <div className={styled.divShareInput}>
               <p>Título:</p>

@@ -20,6 +20,7 @@
     max-width: 95%;
     max-height: 95%;
     overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.8);
 }
 .form{
     border-radius: 8px;
@@ -33,7 +34,7 @@
     max-width: 100%;
     border-radius: 8px 8px 0 0;
     background-color: rgb(220, 220, 220);
-    padding: 10px;
+    padding: 5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -42,11 +43,12 @@
     display: flex;
     justify-content: center;
     width: 300px;
-    max-width: 95%;
-    padding: 10px;
+    padding: 6px;
     font-size: 14px;
     font-weight: 600;
     border-radius: 4px;
+    outline: none;
+    border: 1px solid black;
 }
 .pError{
     display: flex;
@@ -60,7 +62,7 @@
     padding: 5px;
     border-radius: 4px;
     color: black;
-    border: 2px solid black;
+    border: 2px solid rgba(0, 0, 0, 0.8);
 }
 .btnFecha:hover{
     color: red;
@@ -70,7 +72,6 @@
 
 /********************************************DESCRICÃO - SOLUÇÂO **********************************************/
 .divDesc{
-    padding: 8px;
     max-width: 100%;
     display: flex;
     flex-direction: column;
@@ -80,18 +81,16 @@
     background-color: rgba(88, 88, 88, 0.05);
 }
 .pDesc{
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
-    padding: 5px;
-    margin-bottom: 5px;
-    border-radius: 4px;
+    padding: 4px;
 }
 .textarea{
     font-size: 15px;
     width: 650px;
     max-width: 95%;
-    height: 150px;
-    resize: none;
+    height: 70px;
+    resize: vertical;
     overflow-y: auto;
     padding: 8px;
     border-radius: 4px;
@@ -100,14 +99,13 @@
 
 /********************************************TAREFAS**********************************************/
 .divTarefas{
-    padding: 8px;
     max-width: 100%;
     display: flex;
     flex-direction: column;
+    margin-top: 5px;
 }
 .divTitleTarefas{
     max-width: 100%;
-    margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -126,23 +124,27 @@
         padding: 8px;
         border-radius: 4px;
         width: 400px;
+        outline: none;
+        border: 1px solid rgba(0, 0, 0, 0.8);
     }
     button {
         font-size: 16px;
         font-weight: 500;
-        padding: 5px;
+        padding: 3px;
         border-radius: 4px;
         margin-left: 15px;
+        border: 2px solid rgba(0, 0, 0, 0.8);
     }
     button:hover{
         color: green;
         font-weight: 500;
         border: 2px solid green;
+        background-color: rgba(0, 128, 0, 0.2);
     }
 }
 .divUl{
     width: 100%;
-    padding: 10px 0;
+    padding: 5px 0;
 }
 .ul{
     width: 100%;
@@ -152,14 +154,14 @@
 } 
 .li{
     width: 90%;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     padding: 5px;
     display: flex;
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.5);  
     border-radius: 4px;
 
     > div {
@@ -187,36 +189,51 @@
 
 
 /********************************************SELECT**********************************************/
+.divTypePrioryt{
+    display: flex;
+    justify-content: space-around;
+}
 .divSelect{
     display: flex;
     align-items: center;
     flex-direction: row;
-    margin: 8px 0;
-    padding: 8px;
+    margin: 4px 0;
 }
 .select{
     font-size: 14px;
     border-radius: 4px;
-    padding: 5px;
-    margin-bottom: 5px;
-    width: 150px;
+    padding: 3px;
+    width: 110px;
 }
-
+.divType{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin: 4px 0;
+}
+.checkboxContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    width: 300px;
+    justify-content: space-evenly;
+}
 
 /********************************************BOTÂO SALVAR**********************************************/
 .salvar{
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     color: green;
-    height: 50px;
-    margin: 10px;
+    margin-bottom: 6px;
     border-radius: 4px;
-    width: 170px;
+    width: 100px;
+    height: 30px;
     max-width: 90%;
     border: 2px solid green;
 }
 .salvar:hover{
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     background-color: rgba(0, 128, 0, 0.3);
 }

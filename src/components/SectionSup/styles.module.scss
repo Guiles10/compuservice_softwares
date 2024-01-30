@@ -2,30 +2,30 @@
 
 
 .secSup{
-    background-color: rgb(235, 233, 233);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 80%;
-    padding: 15px;
+    width: 100%;
+    padding: 5px;
     border-radius: 6px;
+    background-color: rgb(235, 233, 233);
+    border: 1px solid rgb(160, 160, 160);
 }
 .divTitleHeader{
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 10px;
 }
 .divTitle{
     display: flex;
-    flex-direction: column;
     align-items: center;
 }
 .h1Title{
-    font-size: 30px;
+    font-size: 23px;
     font-weight: 600;
-    margin-bottom: 16px;
+    margin-right: 78px;
 }
 .divSup{
     display: flex;
@@ -42,6 +42,7 @@
     border-radius: 6px;
     box-shadow: 9px 14px 31px rgba(0, 0, 0, 0.3);
     padding: 10px;
+
     > h1{
         display: flex;
         justify-content: center;
@@ -54,28 +55,26 @@
 }
 
 .btnCriar{
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     padding: 5px 20px;
     border-radius: 4px;
 }
 .btnCriar:hover{
-    background-color: rgb(210, 210, 210);
+    background-color: rgb(200, 200, 200);
 }
 
 .divShare{
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-left: 35px;
     background-color: rgb(210, 210, 210);
     border-radius: 4px;
-    padding: 5px;
+    padding: 3px;
 }
 .pShare{
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-right: 6px;
 }
 .divInputs{
     width: 100%;
@@ -89,20 +88,20 @@
     margin: 0 4px;
     > p {
         margin-bottom: 4px;
-        font-size: 14px;
+        font-size: 10px;
     }
 }
 .inputShare{
-    padding: 7px;
-    border-radius: 4px;
+    padding: 3px;
+    border-radius: 2px;
     border: 1px solid black;
 }
 .btnShare{
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
-    padding: 5px 20px;
-    border-radius: 4px;
-    margin-left: 8px;
+    padding: 3px 7px;
+    border-radius: 2px;
+    margin-left: 5px;
 }
 .btnShare:hover{
     background-color: rgb(210, 210, 210);
