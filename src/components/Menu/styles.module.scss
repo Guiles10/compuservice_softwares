@@ -1,0 +1,28 @@
+@use "../../scss/abstract/" as *;
+
+.lateralMenuMain{
+    height: 74px;
+    width: 500px;
+    padding: 10px 0 0 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: 4px;
+    background-color: rgb(235, 235, 235);
+}
+
+.pMenu{
+    margin-bottom: 12px;
+    padding: 2px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    border-bottom: 1px solid black;
+}
+.pMenu:hover{
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: rgb(200, 200, 200);
+}

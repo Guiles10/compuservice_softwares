@@ -1,7 +1,7 @@
 import '../scss/main.scss'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { SupProvider } from '@/context/sup.context'
+import { CardsProvider } from '@/context/cards.context'
 import { AuthProvider } from '@/context/auth.context'
 import { NextRouter } from 'next/router'
 
@@ -25,11 +25,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <SupProvider>
+          <CardsProvider>
             <CommentProvider>
               {children}
             </CommentProvider>
-          </SupProvider>
+          </CardsProvider>
         </AuthProvider>
         </body>
     </html>

@@ -1,11 +1,10 @@
 "use client";
-
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { NextRouter } from "next/router";
 import { useRouter } from "next/navigation";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import axios from "axios";
+
 
 export const AuthContext = createContext({} as iProviderValue);
 
@@ -35,7 +34,9 @@ interface iProviderValue {
   loginFunction(infoLogin: iInfoLogin): Promise<void>;
   logout: () => void
   infoUser: iUser | null
-  protectRoutes: () => void
+
+  selectedMenu: string
+  setSelectedMenu: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const AuthProvider = ({ children }: iAuthProviderChildren) => {
@@ -76,9 +77,10 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   const logout = () => {
     destroyCookie(null, '@token');
     destroyCookie(null, '@id');
-
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
     router.push("/");
-    window.location.reload();
   };
 
   const [allUser, setAllUser] = useState<iUser[]| null>(null);
@@ -113,16 +115,22 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   }, [token, userId]);
 
 
-  const protectRoutes = () => {
-    if (!token) {
-      router.push("/");
-    } else {
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
+  const protectRoutes = (router: any, token: string) => {
+    if (typeof window !== 'undefined') {
+      if (!token) {
+        router.push("/");
+      } else {
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 2000);
+      }
     }
   };
-    protectRoutes()
+  protectRoutes(router, token)
+
+
+  const [selectedMenu, setSelectedMenu] = useState<string>('');
+
 
   return (
     <AuthContext.Provider
@@ -133,7 +141,9 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
         loginFunction,
         logout,
         infoUser,
-        protectRoutes
+
+        selectedMenu,
+        setSelectedMenu,
       }}
     >
       {children}

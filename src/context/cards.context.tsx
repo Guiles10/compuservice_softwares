@@ -1,15 +1,14 @@
 'use client'
-
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext, iUser } from "./auth.context";
 
-export const SupContext = createContext({} as iProviderValue);
+export const CardsContext = createContext({} as iProviderValue);
 interface iAuthProviderChildren {
   children: React.ReactNode;
 }
 
-export interface iCardSup {
+export interface iCard {
   id: string 
   title: string
   description?: string | null
@@ -21,7 +20,7 @@ export interface iCardSup {
   updatedAt?: string | null
   userId?: string
   user: iUser
-  workers?: String[]
+  type?: String[]
 }
 export interface iDataForm {
   title?: String,
@@ -29,7 +28,7 @@ export interface iDataForm {
   solution?: String,
   priority?: String,
   tasks?: String[],
-  workers?: String[],
+  type?: String[],
 }
 export interface iTask{
   id: string
@@ -41,14 +40,25 @@ export interface iTask{
 }
 
 interface iProviderValue {
-  allCardsSup: iCardSup[]
-  setAllCardsSup: React.Dispatch<React.SetStateAction<iCardSup[]>>
+  allCardsFatu:iCard[]
+  setAllCardsFatu: React.Dispatch<React.SetStateAction<iCard[]>>
+  
+  allCardsProg:iCard[]
+  setAllCardsProg: React.Dispatch<React.SetStateAction<iCard[]>>
+
+  allCardsSup: iCard[]
+  setAllCardsSup: React.Dispatch<React.SetStateAction<iCard[]>>
+
+  allCardsSupHosp:iCard[]
+  setAllCardsSupHosp: React.Dispatch<React.SetStateAction<iCard[]>>
+
+  allCardsInst: iCard[]
+  setAllCardsInst: React.Dispatch<React.SetStateAction<iCard[]>>
 
   creatCardSup: (dataForm: iDataForm, tarefas: string[]) => Promise<void>
-  getAllCardsSup: () => Promise<void>
 
-  moveCard: (item: iCardSup, idCard: string) => void
-  moveCardReves: (item: iCardSup, idCard: string) => Promise<void>
+  moveCard: (item: iCard, idCard: string) => void
+  moveCardReves: (item: iCard, idCard: string) => Promise<void>
 
   openModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -59,28 +69,46 @@ interface iProviderValue {
   excluirTask: (tasksId: string) => Promise<void>
 }
 
-export const SupProvider = ({ children }: iAuthProviderChildren) => {
+export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
   const { userId, token} = useContext(AuthContext);
 
-  const [allCardsSup, setAllCardsSup] = useState<iCardSup[]>([])
-
-    const getAllCardsSup = async () => {
+  const [allCardsFatu, setAllCardsFatu] = useState<iCard[]>([])
+  const [allCardsProg, setAllCardsProg] = useState<iCard[]>([])
+  const [allCardsSup, setAllCardsSup] = useState<iCard[]>([])
+  const [allCardsSupHosp, setAllCardsSupHosp] = useState<iCard[]>([])
+  const [allCardsInst, setAllCardsInst] = useState<iCard[]>([])
+  
+    const getAllCards = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/suport_card');
-        setAllCardsSup(response.data);
+        const response = await axios.get('http://localhost:3001/cards');
+        const allCards = response.data;
+
+        const atendimentoCards = allCards.filter((card: iCard) => card.type!.includes('Atendimento'));
+        const suporteCards = allCards.filter((card: iCard) => card.type!.includes('Suporte'));
+        const programacaoCards = allCards.filter((card: iCard)=> card.type!.includes('Programação'));
+        const faturamentoCards = allCards.filter((card: iCard)=> card.type!.includes('Faturamento'));
+        const suporteHospCards = allCards.filter((card: iCard) => card.type!.includes('Suporte Hospital'));
+        const instalacaoCards = allCards.filter((card: iCard) => card.type!.includes('Instalação'));
+
+        setAllCardsSup(suporteCards);
+        setAllCardsFatu(faturamentoCards);
+        setAllCardsProg(programacaoCards);
+        setAllCardsSupHosp(suporteHospCards);
+        setAllCardsInst(instalacaoCards);
+
       } catch (error) {
         console.error(error);
       }
     };
     useEffect(() => {
-      getAllCardsSup()
+      getAllCards()
     }, []);
 
     const [openModal, setOpenModal] = useState<boolean>(false)
     const creatCardSup = async (dataForm: iDataForm, tarefas: string[]) => {
        try {
-        const responseCard = await axios.post('http://localhost:3001/suport_card', dataForm, {
+        const responseCard = await axios.post('http://localhost:3001/cards', dataForm, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -96,15 +124,13 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
           );
           createTesks.push(responseTask.data)
         }
-        responseCard.data.tasks = createTesks
-        setAllCardsSup([...allCardsSup, responseCard.data]);
-        getAllCardsSup()
+        getAllCards()
       } catch (error) {
         console.error(error);
       }
     };
 
-    const moveCard = async (item: iCardSup, idCard: string) => {
+    const moveCard = async (item: iCard, idCard: string) => {
       let novoStatus = ''
       if (item.status === 'A Fazer') {
         novoStatus = 'Em Andamento'
@@ -116,19 +142,18 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
       const cardAtualizado = { ...item, status: novoStatus };
 
         try {
-          const response = await axios.patch(`http://localhost:3001/suport_card/${idCard}`, cardAtualizado, {
+          const response = await axios.patch(`http://localhost:3001/cards/${idCard}`, cardAtualizado, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }
           );
-          // setAllCardsSup([...allCardsSup, response.data]);
-          getAllCardsSup()
+          getAllCards()
         } catch (error) {
           console.error(error)
         }
     }
-    const moveCardReves = async (item: iCardSup, idCard: string) => {
+    const moveCardReves = async (item: iCard, idCard: string) => {
       let novoStatus = ''
       if (item.status === 'Concluido') {
         novoStatus = 'Em Andamento'
@@ -139,14 +164,13 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
       }
       const cardAtualizado = {... item, status: novoStatus }
         try {
-          const response = await axios.patch(`http://localhost:3001/suport_card/${idCard}`, cardAtualizado, {
+          const response = await axios.patch(`http://localhost:3001/cards/${idCard}`, cardAtualizado, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }
           );
-          // setAllCardsSup([...allCardsSup, response.data]);
-          getAllCardsSup()
+          getAllCards()
         } catch (error) {
           console.error(error);
         }
@@ -154,7 +178,7 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
 
     const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
       try {
-        const responseCard = await axios.patch(`http://localhost:3001/suport_card/${itemId}`, dataForm, {
+        const responseCard = await axios.patch(`http://localhost:3001/cards/${itemId}`, dataForm, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
@@ -190,16 +214,16 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
       }catch (error) {
         console.error(error);
       }
-      getAllCardsSup()
+      getAllCards()
     };
 
     const excluirSupCard = async (itemId: string) => {
       try {
-        const response = await axios.delete(`http://localhost:3001/suport_card/${itemId}`, {
+        const response = await axios.delete(`http://localhost:3001/cards/${itemId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        getAllCardsSup()
+        getAllCards()
       } catch (error) {
         console.error(error);
       }
@@ -211,20 +235,31 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        getAllCardsSup()
+        getAllCards()
       } catch (error) {
         console.error(error);
       }
     };
 
     return (
-    <SupContext.Provider
+    <CardsContext.Provider
       value={{
+        allCardsFatu,
+        setAllCardsFatu,
+        
+        allCardsProg,
+        setAllCardsProg,
+
         allCardsSup,
         setAllCardsSup,
 
+        allCardsSupHosp,
+        setAllCardsSupHosp,
+
+        allCardsInst,
+        setAllCardsInst,
+
         creatCardSup,
-        getAllCardsSup,
 
         moveCard,
         moveCardReves,
@@ -240,6 +275,6 @@ export const SupProvider = ({ children }: iAuthProviderChildren) => {
       }}
     >
       {children}
-    </SupContext.Provider>
+    </CardsContext.Provider>
   );
 };

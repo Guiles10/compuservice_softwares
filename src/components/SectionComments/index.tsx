@@ -16,6 +16,7 @@ export const SectionComments = () => {
 
   const { allCommentsSup, creatComment } = useContext(CommentContext);
 
+  const [menuAberto, setMenuAberto] = useState(false);
 
   const [filter, setFilter] = useState<iFilter>({ date: '', creator: '', comment: '' });
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -55,27 +56,34 @@ const onSubmit = (dataForm: any) => {
   return (
     <section className={styled.secComm}>
       <div className={styled.divTitleHeaderComm}>
-        <div className={styled.divTitleComm}>
-          <h1 className={styled.h1Title}>CHAT</h1>
-          <button className={styled.btnCriar} onClick={() => setIsFormOpen(true)}>Comentar</button>
-        </div>
-        <div className={styled.divShareComm}>
-          <p className={styled.pShare}>Filtro</p>
-          <div className={styled.divInputs}>
-            <div className={styled.divShareInput}>
-              <p>Comentário:</p>
-              <input placeholder="Digite um Comentário" value={filter.comment} onChange={(e) => setFilter({ ...filter, comment: e.target.value })}/>
-            </div>
-            <div className={styled.divShareInput}>
-              <p>Criador:</p>
-              <input  placeholder="Digite um Nome" value={filter.creator} onChange={(e) => setFilter({ ...filter, creator: e.target.value })}/>
-            </div>
-            <div className={styled.divShareInput}>
-              <p>Data:</p>
-              <input  placeholder="Digite uma Data" value={filter.date} onChange={(e) => setFilter({ ...filter, date: e.target.value })}/>
-            </div>
+
+        <div className={styled.TitleBtn}>
+          <div className={styled.divTitleComm}>
+            <h1 className={styled.h1Title}>CHAT</h1>
+            <button className={styled.btnCriar} onClick={() => setIsFormOpen(true)}>Comentar</button>
+            <button className={styled.btnCriar} onClick={() => setMenuAberto(!menuAberto)}>{menuAberto ? 'X' : 'Filtrar'}</button>
           </div>
         </div>
+
+        {menuAberto && (
+          <div className={styled.divShareComm}>
+            <div className={styled.divInputs}>
+              <div className={styled.divShareInput}>
+                <p>Título:</p>
+                <input placeholder="Digite um Título " value={filter.comment} onChange={(e) => setFilter({ ...filter, comment: e.target.value })}/>
+              </div>
+              <div className={styled.divShareInput}>
+                <p>Nome:</p>
+                <input  placeholder="Digite um Nome" value={filter.creator} onChange={(e) => setFilter({ ...filter, creator: e.target.value })}/>
+              </div>
+              <div className={styled.divShareInput}>
+                <p>Data:</p>
+                <input  placeholder="Digite uma Data" value={filter.date} onChange={(e) => setFilter({ ...filter, date: e.target.value })}/>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
 
       {isFormOpen && (
@@ -90,7 +98,9 @@ const onSubmit = (dataForm: any) => {
           </div>
         </form>
       )}
+
       {sortedComments.map((item: iComment) => (<CommentCard key={item.id} item={item} />))}
+
     </section>
   );
 };
