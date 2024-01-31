@@ -73,7 +73,7 @@ const onSubmit = (dataForm: any) => {
                 <input placeholder="Digite um Título " value={filter.comment} onChange={(e) => setFilter({ ...filter, comment: e.target.value })}/>
               </div>
               <div className={styled.divShareInput}>
-                <p>Criador:</p>
+                <p>Nome:</p>
                 <input  placeholder="Digite um Nome" value={filter.creator} onChange={(e) => setFilter({ ...filter, creator: e.target.value })}/>
               </div>
               <div className={styled.divShareInput}>

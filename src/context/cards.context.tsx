@@ -40,8 +40,20 @@ export interface iTask{
 }
 
 interface iProviderValue {
+  allCardsFatu:iCard[]
+  setAllCardsFatu: React.Dispatch<React.SetStateAction<iCard[]>>
+  
+  allCardsProg:iCard[]
+  setAllCardsProg: React.Dispatch<React.SetStateAction<iCard[]>>
+
   allCardsSup: iCard[]
   setAllCardsSup: React.Dispatch<React.SetStateAction<iCard[]>>
+
+  allCardsSupHosp:iCard[]
+  setAllCardsSupHosp: React.Dispatch<React.SetStateAction<iCard[]>>
+
+  allCardsInst: iCard[]
+  setAllCardsInst: React.Dispatch<React.SetStateAction<iCard[]>>
 
   creatCardSup: (dataForm: iDataForm, tarefas: string[]) => Promise<void>
 
@@ -61,11 +73,12 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
   const { userId, token} = useContext(AuthContext);
 
-  const [allCardsSup, setAllCardsSup] = useState<iCard[]>([])
   const [allCardsFatu, setAllCardsFatu] = useState<iCard[]>([])
   const [allCardsProg, setAllCardsProg] = useState<iCard[]>([])
+  const [allCardsSup, setAllCardsSup] = useState<iCard[]>([])
   const [allCardsSupHosp, setAllCardsSupHosp] = useState<iCard[]>([])
-
+  const [allCardsInst, setAllCardsInst] = useState<iCard[]>([])
+  
     const getAllCards = async () => {
       try {
         const response = await axios.get('http://localhost:3001/cards');
@@ -75,12 +88,14 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         const suporteCards = allCards.filter((card: iCard) => card.type!.includes('Suporte'));
         const programacaoCards = allCards.filter((card: iCard)=> card.type!.includes('Programação'));
         const faturamentoCards = allCards.filter((card: iCard)=> card.type!.includes('Faturamento'));
-        const suporteHospCards = allCards.filter((card: iCard) => card.type!.includes('Suporte Hosptal'));
-    
+        const suporteHospCards = allCards.filter((card: iCard) => card.type!.includes('Suporte Hospital'));
+        const instalacaoCards = allCards.filter((card: iCard) => card.type!.includes('Instalação'));
+
         setAllCardsSup(suporteCards);
         setAllCardsFatu(faturamentoCards);
         setAllCardsProg(programacaoCards);
         setAllCardsSupHosp(suporteHospCards);
+        setAllCardsInst(instalacaoCards);
 
       } catch (error) {
         console.error(error);
@@ -90,9 +105,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       getAllCards()
     }, []);
 
-
-
-    
     const [openModal, setOpenModal] = useState<boolean>(false)
     const creatCardSup = async (dataForm: iDataForm, tarefas: string[]) => {
        try {
@@ -164,7 +176,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         }
     }
 
-
     const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
       try {
         const responseCard = await axios.patch(`http://localhost:3001/cards/${itemId}`, dataForm, {
@@ -233,8 +244,20 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
     return (
     <CardsContext.Provider
       value={{
+        allCardsFatu,
+        setAllCardsFatu,
+        
+        allCardsProg,
+        setAllCardsProg,
+
         allCardsSup,
         setAllCardsSup,
+
+        allCardsSupHosp,
+        setAllCardsSupHosp,
+
+        allCardsInst,
+        setAllCardsInst,
 
         creatCardSup,
 

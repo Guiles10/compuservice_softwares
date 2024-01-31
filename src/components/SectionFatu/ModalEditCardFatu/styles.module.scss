@@ -37,6 +37,21 @@
     align-items: center;
     justify-content: space-between;
 }
+.divInputTitle{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    .editar{
+        width: 12px;
+        margin-right: 15px;
+    }
+    .inputTitle{
+        border-radius: 4px;
+        padding: 3px;
+        font-size: 14px;
+    }
+}
 .title{
     display: flex;
     max-width: 90%;
@@ -70,7 +85,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    width: 200px;
+    width: 105px;
 }
 .h3Name{
     font-size: 14px;
@@ -107,14 +122,13 @@
 .divType{
     display: flex;
     align-items: center;
-    width: 350px;
+    width: 450px;
 }
 .checkboxContainer{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-around;
-    width: 280px;
 }
 .divLabel{
     display: flex;

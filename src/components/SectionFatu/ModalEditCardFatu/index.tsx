@@ -6,29 +6,25 @@ import { useForm } from 'react-hook-form';
 import { editCardSchema, editCardSchemaType } from '@/schema/cards.schema';
 import { Dispatch, SetStateAction } from 'react';
 import { AuthContext } from '@/context/auth.context';
+import { FaPen } from 'react-icons/fa';
 
 
-export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, setOpenModalEdit: Dispatch<SetStateAction<boolean>> }) => {
+export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, setOpenModalEdit: Dispatch<SetStateAction<boolean>> }) => {
 
     const { allUser, userId } = useContext(AuthContext);
     const { excluirSupCard, editarCard, excluirTask } = useContext(CardsContext);
 
 
     const userAuthorized = allUser!.map(user => {
-        if (user.function && user.function.includes('Suporte')) {
+        if (user.function && user.function.includes('Faturamento')) {
             return user;
         }
         return null;
     }).filter(user => user !== null);
 
-    const isAuthorizedArray = userAuthorized.map((user: any )=> {
-        if (user.id === userId){
-            return true
-        } else {
-            return false
-        }
-    })
-    const isAuthorized = isAuthorizedArray[0]
+    const isAuthorized = userAuthorized.some((user: any) => user.id === userId);
+
+
 
     const tasksinfoCard: any = infoCard.tasks!
     const [tasksDB, setTasksDB] = useState<any>(tasksinfoCard);
@@ -88,15 +84,31 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, 
         }
     };
 
+    const [editingTitle, setEditingTitle] = useState(false);
+    const handleEditTitle = () => {
+        setEditingTitle(!editingTitle);
+    };
+
     return (
         <section className={styled.modal}>
             <div className={styled.modalCard}>
                 <form className={styled.form} onSubmit={handleSubmit(onSubmit)}>
+
                     <div className={styled.divHeader}>
-                        <h1 className={styled.title}>{infoCard.title}</h1>
+                        {editingTitle ? (
+                            <div className={styled.divInputTitle}>
+                                {isAuthorized && <FaPen className={styled.editar} onClick={handleEditTitle} />}
+                                <input className={styled.inputTitle} id="title" type="text" {...register("title")} placeholder="Digite o Título" defaultValue={infoCard.title}/>
+                                {errors.title?.message && (<p className={styled.pError}>{errors.title.message}</p>)}
+                            </div>
+                        ) : (
+                            <div className={styled.divInputTitle}>
+                                {isAuthorized && <FaPen className={styled.editar} onClick={handleEditTitle} />}
+                                <h1 className={styled.title}>{infoCard.title}</h1>
+                            </div>
+                        )}
                         <div className={styled.divCreateBtn}>
                             <div className={styled.divNomeData}>|
-                                <h3 className={styled.h3Name}>{infoCard.user?.name}</h3>
                                 <div>
                                     <h3 className={styled.h3Data}>C: {infoCard.createdAt!.slice(0, 16)}</h3>
                                     <h3 className={styled.h3Data}>E: {infoCard.updatedAt!.slice(0, 16)}</h3>
@@ -108,6 +120,7 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, 
                     {!isAuthorized && (
                         <p className={styled.pAuthorized}>Você não é autorizado a fazer edições</p>
                     )}
+
                     <div className={styled.divSelect}>
                         <div className={styled.divPriority}>
                             <p className={styled.pDesc}>Prioridade: </p>
@@ -122,9 +135,9 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, 
                             <p className={styled.pDesc}>Setor: </p>
                             <div className={styled.checkboxContainer}>
                                 <div className={styled.divLabel}>
-                                    {['Suporte', 'Programação', 'Faturamento', 'Suporte Hospital'].map((type, index) => (
+                                    {['Suporte', 'Programação', 'Faturamento', 'Suporte Hospital', 'Instalação'].map((type, index) => (
                                         <label className={styled.labelType} key={index}>
-                                            <input type="checkbox" value={type} checked={selectedOptions.includes(type)} onChange={handleCheckboxChangeType}/>{type}
+                                            <input type="checkbox" value={type} checked={selectedOptions.includes(type)} onChange={handleCheckboxChangeType} disabled={!isAuthorized}/>{type}
                                         </label>
                                     ))}
                                 </div>
@@ -136,7 +149,7 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, 
                     </div> 
     
                     <div className={styled.divDesc}>
-                        <p className={styled.pDesc}>Descrição</p>
+                        <p className={styled.pDesc}>Descrição:</p>
                         <textarea className={styled.textarea} id="descriptin" {...register("description")} defaultValue={infoCard.description || ''} readOnly={!isAuthorized}></textarea>
                     </div>
                     <div className={styled.divTarefas}>
@@ -166,7 +179,7 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, 
                         </div>
                     </div>
                     <div className={styled.divDesc}>
-                        <p className={styled.pDesc}>Solução</p>
+                        <p className={styled.pDesc}>Solução:</p>
                         <textarea className={styled.textarea} id="solution" {...register("solution")} defaultValue={infoCard.solution || ''} readOnly={!isAuthorized}></textarea>
                     </div>
                     {isAuthorized ? (

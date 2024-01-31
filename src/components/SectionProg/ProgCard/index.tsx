@@ -3,10 +3,10 @@ import styled from './styles.module.scss'
 import { useContext, useState } from 'react';
 import { CardsContext, iCard } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
-import { ModalEditCardSup } from '../ModalEditCardSup';
+import { ModalEditCardProg } from '../ModalEditCardProg';
 
 
-export const SupCards = ({ item }: { item: iCard }) => {
+export const ProgCards = ({ item }: { item: iCard }) => {
 
     const { moveCardReves, moveCard } = useContext(CardsContext);
 
@@ -28,7 +28,7 @@ export const SupCards = ({ item }: { item: iCard }) => {
     }; 
 
     const userAuthorized = allUser!.map(user => {
-        if (user.function && user.function.includes('Suporte')) {
+        if (user.function && user.function.includes('Programação')) {
             return user;
         }
         return null;
@@ -62,7 +62,7 @@ export const SupCards = ({ item }: { item: iCard }) => {
                     </div>
                 )}
             </div>
-            {openModalEdit && <ModalEditCardSup infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
+            {openModalEdit && <ModalEditCardProg infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
         </section>
     );
 };
