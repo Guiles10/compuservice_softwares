@@ -82,10 +82,13 @@ export const ModalCriaCards = () => {
                                     <input type="checkbox" {...register('type')} value="Programação" checked={selectedOptions.includes('Programação')} onChange={handleCheckboxChange}/>Programação
                                 </label>
                                 <label>
-                                    <input type="checkbox" {...register('type')} value="Faturamento" checked={selectedOptions.includes('Faturamento')} onChange={handleCheckboxChange} />Faturamento
+                                    <input type="checkbox" {...register('type')} value="Faturamento" checked={selectedOptions.includes('Faturamento')} onChange={handleCheckboxChange}/>Faturamento
                                 </label>
                                 <label>
-                                    <input type="checkbox" {...register('type')} value="Suporte Hospital" checked={selectedOptions.includes('Suporte Hospital')} onChange={handleCheckboxChange}/> Suporte Hospital
+                                    <input type="checkbox" {...register('type')} value="Suporte Hospital" checked={selectedOptions.includes('Suporte Hospital')} onChange={handleCheckboxChange}/>Suporte Hospital
+                                </label>
+                                <label>
+                                    <input type="checkbox" {...register('type')} value="Instalação" checked={selectedOptions.includes('Instalação')} onChange={handleCheckboxChange}/>Instalação
                                 </label>
                                 {selectedOptions.length === 0 && (
                                     <p className={styled.pError}>Escolha ao menos um Setor</p>

@@ -1,12 +1,11 @@
 
 import styled from './styles.module.scss'
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CardsContext, iCard } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
-import { ModalEditCardSup } from '../ModalEditCardSup';
+import { ModalEditCardSupHosp } from '@/components/SectionSupHosp/ModalEditCardSupHosp';
 
-
-export const SupCards = ({ item }: { item: iCard }) => {
+export const SupHospCards = ({ item }: { item: iCard }) => {
 
     const { moveCardReves, moveCard } = useContext(CardsContext);
 
@@ -28,7 +27,7 @@ export const SupCards = ({ item }: { item: iCard }) => {
     }; 
 
     const userAuthorized = allUser!.map(user => {
-        if (user.function && user.function.includes('Suporte')) {
+        if (user.function && user.function.includes('Suporte Hospital')) {
             return user;
         }
         return null;
@@ -62,7 +61,7 @@ export const SupCards = ({ item }: { item: iCard }) => {
                     </div>
                 )}
             </div>
-            {openModalEdit && <ModalEditCardSup infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
+            {openModalEdit && <ModalEditCardSupHosp infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
         </section>
     );
 };

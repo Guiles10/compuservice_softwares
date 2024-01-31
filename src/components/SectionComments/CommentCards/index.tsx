@@ -36,7 +36,6 @@ export const CommentCard = ({ item }: { item: iComment }) => {
     setModoEdicao(false);
   };
 
-  // Renderização dos botões no header
   const headerButtons = (
     <div className={styled.divBtn}>
       {authorized && !modoEdicao && (

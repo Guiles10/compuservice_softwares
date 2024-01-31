@@ -1,0 +1,85 @@
+@use "../../../scss/abstract/" as *;
+
+.sectionCard{
+    background-color: rgb(211, 211, 211);
+    border-radius: 4px;
+    margin-bottom: 12px;
+    padding: 1px;
+    border: 1px solid rgb(170, 170, 170);
+    box-shadow: 0 0 5px blue;
+}
+
+.divTitle{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3px;
+    border-bottom: 2px solid rgb(170, 170, 170);
+    border-radius: 4px;
+    padding: 3px;
+}
+.h2Card{
+    font-size: 18px;
+    font-weight: 600;
+}
+.priority{
+    border-radius: 4px;
+    height: 15px;
+    width: 15px;
+}
+.divNomeData{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-bottom: 6px;
+    margin-right: 6px;
+    
+    .h3Name{
+        font-size: 11px;
+        font-weight: 600;
+    }
+    .h3Data{
+        font-size: 9px;
+    }
+}
+
+.pCard{
+    font-size: 14px;
+    font-weight: 500;
+    height: 50px;
+    border-top: 2px solid rgb(170, 170, 170);
+    border-bottom: 2px solid rgb(170, 170, 170);
+    border-radius: 4px;
+    padding: 4px;
+}
+.divBtnCard{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 2px 0;
+}
+.btnMov{
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 8px;
+    border-radius: 4px;
+    color: rgb(0, 0, 0);
+    background-color: rgba(128, 128, 128, 0.3);
+}
+.btnMov:hover{
+    font-weight: 600;
+    background-color: rgba(128, 128, 128, 0.6);
+}
+.btnEdit{
+    font-size: 14px;
+    font-weight: 600;
+    padding: 2px;
+    border-radius: 4px;
+    color: rgb(0, 0, 0);
+    background-color: rgba(128, 128, 128, 0.3);
+}
+.btnEdit:hover{
+    font-weight: 600;
+    background-color: rgba(128, 128, 128, 0.6);
+}

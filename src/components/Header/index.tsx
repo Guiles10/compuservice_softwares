@@ -26,6 +26,7 @@ export const Header = () => {
                             <p className={styled.cargo}>-{infoUser?.function[2]}</p>
                             <p className={styled.cargo}>-{infoUser?.function[3]}</p>
                             <p className={styled.cargo}>-{infoUser?.function[4]}</p>
+                            <p className={styled.cargo}>-{infoUser?.function[5]}</p>
                         </div>
                     </div>
                     <button className={styled.btnSair} onClick={() => logout()}>Sair</button>

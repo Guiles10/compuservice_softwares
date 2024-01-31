@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import styled from './styles.module.scss';
 import { CardsContext } from '@/context/cards.context';
 import { iUser } from '@/context/auth.context';
-import { SupCards } from './SupCard';
+import { InstCards } from './InstCard';
 import { ModalCriaCards } from '../ModalCriaCard';
 
 interface iPropity {
@@ -26,9 +26,9 @@ interface iCardSupPropity {
   user: iUser;
 }
 
-export const SectionSup = () => {
+export const SectionInst = () => {
 
-  const { allCardsSup, openModal, setOpenModal } = useContext(CardsContext);
+  const { allCardsInst, openModal, setOpenModal } = useContext(CardsContext);
 
   const [filter, setFilter] = useState({
     date: '',
@@ -58,9 +58,9 @@ export const SectionSup = () => {
   };
 
 
-  const cardsAfa: any = allCardsSup.filter((item) => item.status === 'A Fazer');
-  const cardsEa: any = allCardsSup.filter((item) => item.status === 'Em Andamento');
-  const cardsConcluido: any = allCardsSup.filter((item) => item.status === 'Concluido');
+  const cardsAfa: any = allCardsInst.filter((item) => item.status === 'A Fazer');
+  const cardsEa: any = allCardsInst.filter((item) => item.status === 'Em Andamento');
+  const cardsConcluido: any = allCardsInst.filter((item) => item.status === 'Concluido');
 
   const sortedAfa = sortByPriority(filterCards(cardsAfa));
   const sortedEa = sortByPriority(filterCards(cardsEa));
@@ -71,7 +71,7 @@ export const SectionSup = () => {
 
       <div className={styled.divTitleHeader}>
         <div className={styled.divTitle}>
-            <h1 className={styled.h1Title}>SUPORTE</h1>
+            <h1 className={styled.h1Title}>INSTALAÇÃO</h1>
             <button className={styled.btnCriar} onClick={() => setOpenModal(true)}>Nova Tarefa</button>
         </div>
         <div className={styled.divShare}>
@@ -97,15 +97,15 @@ export const SectionSup = () => {
       <div className={styled.divSup}>
         <div className={styled.divTarefa}>
           <h1>A Fazer</h1>
-          <div>{sortedAfa.map((item) => <SupCards key={item.id} item={item} />)}</div>
+          <div>{sortedAfa.map((item) => <InstCards key={item.id} item={item} />)}</div>
         </div>
         <div className={styled.divTarefa}>
           <h1>Em Andamento</h1>
-          <div>{sortedEa.map((item) => <SupCards key={item.id} item={item} />)}</div>
+          <div>{sortedEa.map((item) => <InstCards key={item.id} item={item} />)}</div>
         </div>
         <div className={styled.divTarefa}>
           <h1>Concluído</h1>
-          <div>{sortedConcluido.map((item) => <SupCards key={item.id} item={item} />)}</div>
+          <div>{sortedConcluido.map((item) => <InstCards key={item.id} item={item} />)}</div>
         </div>
       </div>
     </section>
