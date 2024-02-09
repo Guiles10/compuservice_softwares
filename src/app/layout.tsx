@@ -3,9 +3,9 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { CardsProvider } from '@/context/cards.context'
 import { AuthProvider } from '@/context/auth.context'
-import { NextRouter } from 'next/router'
 
 import { CommentProvider } from '@/context/comment.context'
+import { ClientProvider } from '@/context/client.context'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,11 +25,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <CardsProvider>
-            <CommentProvider>
-              {children}
-            </CommentProvider>
-          </CardsProvider>
+          <ClientProvider>
+            <CardsProvider>
+              <CommentProvider>
+                {children}
+              </CommentProvider>
+            </CardsProvider>
+          </ClientProvider>
         </AuthProvider>
         </body>
     </html>

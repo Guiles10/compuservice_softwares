@@ -7,13 +7,15 @@ import { editCardSchema, editCardSchemaType } from '@/schema/cards.schema';
 import { Dispatch, SetStateAction } from 'react';
 import { AuthContext } from '@/context/auth.context';
 import { FaPen } from 'react-icons/fa';
+import { ClientContext } from '@/context/client.context';
+import { UploadFileComponente } from '@/components/UploadFileComponente';
 
 
 export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, setOpenModalEdit: Dispatch<SetStateAction<boolean>> }) => {
 
     const { allUser, userId } = useContext(AuthContext);
+    const { allClient} = useContext(ClientContext);
     const { excluirSupCard, editarCard, excluirTask } = useContext(CardsContext);
-
 
     const userAuthorized = allUser!.map(user => {
         if (user.function && user.function.includes('Faturamento')) {
@@ -21,15 +23,16 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
         }
         return null;
     }).filter(user => user !== null);
-
     const isAuthorized = userAuthorized.some((user: any) => user.id === userId);
 
-
+    const [editingTitle, setEditingTitle] = useState(false);
+    const handleEditTitle = () => {
+        setEditingTitle(!editingTitle);
+    };
 
     const tasksinfoCard: any = infoCard.tasks!
     const [tasksDB, setTasksDB] = useState<any>(tasksinfoCard);
     const [novaTarefa, setNovaTarefa] = useState('');
-
     const handleCheckboxChange = (index: number) => {
         const updatedTasks = [...tasksDB];
         updatedTasks[index].completed = !updatedTasks[index].completed;
@@ -37,13 +40,12 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
     };
 
     const handleCriarTarefa = () => {
-    if (novaTarefa.trim() !== '') {
-        const novaTarefaObj = { task: novaTarefa, completed: false };
-        setTasksDB((prevTasks: any) => [...prevTasks, novaTarefaObj]);
-        setNovaTarefa('');
-    }
+        if (novaTarefa.trim() !== '') {
+            const novaTarefaObj = { task: novaTarefa, completed: false };
+            setTasksDB((prevTasks: any) => [...prevTasks, novaTarefaObj]);
+            setNovaTarefa('');
+        }
     };
-
     const excluirTarefa = (index: number, id: any | undefined) => {
         const novaListaTarefas = [...tasksDB];
         novaListaTarefas.splice(index, 1);
@@ -52,7 +54,6 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
         }
         setTasksDB(novaListaTarefas);
     };
-    
     const [confirmacaoExclusao, setConfirmacaoExclusao] = useState(false);
     const confirmaExcluir = (cardId: string)=> {
         if (isAuthorized) {
@@ -60,7 +61,6 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
             setOpenModalEdit(false)
         }
     }
-
 
     const [selectedOptions, setSelectedOptions] = useState(infoCard.type || []);
     const handleCheckboxChangeType = (e: any) => {
@@ -72,21 +72,26 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
         }
     };
 
+    const [selectedClient, setSelectedClient] = useState<string>('');
+    const [selectedNames, setSelectedNames] = useState(infoCard.clients || [])
+    const handleSave = () => {
+      if (selectedClient && !selectedNames.includes(selectedClient)) {
+        setSelectedNames(prevSelectedNames => [...prevSelectedNames, selectedClient]);
+      }
+    };
+    const handleRemoveName = (nameToRemove: string) => {
+      setSelectedNames(prevSelectedNames => prevSelectedNames.filter(name => name !== nameToRemove));
+    };
+
     const { register, handleSubmit, formState: { errors } } = useForm<editCardSchemaType>({
         resolver: zodResolver(editCardSchema),
     });
-
     const onSubmit = (form: iDataForm) => {
         if(selectedOptions.length > 0){
-            const dataForm = { ...form, type: selectedOptions };
+            const dataForm = { ...form, type: selectedOptions, clients: selectedNames };
             editarCard(infoCard.id, dataForm, tasksDB);
             setOpenModalEdit(false);
         }
-    };
-
-    const [editingTitle, setEditingTitle] = useState(false);
-    const handleEditTitle = () => {
-        setEditingTitle(!editingTitle);
     };
 
     return (
@@ -117,6 +122,7 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
                             <button className={styled.btnFecha} type='button' onClick={() => setOpenModalEdit(false)}>Fechar</button>
                         </div>
                     </div>
+
                     {!isAuthorized && (
                         <p className={styled.pAuthorized}>Você não é autorizado a fazer edições</p>
                     )}
@@ -147,11 +153,39 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
                             </div>
                         </div>
                     </div> 
-    
+
+                    {isAuthorized && (
+                        <div className={styled.divClientSelect}>
+                            <div className={styled.divSelectClient}>
+                                <p className={styled.pDesc}>Cliente: </p>
+                                <div>
+                                    <select className={styled.selectClient} onChange={(event) => setSelectedClient(event.target.value)}>
+                                        <option value=''> - Selecione - </option>
+                                        {allClient.map((cliente, index) => (
+                                            <option key={index} value={cliente.companyName}>{cliente.companyName}</option>
+                                            ))}
+                                    </select>
+                                <button className={styled.btnSlavar} onClick={handleSave} type='button'>Salvar</button>
+                                </div>
+                            </div>
+                            {selectedNames.length > 0 && (
+                                <div className={styled.divClient}>
+                                    {selectedNames.map((nome, index) => (
+                                        <div className={styled.divNameBtn} key={index}>
+                                            <p className={styled.pName}>{nome}</p>
+                                            <button className={styled.btnExcluir} type='button' onDoubleClick={() => handleRemoveName(nome.toString())}>X</button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     <div className={styled.divDesc}>
                         <p className={styled.pDesc}>Descrição:</p>
                         <textarea className={styled.textarea} id="descriptin" {...register("description")} defaultValue={infoCard.description || ''} readOnly={!isAuthorized}></textarea>
                     </div>
+
                     <div className={styled.divTarefas}>
                         <div className={styled.divTitleTarefas}>
                             <h2 className={styled.pDesc}>Tarefas</h2>
@@ -159,7 +193,7 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
                         <div className={styled.divInput}>
                             <div className={styled.divAddTarefa}>
                                 <input type="text" placeholder="Digite a nova tarefa" value={novaTarefa} onChange={(e) => setNovaTarefa(e.target.value)} disabled={!isAuthorized}/>
-                                <button type="button" onClick={handleCriarTarefa} disabled={!isAuthorized}>Criar</button>
+                                <button type="button" onClick={handleCriarTarefa} disabled={!isAuthorized} className={styled.btnSlavar} >Criar</button>
                             </div>
                             <div className={styled.divUl}>
                                 <ul className={styled.ul}>
@@ -171,17 +205,21 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
                                                     <label className={styled.newLabol} htmlFor={`tarefa-${index}`}>{tarefa.task}</label>
                                                 </div>
                                             </div>
-                                            <button type="button" onClick={() => excluirTarefa(index, tarefa.id)} disabled={!isAuthorized}>X</button>
+                                            <button className={styled.btnExcluir} type="button" onDoubleClick={() => excluirTarefa(index, tarefa.id)} disabled={!isAuthorized}>X</button>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                         </div>
                     </div>
+
                     <div className={styled.divDesc}>
                         <p className={styled.pDesc}>Solução:</p>
                         <textarea className={styled.textarea} id="solution" {...register("solution")} defaultValue={infoCard.solution || ''} readOnly={!isAuthorized}></textarea>
                     </div>
+
+                    <UploadFileComponente/>
+
                     {isAuthorized ? (
                         <div className={styled.divExcluir}>
                             <button type='submit' className={styled.salvar}>Salvar</button>
@@ -197,9 +235,9 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
                             )}
                         </div>
                     ) : null }
+
                 </form>
             </div>
         </section>
     );
-    
 };

@@ -10,12 +10,26 @@
 .divHeaderSec{
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
     width: 100%;
 }
 .secBody{
     display: flex;
     justify-content: space-between;
     width: 100%;
+}
+
+.btnListClient{
+    width: 150px;
+    font-size: 14px;
+    border: none;
+    padding: 3px;
+    border: 2px solid grey;
+    margin-bottom: 3px;
+}
+.btnListClient:hover{
+    font-weight: 700;
+    background-color: rgba(128, 128, 128, 0.363);
 }
 
 @media (max-width: 900px) {

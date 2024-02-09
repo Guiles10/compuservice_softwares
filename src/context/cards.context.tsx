@@ -1,6 +1,6 @@
 'use client'
 import axios from "axios";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext, iUser } from "./auth.context";
 
 export const CardsContext = createContext({} as iProviderValue);
@@ -21,6 +21,7 @@ export interface iCard {
   userId?: string
   user: iUser
   type?: String[]
+  clients?: String[]
 }
 export interface iDataForm {
   title?: String,
@@ -67,6 +68,14 @@ interface iProviderValue {
   excluirSupCard: (itemId: string) => Promise<void>
 
   excluirTask: (tasksId: string) => Promise<void>
+
+
+  docUrl: string
+  setDocUrl: React.Dispatch<React.SetStateAction<string>>
+
+  getFile: (NomeDocumento: string) => Promise<void>
+
+  uploadFile: (file: any) => Promise<void>
 }
 
 export const CardsProvider = ({ children }: iAuthProviderChildren) => {
@@ -241,6 +250,66 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
     };
 
+
+
+    const uploadFile = async (file: any) => {
+      console.log(file)
+        if (!file) {
+            console.error('Nenhum arquivo selecionado.');
+            return;
+        }
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await axios.post('http://localhost:3001/upload', formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+            console.log('Arquivo enviado com sucesso!', response.data);
+
+        } catch (error) {
+            console.error('Erro ao enviar arquivo:', error);
+        }
+    };
+
+
+
+    const [docUrl, setDocUrl] = useState<string>('');
+    const getFile = async (nomeArquivo: string) => {
+      console.log(nomeArquivo);
+      try {
+        const response = await axios.get(`http://localhost:3001/upload/${nomeArquivo}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+    
+        setDocUrl(response.data.signedUrl);
+        
+      } catch (error) {
+        console.error('Erro ao buscar o documento:', error);
+      }
+    };
+    
+
+
+
+    const deleteFile = async (NomeDocumento: any) => {
+      try {
+        const response = await axios.delete(`http://localhost:3001/upload/${NomeDocumento}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+
     return (
     <CardsContext.Provider
       value={{
@@ -271,6 +340,13 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         excluirSupCard,
 
         excluirTask,
+
+
+        getFile,
+        docUrl,
+        setDocUrl,
+
+        uploadFile,
 
       }}
     >

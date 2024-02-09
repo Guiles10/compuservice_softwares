@@ -6,10 +6,11 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 230px;
+    width: 300px;
     padding: 3px;
     border-radius: 6px;
     margin-top: 10px;
+    margin-left: 8px;
     border: 1px solid rgb(160, 160, 160);
 }
 .divTitleHeaderComm{
@@ -56,6 +57,7 @@
     background-color: rgb(210, 210, 210);
     border-radius: 4px;
     padding: 3px;
+    width: 90%;
 }
 .pShare{
     font-size: 18px;
@@ -114,13 +116,13 @@
             width: 85px;
             font-weight: 700;
             padding: 3px;
-            border: 2px solid rgba(128, 0, 0, 0.7);
+            border: 2px solid rgba(0, 0, 0, 0.7);
         }
         .btnSalvar:hover{
             background-color: rgba(0, 128, 0, 0.3);
         }
         .btnCancelar:hover{
-            background-color: rgba(128, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.3);
         }
     }
     .divComment{
