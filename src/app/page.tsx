@@ -5,19 +5,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, loginSchemaType } from "@/schema/login.schema";
 import { AuthContext } from "@/context/auth.context";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import Logo from '../assets/Logo Compuservice.png'
 import Image from "next/image";
-import { parseCookies } from 'nookies';
-
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { useRouter } from 'next/navigation';
-
 
 export default function Login() {
-  
-
   const { loginFunction } = useContext(AuthContext);
 
   const { register, handleSubmit, formState: { errors }} = useForm<loginSchemaType>({

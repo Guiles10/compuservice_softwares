@@ -11,16 +11,22 @@ import { SectionProg } from '@/components/SectionProg';
 import { SectionSupHosp } from '@/components/SectionSupHosp';
 import { SectionFatu } from '@/components/SectionFatu';
 import { SectionInst } from '@/components/SectionInst';
+import { ListClient } from '@/components/ListClient';
+import { ClientContext } from '@/context/client.context';
 
 const Dashboard = () => {
 
   const { selectedMenu } = useContext(AuthContext);
   const { setOpenModal } = useContext(CardsContext);
+  const { modalClient, setModalClient } = useContext(ClientContext);
  
   return (
     <main className={styled.main}>
       <div className={styled.divHeaderSec}>
         <Header />
+      <button onClick={() => setModalClient(true)} className={styled.btnListClient} >Lista Clientes</button>
+      {modalClient && <ListClient/>}
+
         <section className={styled.secBody}>
           {selectedMenu === 'Suporte' && <SectionSup />}
           {selectedMenu === 'Programação' && <SectionProg />}

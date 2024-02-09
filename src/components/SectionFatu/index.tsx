@@ -11,12 +11,12 @@ interface iPropity {
   'Normal': number;
   'Basica': number;
 }
-
-interface iCardSupPropity {
+interface iCardPropity {
   id: string;
   title: string;
   description?: string | null;
   tasks: string[] | null;
+  clientes: string[] | null;
   solution?: string | null;
   status?: string;
   priority: keyof iPropity;
@@ -36,7 +36,7 @@ export const SectionFatu = () => {
     title: '',
   });
 
-  const sortByPriority = (cards: iCardSupPropity[]) => {
+  const sortByPriority = (cards: iCardPropity[]) => {
     const priorityOrder: iPropity = {
       'Muito Urgente': 1,
       'Urgente': 2,
@@ -44,11 +44,11 @@ export const SectionFatu = () => {
       'Basica': 4,
     };
     return cards.sort(
-      (a: iCardSupPropity, b: iCardSupPropity) =>
+      (a: iCardPropity, b: iCardPropity) =>
         priorityOrder[a.priority] - priorityOrder[b.priority]
     );
   };
-  const filterCards = (cards: iCardSupPropity[]) => {
+  const filterCards = (cards: iCardPropity[]) => {
     return cards.filter(
       (item) =>
         item.createdAt?.includes(filter.date) &&
