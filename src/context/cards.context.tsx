@@ -253,7 +253,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
 
     const uploadFile = async (file: any) => {
-      console.log(file)
         if (!file) {
             console.error('Nenhum arquivo selecionado.');
             return;
