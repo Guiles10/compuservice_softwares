@@ -151,6 +151,7 @@
     justify-content: flex-start;
     background-color: rgba(88, 88, 88, 0.08);
     flex-direction: column;
+    padding: 8px;
   }
   .divSelectClient{
     padding: 6px 3px;
@@ -174,14 +175,16 @@
 .divNameBtn {
     display: flex;
     align-items: center;;
-    border-bottom: 1px dashed #007bff;
+    box-shadow: 0 1px 4px rgba(0, 0, 255, 0.4);
+    border: 1px solid rgba(0, 0, 255, 0.1);
     border-radius: 4px;
-    padding: 2px;
+    padding: 5px 8px;
     margin-bottom: 3px;
+    margin-left: 10px;
 }    
 .pName {
     margin: 0;
-    margin-right: 5px;
+    margin-right: 25px;
 }
 
 
@@ -263,8 +266,8 @@
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1px 4px rgba(0, 0, 255, 0.4);
+    border: 1px solid rgba(0, 0, 255, 0.1);
     border-radius: 4px;
 
     > div {

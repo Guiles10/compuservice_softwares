@@ -21,8 +21,18 @@ export interface iCard {
   userId?: string
   user: iUser
   type?: String[]
+  files: iFiles[] | []
   clients?: String[]
 }
+export interface iFiles {
+  cardId: string
+  createdAt: string
+  filename: string
+  id: string
+  updatedAt: string
+  url: string
+}
+
 export interface iDataForm {
   title?: String,
   descriptin?: String,
@@ -56,7 +66,7 @@ interface iProviderValue {
   allCardsInst: iCard[]
   setAllCardsInst: React.Dispatch<React.SetStateAction<iCard[]>>
 
-  creatCardSup: (dataForm: iDataForm, tarefas: string[]) => Promise<void>
+  creatCard: (dataForm: iDataForm, tarefas: string[], file: any) => Promise<void>
 
   moveCard: (item: iCard, idCard: string) => void
   moveCardReves: (item: iCard, idCard: string) => Promise<void>
@@ -69,19 +79,15 @@ interface iProviderValue {
 
   excluirTask: (tasksId: string) => Promise<void>
 
-
-  docUrl: string
-  setDocUrl: React.Dispatch<React.SetStateAction<string>>
-
-  getFile: (NomeDocumento: string) => Promise<void>
-
-  uploadFile: (file: any) => Promise<void>
+  uploadFile: (file: any, cardId: string) => Promise<void>
+  deleteFile: (nameDoc: string, cardId: string) => Promise<void>
 }
 
 export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
   const { userId, token} = useContext(AuthContext);
 
+///////////////////////////////////////////////// GET TODOS OS CARDS /////////////////////////////////////////////////
   const [allCardsFatu, setAllCardsFatu] = useState<iCard[]>([])
   const [allCardsProg, setAllCardsProg] = useState<iCard[]>([])
   const [allCardsSup, setAllCardsSup] = useState<iCard[]>([])
@@ -114,8 +120,10 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       getAllCards()
     }, []);
 
+///////////////////////////////////////////////// CARDS E TAREFAS /////////////////////////////////////////////////
     const [openModal, setOpenModal] = useState<boolean>(false)
-    const creatCardSup = async (dataForm: iDataForm, tarefas: string[]) => {
+    const creatCard = async (dataForm: iDataForm, tarefas: string[], file: any) => {
+      console.log(file)
        try {
         const responseCard = await axios.post('http://localhost:3001/cards', dataForm, {
             headers: {
@@ -132,58 +140,32 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
             }
           );
           createTesks.push(responseTask.data)
+        }   
+
+        for (const fileItem of file) {
+          const formData = new FormData();
+          formData.append('file', fileItem);
+          try {
+            const response = await axios.post(`http://localhost:3001/file/${responseCard.data.id}`, 
+                formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+            );
+            console.log('File uploaded successfully:', response.data);
+          } catch (error) {
+            console.error('Error uploading file:', error);
+          }
         }
+
         getAllCards()
       } catch (error) {
         console.error(error);
       }
+  
     };
-
-    const moveCard = async (item: iCard, idCard: string) => {
-      let novoStatus = ''
-      if (item.status === 'A Fazer') {
-        novoStatus = 'Em Andamento'
-      } else if (item.status === 'Em Andamento') {
-        novoStatus = 'Concluido'
-      } else if (item.status === 'Concluido') {
-        return
-      }
-      const cardAtualizado = { ...item, status: novoStatus };
-
-        try {
-          const response = await axios.patch(`http://localhost:3001/cards/${idCard}`, cardAtualizado, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          getAllCards()
-        } catch (error) {
-          console.error(error)
-        }
-    }
-    const moveCardReves = async (item: iCard, idCard: string) => {
-      let novoStatus = ''
-      if (item.status === 'Concluido') {
-        novoStatus = 'Em Andamento'
-      } else if (item.status === 'Em Andamento') {
-        novoStatus = 'A Fazer'
-      } else if (item.status === 'A Fazer') {
-        return
-      }
-      const cardAtualizado = {... item, status: novoStatus }
-        try {
-          const response = await axios.patch(`http://localhost:3001/cards/${idCard}`, cardAtualizado, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          getAllCards()
-        } catch (error) {
-          console.error(error);
-        }
-    }
 
     const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
       try {
@@ -238,6 +220,54 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
     };
 
+///////////////////////////////////////////////// MOVER CARD /////////////////////////////////////////////////
+    const moveCard = async (item: iCard, idCard: string) => {
+      let novoStatus = ''
+      if (item.status === 'A Fazer') {
+        novoStatus = 'Em Andamento'
+      } else if (item.status === 'Em Andamento') {
+        novoStatus = 'Concluido'
+      } else if (item.status === 'Concluido') {
+        return
+      }
+      const cardAtualizado = { ...item, status: novoStatus };
+
+        try {
+          const response = await axios.patch(`http://localhost:3001/cards/${idCard}`, cardAtualizado, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          getAllCards()
+        } catch (error) {
+          console.error(error)
+        }
+    }
+    const moveCardReves = async (item: iCard, idCard: string) => {
+      let novoStatus = ''
+      if (item.status === 'Concluido') {
+        novoStatus = 'Em Andamento'
+      } else if (item.status === 'Em Andamento') {
+        novoStatus = 'A Fazer'
+      } else if (item.status === 'A Fazer') {
+        return
+      }
+      const cardAtualizado = {... item, status: novoStatus }
+        try {
+          const response = await axios.patch(`http://localhost:3001/cards/${idCard}`, cardAtualizado, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          getAllCards()
+        } catch (error) {
+          console.error(error);
+        }
+    }
+
+///////////////////////////////////////////////// TAREFAS /////////////////////////////////////////////////
     const excluirTask = async (tasksId: string) => {
       try {
         const response = await axios.delete(`http://localhost:3001/tasks/${tasksId}`, {
@@ -250,62 +280,48 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
     };
 
-
-
-    const uploadFile = async (file: any) => {
-        if (!file) {
-            console.error('Nenhum arquivo selecionado.');
-            return;
-        }
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const response = await axios.post('http://localhost:3001/upload', formData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                }
-            });
-            console.log('Arquivo enviado com sucesso!', response.data);
-
-        } catch (error) {
-            console.error('Erro ao enviar arquivo:', error);
-        }
-    };
-
-
-
-    const [docUrl, setDocUrl] = useState<string>('');
-    const getFile = async (nomeArquivo: string) => {
-      console.log(nomeArquivo);
+///////////////////////////////////////////////// FILES /////////////////////////////////////////////////
+    const uploadFile = async (file: any, cardId: string) => {
+      if (!file) {
+          console.error('Nenhum arquivo selecionado.');
+          return;
+      }
       try {
-        const response = await axios.get(`http://localhost:3001/upload/${nomeArquivo}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        });
-    
-        setDocUrl(response.data.signedUrl);
-        
+          const formData = new FormData();
+          formData.append('file', file);
+          const response = await axios.post(`http://localhost:3001/file/${cardId}`, 
+              formData, {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                      'Content-Type': 'multipart/form-data',
+                  }
+              }
+          );
+          getAllCards()
       } catch (error) {
-        console.error('Erro ao buscar o documento:', error);
+          console.error('Erro ao enviar arquivo:', error);
       }
     };
-    
 
-
-
-    const deleteFile = async (NomeDocumento: any) => {
+    const deleteFile = async (nameDoc: string, cardId: string) => {
       try {
-        const response = await axios.delete(`http://localhost:3001/upload/${NomeDocumento}`, {
+        const response = await axios.delete(`http://localhost:3001/file/${nameDoc}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
       } catch (error) {
         console.error(error);
       }
+
+      try {
+        const responseCard = await axios.delete(`http://localhost:3001/cards/${cardId}/${nameDoc}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        getAllCards()
+      } catch (error) {
+        console.error(error);
+      }
+
     };
 
 
@@ -327,7 +343,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         allCardsInst,
         setAllCardsInst,
 
-        creatCardSup,
+        creatCard,
 
         moveCard,
         moveCardReves,
@@ -340,12 +356,8 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
         excluirTask,
 
-
-        getFile,
-        docUrl,
-        setDocUrl,
-
         uploadFile,
+        deleteFile,
 
       }}
     >

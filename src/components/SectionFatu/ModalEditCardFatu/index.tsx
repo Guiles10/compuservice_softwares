@@ -218,7 +218,7 @@ export const ModalEditCardFatu = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
                         <textarea className={styled.textarea} id="solution" {...register("solution")} defaultValue={infoCard.solution || ''} readOnly={!isAuthorized}></textarea>
                     </div>
 
-                    <UploadFileComponente/>
+                    <UploadFileComponente infoCard={infoCard}/>
 
                     {isAuthorized ? (
                         <div className={styled.divExcluir}>
