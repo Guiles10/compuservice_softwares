@@ -2,12 +2,18 @@ import styled from './styles.module.scss';
 import { CardsContext, iCard, iFiles } from '@/context/cards.context';
 import { useContext, useRef, useState } from 'react';
 
-export const UploadFileComponente = ({ infoCard }:{ infoCard: iCard}) => {
-
+interface iUploadFileComponente{
+    infoCard: iCard,
+    isAuthorized: boolean
+}
+export const UploadFileComponente = ({ infoCard, isAuthorized }: iUploadFileComponente) => {
     const { uploadFile, deleteFile } = useContext(CardsContext);
 
     const [selectedFileName, setSelectedFileName] = useState('');
     const [fileSelected, setFileSelected] = useState(false);
+
+    const [isUploading, setIsUploading] = useState(false);
+    const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -21,14 +27,28 @@ export const UploadFileComponente = ({ infoCard }:{ infoCard: iCard}) => {
             setFileSelected(false);
         }
     };
-    
+
     const handleFileUpload = () => {
         if (fileInputRef.current && fileInputRef.current.files && fileInputRef.current.files.length > 0) {
             const file = fileInputRef.current.files[0];
             setSelectedFileName('');
             setFileSelected(false);
+            setIsUploading(true);
             uploadFile(file, infoCard.id);
+
+            setTimeout(() => {
+                setIsUploading(false);
+            }, 3500);
         }
+    };
+
+    const handleFileDelete = (fileName: string, fileId: string) => {
+        setDeletingFileId(fileId);
+        deleteFile(fileName, infoCard.id);
+
+        setTimeout(() => {
+            setDeletingFileId(null); 
+        }, 3500);
     };
 
     const handleButtonClick = () => {
@@ -40,14 +60,20 @@ export const UploadFileComponente = ({ infoCard }:{ infoCard: iCard}) => {
             <p className={styled.pDesc}>Selecionar Arquivo:</p>
             <div className={styled.divAddFile}>
                 <input className={styled.inputFile} type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileSelect} />
-                <button className={styled.btnSelectFile} type="button" onClick={handleButtonClick}>Selecionar Arquivo</button>
+                {isAuthorized && (
+                    <button className={styled.btnSelectFile} type="button" onClick={handleButtonClick}>Selecionar Arquivo</button>
+                )}
                 {selectedFileName &&
                     <div className={styled.divSpan}>
                         <span className={styled.span}>Arquivo:</span>
                         <span className={styled.spanFile}> - {selectedFileName}</span>
                     </div>
                 }
-                <button className={styled.btnSalveFile} type='button' onClick={handleFileUpload} disabled={!fileSelected}>Salvar</button>
+                {isAuthorized && (
+                    <button className={styled.btnSalveFile} type='button' onClick={handleFileUpload} disabled={!fileSelected || isUploading}>
+                        {isUploading ? 'Carregando...' : 'Salvar'} 
+                    </button>
+                )}
             </div>
 
             <div className={styled.divAllFile}>
@@ -56,7 +82,11 @@ export const UploadFileComponente = ({ infoCard }:{ infoCard: iCard}) => {
                         <p className={styled.fileName} >{file.filename} </p>
                         <div>
                             <a className={styled.fileLink} href={file.url} target="_blank" rel="noopener noreferrer">Visualizar</a>
-                            <button className={styled.fileExcluir} type='button' onDoubleClick={() => deleteFile(file.filename, infoCard.id)}>Excluir</button>
+                            {isAuthorized && (
+                                <button className={styled.fileExcluir} type='button' disabled={deletingFileId === file.id} onClick={() => handleFileDelete(file.filename, file.id)}>
+                                    {deletingFileId === file.id ? 'Excluindo...' : 'Excluir'}
+                                </button>
+                            )}
                         </div>
                     </div>
                 ))}

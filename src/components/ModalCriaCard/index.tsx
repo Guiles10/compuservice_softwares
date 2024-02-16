@@ -174,7 +174,7 @@ export const ModalCriaCards = () => {
                                         <option key={index} value={cliente.companyName}>{cliente.companyName}</option>
                                         ))}
                                 </select>
-                                <button className={styled.btnSlavar} onClick={handleSave} type='button'>Salvar</button>
+                                <button className={styled.btnSlavar} onClick={handleSave} type='button'>Adicionar</button>
                             </div>
                         </div>
                         {selectedNames.length > 0 && (
@@ -243,7 +243,7 @@ export const ModalCriaCards = () => {
                     </section>
 
                     <div className={styled.divSalvar}>
-                        <button type='submit' className={styled.salvar}>Salvar</button>
+                        <button type='submit' className={styled.salvar}>Criar Card</button>
                     </div>
 
                 </form>

@@ -75,7 +75,7 @@ interface iProviderValue {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 
   editarCard: (item: string, dataForm: iDataForm, tarefas: iTask[]) => Promise<void>
-  excluirSupCard: (itemId: string) => Promise<void>
+  excluirCard: (infoCard: any) => Promise<void>
 
   excluirTask: (tasksId: string) => Promise<void>
 
@@ -208,13 +208,36 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       getAllCards()
     };
 
-    const excluirSupCard = async (itemId: string) => {
+    const excluirCard = async (infoCard: any) => {
+
+      for (const file of infoCard.files) {
+        try {
+          const response = await axios.delete(`http://localhost:3001/file/${file.filename}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+        } catch (error) {
+          console.error(error);
+        }
+
+        try {
+          const response = await axios.delete(`http://localhost:3001/cards/${infoCard.id}/${file.filename}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
       try {
-        const response = await axios.delete(`http://localhost:3001/cards/${itemId}`, {
+        const response = await axios.delete(`http://localhost:3001/cards/${infoCard.id}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+
         getAllCards()
+        alert('Card excluido com Sucesso')
+
       } catch (error) {
         console.error(error);
       }
@@ -314,7 +337,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
 
       try {
-        const responseCard = await axios.delete(`http://localhost:3001/cards/${cardId}/${nameDoc}`, {
+        const response = await axios.delete(`http://localhost:3001/cards/${cardId}/${nameDoc}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         getAllCards()
@@ -352,7 +375,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         setOpenModal,
 
         editarCard,
-        excluirSupCard,
+        excluirCard,
 
         excluirTask,
 
