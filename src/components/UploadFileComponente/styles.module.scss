@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 5px;
+  padding: 5px 10px 10px 10px;
 }
 .inputFile{
 
@@ -67,10 +67,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // border: 1px dashed red;
   margin-bottom: 3px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 255, 0.4);
+  border: 1px solid rgba(0, 0, 255, 0.4);
 }
 .fileName{
   font-size: 14px;
@@ -86,7 +86,7 @@
   font-size: 12px;
   font-weight: 600;
   color: red;
-  margin: 8px;
+  margin: 0 8px;
   border-radius: 4px;
   padding: 3px;
   max-width: 90%;
