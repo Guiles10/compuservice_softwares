@@ -5,7 +5,7 @@ import { CardsContext, iCard } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
 import { ModalEditCardSupHosp } from '@/components/SectionSupHosp/ModalEditCardSupHosp';
 
-export const SupHospCards = ({ item }: { item: iCard }) => {
+export const SupHospCards = ({ item }: any) => {
 
     const { moveCardReves, moveCard } = useContext(CardsContext);
 

@@ -87,6 +87,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
     };
     useEffect(() => {
       getAllClient()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token, userId ]);
 
     const [modalCriaClient, setModalCriaClient] = useState<boolean>(false)

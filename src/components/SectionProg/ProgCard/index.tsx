@@ -6,7 +6,7 @@ import { AuthContext } from '@/context/auth.context';
 import { ModalEditCardProg } from '../ModalEditCardProg';
 
 
-export const ProgCards = ({ item }: { item: iCard }) => {
+export const ProgCards = ({ item }: any) => {
 
     const { moveCardReves, moveCard } = useContext(CardsContext);
 
