@@ -94,7 +94,7 @@ export const SectionFatu = () => {
         </div>
       </div>
       {openModal && <ModalCriaCards />}
-      <div className={styled.divSup}>
+      <div className={styled.divSup}> 
         <div className={styled.divTarefa}>
           <h1>A Fazer</h1>
           <div>{sortedAfa.map((item) => <FatuCards key={item.id} item={item} />)}</div>

@@ -27,7 +27,7 @@ export const ModalCriaClient = () => {
         resolver: zodResolver(clientSchema),
     });
     
-    const onSubmit = (dataForm: iDataForm) => {
+    const onSubmit = (dataForm: any) => {
         const responsibleData = showResponsibleForms.map(formId => {
             return {
                 name: (document.getElementById(`name-${formId}`) as HTMLInputElement).value,
