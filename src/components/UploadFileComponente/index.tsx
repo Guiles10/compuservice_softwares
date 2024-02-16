@@ -1,37 +1,66 @@
-import styled from './styles.module.scss'
+import styled from './styles.module.scss';
+import { CardsContext, iCard, iFiles } from '@/context/cards.context';
+import { useContext, useRef, useState } from 'react';
 
-import { AuthContext } from '@/context/auth.context';
-import { CardsContext } from '@/context/cards.context';
-import { useContext, useRef } from 'react';
+export const UploadFileComponente = ({ infoCard }:{ infoCard: iCard}) => {
 
+    const { uploadFile, deleteFile } = useContext(CardsContext);
 
-export const UploadFileComponente = () => {
+    const [selectedFileName, setSelectedFileName] = useState('');
+    const [fileSelected, setFileSelected] = useState(false);
 
-    const { infoUser, logout } = useContext(AuthContext);
-    const { getFile, uploadFile, docUrl } = useContext(CardsContext);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-
-    const fileInputRef = useRef<any>(null);
-
+    const handleFileSelect = () => {
+        if (fileInputRef.current && fileInputRef.current.files && fileInputRef.current.files.length > 0) {
+            const file = fileInputRef.current.files[0];
+            setSelectedFileName(file.name);
+            setFileSelected(true);
+        } else {
+            setSelectedFileName('');
+            setFileSelected(false);
+        }
+    };
+    
     const handleFileUpload = () => {
-        const file = fileInputRef.current.files[0];
-        uploadFile(file);
+        if (fileInputRef.current && fileInputRef.current.files && fileInputRef.current.files.length > 0) {
+            const file = fileInputRef.current.files[0];
+            setSelectedFileName('');
+            setFileSelected(false);
+            uploadFile(file, infoCard.id);
+        }
     };
 
-    const UrlFile = docUrl
+    const handleButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
     return (
-        <section>
-            <div>
-                <input type="file" ref={fileInputRef} />
-                <button type='button' onClick={handleFileUpload}>Enviar Arquivo</button>
+        <section className={styled.secFile}>
+            <p className={styled.pDesc}>Selecionar Arquivo:</p>
+            <div className={styled.divAddFile}>
+                <input className={styled.inputFile} type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileSelect} />
+                <button className={styled.btnSelectFile} type="button" onClick={handleButtonClick}>Selecionar Arquivo</button>
+                {selectedFileName &&
+                    <div className={styled.divSpan}>
+                        <span className={styled.span}>Arquivo:</span>
+                        <span className={styled.spanFile}> - {selectedFileName}</span>
+                    </div>
+                }
+                <button className={styled.btnSalveFile} type='button' onClick={handleFileUpload} disabled={!fileSelected}>Salvar</button>
             </div>
 
-            <div>
-                <button type='button' onClick={() => getFile('anexo01.jpg')}>LIONS.pdf</button>
+            <div className={styled.divAllFile}>
+                {infoCard.files.map((file: iFiles) => (
+                    <div className={styled.divFile} key={file.id}>
+                        <p className={styled.fileName} >{file.filename} </p>
+                        <div>
+                            <a className={styled.fileLink} href={file.url} target="_blank" rel="noopener noreferrer">Visualizar</a>
+                            <button className={styled.fileExcluir} type='button' onDoubleClick={() => deleteFile(file.filename, infoCard.id)}>Excluir</button>
+                        </div>
+                    </div>
+                ))}
             </div>
-            {docUrl && (
-                <a href={UrlFile} target="_blank" rel="noopener noreferrer">Aqui</a>
-            )}
         </section>
     );
 };

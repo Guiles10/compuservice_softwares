@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { AuthContext } from '@/context/auth.context';
 import { FaPen } from 'react-icons/fa';
 import { ClientContext } from '@/context/client.context';
+import { UploadFileComponente } from '@/components/UploadFileComponente';
 
 
 export const ModalEditCardSup = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, setOpenModalEdit: Dispatch<SetStateAction<boolean>> }) => {
@@ -231,6 +232,8 @@ export const ModalEditCardSup = ({ infoCard, setOpenModalEdit }:{ infoCard: iCar
                     <p className={styled.pDesc}>Solução:</p>
                     <textarea className={styled.textarea} id="solution" {...register("solution")} defaultValue={infoCard.solution || ''} readOnly={!isAuthorized}></textarea>
                 </div>
+
+                <UploadFileComponente infoCard={infoCard}/>
 
                 {isAuthorized ? (
                     <div className={styled.divExcluir}>
