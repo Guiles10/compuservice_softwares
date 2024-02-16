@@ -1,9 +1,9 @@
 
 import styled from './styles.module.scss'
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { CardsContext, iCard } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
-import { ModalEditCardSupHosp } from '@/components/SectionSupHosp/ModalEditCardSupHosp';
+import { ModalEditCardFatu } from '../ModalEditCardFatu';
 
 export const FatuCards = ({ item }: { item: iCard }) => {
 
@@ -15,7 +15,7 @@ export const FatuCards = ({ item }: { item: iCard }) => {
 
     const getPriorityColor = () => {
         switch (item.priority) {
-            case 'Muito Urgente':
+            case 'Muito Urgente': 
                 return 'black';
             case 'Urgente':
                 return 'red';
@@ -48,7 +48,7 @@ export const FatuCards = ({ item }: { item: iCard }) => {
                     <h3 className={styled.h3Name}>{item.user?.name}</h3>
                     <h3 className={styled.h3Data}>{item.createdAt!.slice(0, 10)} - {item.createdAt!.slice(10, -3)}</h3>
                 </div>
-
+                
                 {!isAuthorized ? (
                     <div className={styled.divBtnCard}>
                         <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)}>Visualizar</button>
@@ -61,7 +61,7 @@ export const FatuCards = ({ item }: { item: iCard }) => {
                     </div>
                 )}
             </div>
-            {openModalEdit && <ModalEditCardSupHosp infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
+            {openModalEdit && <ModalEditCardFatu infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
         </section>
     );
 };

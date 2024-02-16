@@ -1,0 +1,97 @@
+@use "../../scss/abstract/" as *;
+
+.secFile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: rgba(88, 88, 88, 0.07);
+  flex-direction: column;
+  padding: 8px;
+}
+.pDesc{
+  font-size: 16px;
+  font-weight: 600;
+  padding: 3px;
+}
+.divAddFile{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 5px 10px 10px 10px;
+}
+.inputFile{
+
+}
+.btnSelectFile{
+  font-size: 14px;
+  padding: 5px;
+  border-radius: 4px;
+  margin-right: 25px;
+  font-weight: 600;
+}
+.btnSelectFile:hover{
+  background-color: #d3d3d3;
+}
+.divSpan{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.span{
+  font-size: 16px;
+  font-weight: 700;
+}
+.spanFile{
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 25px;
+}
+.btnSalveFile{
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+.btnSalveFile:hover{
+  font-weight: 700;
+}
+
+.divAllFile{
+  display: flex;
+  flex-direction: column;
+}
+.divFile{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  padding: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 255, 0.4);
+  border: 1px solid rgba(0, 0, 255, 0.4);
+}
+.fileName{
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 15px;
+  margin-right: 25px;
+}
+.fileLink{
+  font-size: 14px;
+  font-weight: 600;
+}
+.fileExcluir{
+  font-size: 12px;
+  font-weight: 600;
+  color: red;
+  margin: 0 8px;
+  border-radius: 4px;
+  padding: 3px;
+  max-width: 90%;
+  border: 2px solid red;
+}
+.fileExcluir:hover{
+  background-color: rgba(128, 0, 0, 0.3);
+}

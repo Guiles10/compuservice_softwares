@@ -17,9 +17,13 @@ export const Header = () => {
                 </figure>
                 <Menu />
                 <div className={styled.divInfo}>
-                    <div>
-                        <h2 className={styled.name}>{infoUser?.name}</h2>
-                        <p className={styled.email}>{infoUser?.email}</p>
+                    <div className={styled.divInfoHeader}>
+                        <div>
+                            <h2 className={styled.name}>{infoUser?.name}</h2>
+                            <p className={styled.email}>{infoUser?.email}</p>
+                        </div>
+                        <button className={styled.btnSair} onClick={() => logout()}>Sair</button>
+                    </div>
                         <div className={styled.divCargo}>
                             <p className={styled.cargo}>-{infoUser?.function[0]}</p>
                             <p className={styled.cargo}>-{infoUser?.function[1]}</p>
@@ -28,8 +32,6 @@ export const Header = () => {
                             <p className={styled.cargo}>-{infoUser?.function[4]}</p>
                             <p className={styled.cargo}>-{infoUser?.function[5]}</p>
                         </div>
-                    </div>
-                    <button className={styled.btnSair} onClick={() => logout()}>Sair</button>
 
                 </div>
             </section>

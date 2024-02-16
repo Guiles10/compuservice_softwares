@@ -1,6 +1,6 @@
 'use client'
 import axios from "axios";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext, iUser } from "./auth.context";
 
 export const CardsContext = createContext({} as iProviderValue);
@@ -21,7 +21,18 @@ export interface iCard {
   userId?: string
   user: iUser
   type?: String[]
+  files: iFiles[] | []
+  clients?: String[]
 }
+export interface iFiles {
+  cardId: string
+  createdAt: string
+  filename: string
+  id: string
+  updatedAt: string
+  url: string
+}
+
 export interface iDataForm {
   title?: String,
   descriptin?: String,
@@ -55,7 +66,7 @@ interface iProviderValue {
   allCardsInst: iCard[]
   setAllCardsInst: React.Dispatch<React.SetStateAction<iCard[]>>
 
-  creatCardSup: (dataForm: iDataForm, tarefas: string[]) => Promise<void>
+  creatCard: (dataForm: iDataForm, tarefas: string[], file: any) => Promise<void>
 
   moveCard: (item: iCard, idCard: string) => void
   moveCardReves: (item: iCard, idCard: string) => Promise<void>
@@ -64,15 +75,19 @@ interface iProviderValue {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 
   editarCard: (item: string, dataForm: iDataForm, tarefas: iTask[]) => Promise<void>
-  excluirSupCard: (itemId: string) => Promise<void>
+  excluirCard: (infoCard: any) => Promise<void>
 
   excluirTask: (tasksId: string) => Promise<void>
+
+  uploadFile: (file: any, cardId: string) => Promise<void>
+  deleteFile: (nameDoc: string, cardId: string) => Promise<void>
 }
 
 export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
   const { userId, token} = useContext(AuthContext);
 
+///////////////////////////////////////////////// GET TODOS OS CARDS /////////////////////////////////////////////////
   const [allCardsFatu, setAllCardsFatu] = useState<iCard[]>([])
   const [allCardsProg, setAllCardsProg] = useState<iCard[]>([])
   const [allCardsSup, setAllCardsSup] = useState<iCard[]>([])
@@ -105,8 +120,10 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       getAllCards()
     }, []);
 
+///////////////////////////////////////////////// CARDS E TAREFAS /////////////////////////////////////////////////
     const [openModal, setOpenModal] = useState<boolean>(false)
-    const creatCardSup = async (dataForm: iDataForm, tarefas: string[]) => {
+    const creatCard = async (dataForm: iDataForm, tarefas: string[], file: any) => {
+      console.log(file)
        try {
         const responseCard = await axios.post('http://localhost:3001/cards', dataForm, {
             headers: {
@@ -123,13 +140,110 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
             }
           );
           createTesks.push(responseTask.data)
+        }   
+
+        for (const fileItem of file) {
+          const formData = new FormData();
+          formData.append('file', fileItem);
+          try {
+            const response = await axios.post(`http://localhost:3001/file/${responseCard.data.id}`, 
+                formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+            );
+            console.log('File uploaded successfully:', response.data);
+          } catch (error) {
+            console.error('Error uploading file:', error);
+          }
         }
+
         getAllCards()
+      } catch (error) {
+        console.error(error);
+      }
+  
+    };
+
+    const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
+      try {
+        const responseCard = await axios.patch(`http://localhost:3001/cards/${itemId}`, dataForm, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+
+      let idTasks: iTask[] = [];
+      let semIdTasks: iTask[] = [];
+      tarefas.forEach((tarefa) => {
+            if (tarefa.id) {
+                idTasks.push(tarefa);
+            } else {
+                semIdTasks.push(tarefa);
+            }
+      });
+
+      try {
+        for (const tarefa of semIdTasks) {
+          const responseCreateTask = await axios.post(`http://localhost:3001/tasks/${itemId}`, tarefa,{ 
+            headers: { Authorization: `Bearer ${token}` } 
+          });
+        }
+      }catch (error) {
+        console.error(error);
+      }
+
+      try {
+        for (const tarefa of idTasks) {
+          const responseEditeTask = await axios.patch(`http://localhost:3001/tasks/${itemId}/${tarefa.id}`, tarefa,{ 
+            headers: { Authorization: `Bearer ${token}` } 
+          });
+        }
+      }catch (error) {
+        console.error(error);
+      }
+      getAllCards()
+    };
+
+    const excluirCard = async (infoCard: any) => {
+
+      for (const file of infoCard.files) {
+        try {
+          const response = await axios.delete(`http://localhost:3001/file/${file.filename}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+        } catch (error) {
+          console.error(error);
+        }
+
+        try {
+          const response = await axios.delete(`http://localhost:3001/cards/${infoCard.id}/${file.filename}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      try {
+        const response = await axios.delete(`http://localhost:3001/cards/${infoCard.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        getAllCards()
+        alert('Card excluido com Sucesso')
+
       } catch (error) {
         console.error(error);
       }
     };
 
+///////////////////////////////////////////////// MOVER CARD /////////////////////////////////////////////////
     const moveCard = async (item: iCard, idCard: string) => {
       let novoStatus = ''
       if (item.status === 'A Fazer') {
@@ -176,59 +290,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         }
     }
 
-    const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
-      try {
-        const responseCard = await axios.patch(`http://localhost:3001/cards/${itemId}`, dataForm, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      } catch (error) {
-        console.error(error);
-      }
-
-      let idTasks: iTask[] = [];
-      let semIdTasks: iTask[] = [];
-      tarefas.forEach((tarefa) => {
-            if (tarefa.id) {
-                idTasks.push(tarefa);
-            } else {
-                semIdTasks.push(tarefa);
-            }
-      });
-
-      try {
-        for (const tarefa of semIdTasks) {
-          const responseCreateTask = await axios.post(`http://localhost:3001/tasks/${itemId}`, tarefa,{ 
-            headers: { Authorization: `Bearer ${token}` } 
-          });
-        }
-      }catch (error) {
-        console.error(error);
-      }
-
-      try {
-        for (const tarefa of idTasks) {
-          const responseEditeTask = await axios.patch(`http://localhost:3001/tasks/${itemId}/${tarefa.id}`, tarefa,{ 
-            headers: { Authorization: `Bearer ${token}` } 
-          });
-        }
-      }catch (error) {
-        console.error(error);
-      }
-      getAllCards()
-    };
-
-    const excluirSupCard = async (itemId: string) => {
-      try {
-        const response = await axios.delete(`http://localhost:3001/cards/${itemId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        getAllCards()
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
+///////////////////////////////////////////////// TAREFAS /////////////////////////////////////////////////
     const excluirTask = async (tasksId: string) => {
       try {
         const response = await axios.delete(`http://localhost:3001/tasks/${tasksId}`, {
@@ -240,6 +302,51 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         console.error(error);
       }
     };
+
+///////////////////////////////////////////////// FILES /////////////////////////////////////////////////
+    const uploadFile = async (file: any, cardId: string) => {
+      if (!file) {
+          console.error('Nenhum arquivo selecionado.');
+          return;
+      }
+      try {
+          const formData = new FormData();
+          formData.append('file', file);
+          const response = await axios.post(`http://localhost:3001/file/${cardId}`, 
+              formData, {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                      'Content-Type': 'multipart/form-data',
+                  }
+              }
+          );
+          getAllCards()
+      } catch (error) {
+          console.error('Erro ao enviar arquivo:', error);
+      }
+    };
+
+    const deleteFile = async (nameDoc: string, cardId: string) => {
+      try {
+        const response = await axios.delete(`http://localhost:3001/file/${nameDoc}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      } catch (error) {
+        console.error(error);
+      }
+
+      try {
+        const response = await axios.delete(`http://localhost:3001/cards/${cardId}/${nameDoc}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        getAllCards()
+      } catch (error) {
+        console.error(error);
+      }
+
+    };
+
 
     return (
     <CardsContext.Provider
@@ -259,7 +366,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         allCardsInst,
         setAllCardsInst,
 
-        creatCardSup,
+        creatCard,
 
         moveCard,
         moveCardReves,
@@ -268,9 +375,12 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         setOpenModal,
 
         editarCard,
-        excluirSupCard,
+        excluirCard,
 
         excluirTask,
+
+        uploadFile,
+        deleteFile,
 
       }}
     >
