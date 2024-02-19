@@ -62,13 +62,11 @@ export const ModalCriaCards = () => {
     const handleFileSelect = () => {
         if (fileInputRef.current && fileInputRef.current.files && fileInputRef.current.files.length > 0) {
             const file = fileInputRef.current.files[0];
-            console.log(file)
             const isExisting = selectedFiles.some((f: any) => f.name === file.name);
-            console.log(isExisting)
+
             if (!isExisting) {
                 setSelectedFileName(file.name);
             } else {
-                console.log("primeiro")
                 alert("Já existe um arquivo com esse nome.");
                 setSelectedFileName('');
             }
@@ -87,7 +85,6 @@ export const ModalCriaCards = () => {
             if (!isExisting) {
                 setSelectedFiles(prevFiles => [...prevFiles, file]);
             } else {
-                console.log("segundo")
                 alert("Já existe um arquivo com esse nome.");
             }
         }
@@ -102,15 +99,29 @@ export const ModalCriaCards = () => {
     };
 
 /////////////////////////////////////////////////// FORM ///////////////////////////////////////////////////
+    const [isLoading, setIsLoading] = useState(false);
+
     const { register, handleSubmit, formState: { errors } } = useForm<cardSchemaType>({
         resolver: zodResolver(cardSchema),
     });
     const onSubmit = (data: any) => {
-        if(selectedOptions.length > 0){
-            const dataForm = { ...data, type: selectedOptions, clients: selectedNames};
+        setIsLoading(true); 
 
+        if(selectedOptions.length > 0){
+            const dataForm = { ...data, type: selectedOptions, clients: selectedNames };
             creatCard(dataForm, tarefas, selectedFiles);
-            setOpenModal(false);
+
+            if(selectedFiles.length > 0){
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setOpenModal(false);
+                }, 4000);
+            } else {
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setOpenModal(false);
+                }, 1000);
+            }
         }
     };
 
@@ -125,7 +136,7 @@ export const ModalCriaCards = () => {
                             <input className={styled.inputTitle} id="title" type="text" {...register("title")} placeholder="Digite o Titulo"/>
                             {errors.title?.message && ( <p className={styled.pError}>{errors.title.message}</p> )}
                         </div>
-                        <button className={styled.btnFecha} onClick={() => setOpenModal(false)}>Fechar</button>
+                        <button className={styled.btnFecha} onClick={() => setOpenModal(false)} disabled={isLoading}>Fechar</button>
                     </div>
 
                     <div  className={styled.divTypePrioryt}>
@@ -174,7 +185,7 @@ export const ModalCriaCards = () => {
                                         <option key={index} value={cliente.companyName}>{cliente.companyName}</option>
                                         ))}
                                 </select>
-                                <button className={styled.btnSlavar} onClick={handleSave} type='button'>Adicionar</button>
+                                <button className={styled.btnSlavar} onClick={handleSave} type='button' disabled={isLoading}>Adicionar</button>
                             </div>
                         </div>
                         {selectedNames.length > 0 && (
@@ -203,7 +214,7 @@ export const ModalCriaCards = () => {
                         <div className={styled.divInput}>
                             <div className={styled.divAddTarefa}>
                                 <input type="text" value={novaTarefa} onChange={(e) => setNovaTarefa(e.target.value)} placeholder="Digite a nova tarefa"/>
-                                <button className={styled.btnSlavar}type="button" onClick={adicionarTarefa}>Adicionar</button>
+                                <button className={styled.btnSlavar}type="button" onClick={adicionarTarefa} disabled={isLoading}>Adicionar</button>
                             </div>
                             <div className={styled.divUl}>
                                 <ul className={styled.ul}>
@@ -212,7 +223,7 @@ export const ModalCriaCards = () => {
                                             <div>
                                                 <label htmlFor={`tarefa-${index}`}>{tarefa}</label>
                                             </div>
-                                            <button type='button' onDoubleClick={() => excluirTarefa(index)}>X</button>
+                                            <button type='button' onDoubleClick={() => excluirTarefa(index)} disabled={isLoading}>X</button>
                                         </li>
                                     ))}
                                 </ul>
@@ -224,7 +235,7 @@ export const ModalCriaCards = () => {
                         <p className={styled.pDesc}>Selecionar Arquivo:</p>
                         <div className={styled.divAddFile}>
                             <input className={styled.inputFile} type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileSelect} />
-                            <button className={styled.btnSelectFile} type="button" onClick={handleButtonClick}>Selecionar Arquivo</button>
+                            <button className={styled.btnSelectFile} type="button" onClick={handleButtonClick} disabled={isLoading}>Selecionar Arquivo</button>
                                 <div className={styled.divSpan}>
                                     <span className={styled.span}>Arquivo:</span>
                                     <span className={styled.spanFile}> - {selectedFileName}</span>  
@@ -236,14 +247,16 @@ export const ModalCriaCards = () => {
                             {selectedFiles.map((file: any, index: number) => (
                                 <div className={styled.divFile} key={index}>
                                     <p className={styled.fileName}>{file.name}</p>
-                                    <button className={styled.fileExcluir} type='button' onDoubleClick={() => handleDeleteFile(file.name)}>Excluir</button>
+                                    <button className={styled.fileExcluir} type='button' onDoubleClick={() => handleDeleteFile(file.name)} disabled={isLoading}>Excluir</button>
                                 </div>
                             ))}
                         </div>
                     </section>
 
                     <div className={styled.divSalvar}>
-                        <button type='submit' className={styled.salvar}>Criar Card</button>
+                        <button type='submit' className={isLoading ? styled.salvarLoading : styled.salvar} disabled={isLoading}>
+                            {isLoading ? 'Criando Card ...' : 'Criar Card'}
+                        </button>
                     </div>
 
                 </form>

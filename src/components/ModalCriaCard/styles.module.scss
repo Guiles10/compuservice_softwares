@@ -377,3 +377,17 @@
     font-size: 22px;
     background-color: rgba(0, 128, 0, 0.3);
 }
+
+.salvarLoading{
+    font-size: 20px;
+    color: gray;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    width: 170px;
+    height: 40px;
+    max-width: 90%;
+    border: 2px solid gray;
+    font-weight: 700;
+    cursor: not-allowed;
+    
+}

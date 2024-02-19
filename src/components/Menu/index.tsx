@@ -11,7 +11,7 @@ export const Menu = () => {
         <p className={styled.pMenu} onClick={() => setSelectedMenu('Suporte')}>Suporte</p>
         <p className={styled.pMenu} onClick={() => setSelectedMenu('Programação')}>Programação</p>
         <p className={styled.pMenu} onClick={() => setSelectedMenu('Faturamento')}>Faturamento</p>
-        <p className={styled.pMenu} onClick={() => setSelectedMenu('SupporteHosp')}>Suporte Hospital</p>
+        <p className={styled.pMenu} onClick={() => setSelectedMenu('SuporteHosp')}>Suporte Hospital</p>
         <p className={styled.pMenu} onClick={() => setSelectedMenu('Instalação')}>Instalação</p>
       </section>
     );
