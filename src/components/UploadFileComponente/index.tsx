@@ -83,7 +83,7 @@ export const UploadFileComponente = ({ infoCard, isAuthorized }: iUploadFileComp
                         <div>
                             <a className={styled.fileLink} href={file.url} target="_blank" rel="noopener noreferrer">Visualizar</a>
                             {isAuthorized && (
-                                <button className={styled.fileExcluir} type='button' disabled={deletingFileId === file.id} onClick={() => handleFileDelete(file.filename, file.id)}>
+                                <button className={styled.fileExcluir} type='button' disabled={deletingFileId === file.id} onDoubleClick={() => handleFileDelete(file.filename, file.id)}>
                                     {deletingFileId === file.id ? 'Excluindo...' : 'Excluir'}
                                 </button>
                             )}
