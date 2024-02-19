@@ -3,7 +3,9 @@ import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
+// import { Api } from "../service/urlAxios";
 import axios from "axios";
+
 
 
 export const AuthContext = createContext({} as iProviderValue);
@@ -47,7 +49,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
 
   const loginFunction = async (infoLogin: iInfoLogin) => {
     try {
-      const response = await axios.post('http://localhost:3001/login', infoLogin);
+      const response = await axios.post('https://compuservice-bd.vercel.app/login', infoLogin);
 
       setCookie(null, "@token", response.data.token, {
         maxAge: 60 * 610,
@@ -86,7 +88,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   const [allUser, setAllUser] = useState<iUser[]| null>(null);
   const userAll = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/users/`);
+      const response = await axios.get(`https://compuservice-bd.vercel.app/users/`);
       setAllUser(response.data);
     } catch (error) {
       console.error(error);
@@ -99,7 +101,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   useEffect(() => {
     const findUser = async (id: string) => {
       try {
-        const response = await axios.get(`http://localhost:3001/users/${id}`, {
+        const response = await axios.get(`https://compuservice-bd.vercel.app/users/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -96,7 +96,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
   
     const getAllCards = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/cards');
+        const response = await axios.get('https://compuservice-bd.vercel.app/cards');
         const allCards = response.data;
 
         const atendimentoCards = allCards.filter((card: iCard) => card.type!.includes('Atendimento'));
@@ -125,7 +125,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
     const creatCard = async (dataForm: iDataForm, tarefas: string[], file: any) => {
       console.log(file)
        try {
-        const responseCard = await axios.post('http://localhost:3001/cards', dataForm, {
+        const responseCard = await axios.post('https://compuservice-bd.vercel.app/cards', dataForm, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -133,7 +133,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         );
         let createTesks: iTask[] = []
         for (const tarefa of tarefas) {
-          const responseTask = await axios.post(`http://localhost:3001/tasks/${responseCard.data.id}`, { task: tarefa }, {
+          const responseTask = await axios.post(`https://compuservice-bd.vercel.app/tasks/${responseCard.data.id}`, { task: tarefa }, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -146,7 +146,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           const formData = new FormData();
           formData.append('file', fileItem);
           try {
-            const response = await axios.post(`http://localhost:3001/file/${responseCard.data.id}`, 
+            const response = await axios.post(`https://compuservice-bd.vercel.app/file/${responseCard.data.id}`, 
                 formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -169,7 +169,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
     const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
       try {
-        const responseCard = await axios.patch(`http://localhost:3001/cards/${itemId}`, dataForm, {
+        const responseCard = await axios.patch(`https://compuservice-bd.vercel.app/cards/${itemId}`, dataForm, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
@@ -188,7 +188,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
       try {
         for (const tarefa of semIdTasks) {
-          const responseCreateTask = await axios.post(`http://localhost:3001/tasks/${itemId}`, tarefa,{ 
+          const responseCreateTask = await axios.post(`https://compuservice-bd.vercel.app/tasks/${itemId}`, tarefa,{ 
             headers: { Authorization: `Bearer ${token}` } 
           });
         }
@@ -198,7 +198,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
       try {
         for (const tarefa of idTasks) {
-          const responseEditeTask = await axios.patch(`http://localhost:3001/tasks/${itemId}/${tarefa.id}`, tarefa,{ 
+          const responseEditeTask = await axios.patch(`https://compuservice-bd.vercel.app/tasks/${itemId}/${tarefa.id}`, tarefa,{ 
             headers: { Authorization: `Bearer ${token}` } 
           });
         }
@@ -212,7 +212,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
       for (const file of infoCard.files) {
         try {
-          const response = await axios.delete(`http://localhost:3001/file/${file.filename}`, {
+          const response = await axios.delete(`https://compuservice-bd.vercel.app/file/${file.filename}`, {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
@@ -221,7 +221,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         }
 
         try {
-          const response = await axios.delete(`http://localhost:3001/cards/${infoCard.id}/${file.filename}`, {
+          const response = await axios.delete(`https://compuservice-bd.vercel.app/cards/${infoCard.id}/${file.filename}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
         } catch (error) {
@@ -230,7 +230,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
 
       try {
-        const response = await axios.delete(`http://localhost:3001/cards/${infoCard.id}`, {
+        const response = await axios.delete(`https://compuservice-bd.vercel.app/cards/${infoCard.id}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
@@ -256,7 +256,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       const cardAtualizado = { ...item, status: novoStatus };
 
         try {
-          const response = await axios.patch(`http://localhost:3001/cards/${idCard}`, cardAtualizado, {
+          const response = await axios.patch(`https://compuservice-bd.vercel.app/cards/${idCard}`, cardAtualizado, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -278,7 +278,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
       const cardAtualizado = {... item, status: novoStatus }
         try {
-          const response = await axios.patch(`http://localhost:3001/cards/${idCard}`, cardAtualizado, {
+          const response = await axios.patch(`https://compuservice-bd.vercel.app/cards/${idCard}`, cardAtualizado, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -293,7 +293,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 ///////////////////////////////////////////////// TAREFAS /////////////////////////////////////////////////
     const excluirTask = async (tasksId: string) => {
       try {
-        const response = await axios.delete(`http://localhost:3001/tasks/${tasksId}`, {
+        const response = await axios.delete(`https://compuservice-bd.vercel.app/tasks/${tasksId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
@@ -312,7 +312,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       try {
           const formData = new FormData();
           formData.append('file', file);
-          const response = await axios.post(`http://localhost:3001/file/${cardId}`, 
+          const response = await axios.post(`https://compuservice-bd.vercel.app/file/${cardId}`, 
               formData, {
                   headers: {
                       Authorization: `Bearer ${token}`,
@@ -328,7 +328,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
     const deleteFile = async (nameDoc: string, cardId: string) => {
       try {
-        const response = await axios.delete(`http://localhost:3001/file/${nameDoc}`, {
+        const response = await axios.delete(`https://compuservice-bd.vercel.app/file/${nameDoc}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
@@ -337,7 +337,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
 
       try {
-        const response = await axios.delete(`http://localhost:3001/cards/${cardId}/${nameDoc}`, {
+        const response = await axios.delete(`https://compuservice-bd.vercel.app/cards/${cardId}/${nameDoc}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         getAllCards()
