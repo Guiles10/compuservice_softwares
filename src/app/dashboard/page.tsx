@@ -1,7 +1,7 @@
 'use client'
 
 import styled from './styles.module.scss';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Header } from '@/components/Header';
 import { SectionSup } from '@/components/SectionSup';
 import { SectionComments } from '@/components/SectionComments';
@@ -16,10 +16,22 @@ import { ClientContext } from '@/context/client.context';
 
 const Dashboard = () => {
 
-  const { selectedMenu } = useContext(AuthContext);
-  const { setOpenModal } = useContext(CardsContext);
+  const { selectedMenu, setSelectedMenu, infoUser } = useContext(AuthContext);
   const { modalClient, setModalClient } = useContext(ClientContext);
- 
+
+  useEffect(() => {
+    if (infoUser && infoUser.function && Array.isArray(infoUser.function)) {
+      const firstMatchingMenu = infoUser.function.find((menuItem: string) =>
+        ['Suporte', 'Programação', 'Faturamento', 'SuporteHosp', 'Instalação'].includes(menuItem)
+      );
+
+      if (firstMatchingMenu) {
+        setSelectedMenu(firstMatchingMenu);
+      }
+    }
+  }, [infoUser]);
+
+
   return (
     <main className={styled.main}>
       <div className={styled.divHeaderSec}>
@@ -31,7 +43,7 @@ const Dashboard = () => {
           {selectedMenu === 'Suporte' && <SectionSup />}
           {selectedMenu === 'Programação' && <SectionProg />}
           {selectedMenu === 'Faturamento' && <SectionFatu />}
-          {selectedMenu === 'SupporteHosp' && <SectionSupHosp />}
+          {selectedMenu === 'SuporteHosp' && <SectionSupHosp />}
           {selectedMenu === 'Instalação' && <SectionInst />}
         </section>
       </div>

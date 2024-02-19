@@ -123,7 +123,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 ///////////////////////////////////////////////// CARDS E TAREFAS /////////////////////////////////////////////////
     const [openModal, setOpenModal] = useState<boolean>(false)
     const creatCard = async (dataForm: iDataForm, tarefas: string[], file: any) => {
-      console.log(file)
        try {
         const responseCard = await axios.post('https://compuservice-bd.vercel.app/cards', dataForm, {
             headers: {
@@ -154,7 +153,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
                     }
                 }
             );
-            console.log('File uploaded successfully:', response.data);
           } catch (error) {
             console.error('Error uploading file:', error);
           }
