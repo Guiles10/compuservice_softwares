@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
 
   const loginFunction = async (infoLogin: iInfoLogin) => {
     try {
-      const response = await axios.post('https://compuservice-bd.vercel.app/login', infoLogin);
+      const response = await axios.post('http://localhost:3001/login', infoLogin);
 
       setCookie(null, "@token", response.data.token, {
         maxAge: 60 * 610,
@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   const [allUser, setAllUser] = useState<iUser[]| null>(null);
   const userAll = async () => {
     try {
-      const response = await axios.get(`https://compuservice-bd.vercel.app/users/`);
+      const response = await axios.get(`http://localhost:3001/users/`);
       setAllUser(response.data);
     } catch (error) {
       console.error(error);
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   useEffect(() => {
     const findUser = async (id: string) => {
       try {
-        const response = await axios.get(`https://compuservice-bd.vercel.app/users/${id}`, {
+        const response = await axios.get(`http://localhost:3001/users/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
