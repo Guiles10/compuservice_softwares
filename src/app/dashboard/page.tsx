@@ -15,6 +15,7 @@ import { ListClient } from '@/components/ListClient';
 import { ClientContext } from '@/context/client.context';
 
 const Dashboard = () => {
+  const { allCardsSup, openModal, setOpenModal } = useContext(CardsContext);
 
   const { selectedMenu, setSelectedMenu, infoUser } = useContext(AuthContext);
   const { modalClient, setModalClient } = useContext(ClientContext);
@@ -36,8 +37,12 @@ const Dashboard = () => {
     <main className={styled.main}>
       <div className={styled.divHeaderSec}>
         <Header />
-      <button onClick={() => setModalClient(true)} className={styled.btnListClient} >Lista Clientes</button>
-      {modalClient && <ListClient/>}
+        
+        <div className={styled.divBtn}>
+          <button className={styled.btnCriarTarefa} onClick={() => setOpenModal(true)}>Criar Tarefa</button>
+          <button onClick={() => setModalClient(true)} className={styled.btnListClient} >Lista Clientes</button>
+        </div>
+          {modalClient && <ListClient/>}
 
         <section className={styled.secBody}>
           {selectedMenu === 'Suporte' && <SectionSup />}
