@@ -77,7 +77,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
 
     const getAllClient = async () => {
       try {
-        const response = await axios.get('https://compuservice-bd.vercel.app/client', {
+        const response = await axios.get('http://localhost:3001/client', {
           headers: { Authorization: `Bearer ${token}`}
         })
         setAllClient(response.data);
@@ -93,7 +93,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
     const [modalCriaClient, setModalCriaClient] = useState<boolean>(false)
     const creatClient = async (dataForm: iDataForm, responsibles: iResponsible[]) => {
        try {
-        const responseClinet = await axios.post('https://compuservice-bd.vercel.app/client', dataForm, {
+        const responseClinet = await axios.post('http://localhost:3001/client', dataForm, {
             headers: { Authorization: `Bearer ${token}`},
           }
         );
@@ -101,7 +101,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
         let createResp: iResponsible[] = []
         for (const responsible of responsibles) {
           try {
-            const responseResp = await axios.post(`https://compuservice-bd.vercel.app/responsible/${responseClinet.data.id}`, responsible, {
+            const responseResp = await axios.post(`http://localhost:3001/responsible/${responseClinet.data.id}`, responsible, {
                 headers: { Authorization: `Bearer ${token}`},
               }
             );
@@ -119,7 +119,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
 
     const editarClient = async (clientId: string, dataForm: iClient, newRespFrom: iResponsible[], respClint:iResponsible[]) => {
       try {
-        const responseClient = await axios.patch(`https://compuservice-bd.vercel.app/client/${clientId}`, dataForm, {
+        const responseClient = await axios.patch(`http://localhost:3001/client/${clientId}`, dataForm, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
@@ -128,7 +128,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
       let createResp: iResponsible[] = []
       for (const responsible of newRespFrom) {
         try {
-          const responseResp = await axios.post(`https://compuservice-bd.vercel.app/responsible/${clientId}`, responsible, {
+          const responseResp = await axios.post(`http://localhost:3001/responsible/${clientId}`, responsible, {
               headers: { Authorization: `Bearer ${token}`},
             }
           );
@@ -140,7 +140,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
       let editResp: iResponsible[] = []
       for (const responsible of respClint) {
         try {
-          const responseResp = await axios.patch(`https://compuservice-bd.vercel.app/responsible/${clientId}/${responsible.id}`, responsible, {
+          const responseResp = await axios.patch(`http://localhost:3001/responsible/${clientId}/${responsible.id}`, responsible, {
               headers: { Authorization: `Bearer ${token}`},
             }
           );
@@ -155,7 +155,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
   
     const excluirClient = async (clientId: string) => {
       try {
-        const response = await axios.delete(`https://compuservice-bd.vercel.app/client/${clientId}`, {
+        const response = await axios.delete(`http://localhost:3001/client/${clientId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
@@ -168,7 +168,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
 
     const excluirRespnsible = async (respnsibleId: string) => {
       try {
-        const response = await axios.delete(`https://compuservice-bd.vercel.app/responsible/${respnsibleId}`, {
+        const response = await axios.delete(`http://localhost:3001/responsible/${respnsibleId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
