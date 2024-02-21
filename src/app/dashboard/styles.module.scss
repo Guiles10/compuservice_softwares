@@ -19,17 +19,35 @@
     width: 100%;
 }
 
+.divBtn{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
 .btnListClient{
-    width: 150px;
-    font-size: 14px;
-    border: none;
-    padding: 3px;
-    border: 2px solid grey;
-    margin-bottom: 3px;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 5px 15px;
+    border-radius: 4px;
 }
 .btnListClient:hover{
     font-weight: 700;
-    background-color: rgba(128, 128, 128, 0.363);
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+.btnCriarTarefa{
+    font-size: 20px;
+    font-weight: 700;
+    padding: 5px 15px;
+    border-radius: 4px;
+    border: 1px solid green;
+    color: green;
+}
+.btnCriarTarefa:hover{
+    background-color: rgb(0, 128, 0, 0.1);
 }
 
 @media (max-width: 900px) {
