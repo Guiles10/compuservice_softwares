@@ -1,15 +1,16 @@
 import styled from './styles.module.scss'
-import { CardsContext, iDataForm } from '@/context/cards.context';
+import { CardsContext } from '@/context/cards.context';
 import { useContext, useRef, useState } from 'react';
 import { cardSchema, cardSchemaType } from '@/schema/cards.schema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ClientContext } from '@/context/client.context';
-import { UploadFileComponente } from '../UploadFileComponente';
+import { AuthContext } from '@/context/auth.context';
 
 export const ModalCriaCards = () => {
 
-    const { allClient} = useContext(ClientContext);
+    const { allUser } = useContext(AuthContext);
+    const { allClient } = useContext(ClientContext);
     const { setOpenModal, creatCard } = useContext(CardsContext);
 
 /////////////////////////////////////////////////// TASK ///////////////////////////////////////////////////
@@ -42,6 +43,7 @@ export const ModalCriaCards = () => {
         }
     }
 
+/////////////////////////////////////////////////// CLIENTES ///////////////////////////////////////////////////
     const [selectedClient, setSelectedClient] = useState<string>('');
     const [selectedNames, setSelectedNames] = useState<string[]>([]);
     const handleSave = () => {
@@ -51,6 +53,18 @@ export const ModalCriaCards = () => {
     };
     const handleRemoveName = (nameToRemove: string) => {
       setSelectedNames(prevSelectedNames => prevSelectedNames.filter(name => name !== nameToRemove));
+    };
+
+/////////////////////////////////////////////////// USUÁRIOS ///////////////////////////////////////////////////
+    const [selectedUser, setSelectedUser] = useState<string>('');
+    const [selectedUserNames, setSelectedUserNames] = useState<string[]>([]);
+    const handleSaveUser = () => {
+    if (selectedUser && !selectedUserNames.includes(selectedUser)) {
+        setSelectedUserNames(prevSelectedUserNames => [...prevSelectedUserNames, selectedUser]);
+    }
+    };
+    const handleRemoveUserName = (nameToRemove: string) => {
+    setSelectedUserNames(prevSelectedUserNames => prevSelectedUserNames.filter(name => name !== nameToRemove));
     };
 
 /////////////////////////////////////////////////// FILE ///////////////////////////////////////////////////
@@ -138,6 +152,31 @@ export const ModalCriaCards = () => {
                         </div>
                         <button className={styled.btnFecha} onClick={() => setOpenModal(false)} disabled={isLoading}>Fechar</button>
                     </div>
+
+                    <div className={styled.divClientSelect}>
+                        <div className={styled.divSelectClient}>
+                            <p className={styled.pDesc}>Usuário: </p>
+                            <div>
+                                <select className={styled.selectClient} onChange={(event) => setSelectedUser(event.target.value)}>
+                                    <option value=''> - Selecione - </option>
+                                    {allUser!.map((user: any, index: any) => (
+                                        <option key={index} value={user.name}>{user.name}</option>
+                                    ))}
+                                </select>
+                                <button className={styled.btnSlavar} onClick={handleSaveUser} type='button' disabled={isLoading}>Adicionar</button>
+                            </div>
+                        </div>
+                        {selectedUserNames.length > 0 && (
+                            <div className={styled.divClient} >
+                            {selectedUserNames.map((userName, index) => (
+                                <div className={styled.divNameBtn} key={index}>
+                                <p className={styled.pName}>{userName}</p>
+                                <button className={styled.btnExcluir} type='button' onDoubleClick={() => handleRemoveUserName(userName)}>X</button>
+                                </div>
+                            ))}
+                            </div>
+                        )}
+                        </div>
 
                     <div  className={styled.divTypePrioryt}>
                         <div className={styled.divSelect}>

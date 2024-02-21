@@ -11,19 +11,19 @@ import { ClientContext } from '@/context/client.context';
 import { UploadFileComponente } from '@/components/UploadFileComponente';
 
 
-export const ModalEditCardInst = ({ infoCard, setOpenModalEdit }:{ infoCard: iCard, setOpenModalEdit: Dispatch<SetStateAction<boolean>> }) => {
-
+export const ModalEditCard = ({ infoCard, setOpenModalEdit, isAuthorized }:{ infoCard: iCard, setOpenModalEdit: Dispatch<SetStateAction<boolean>>, isAuthorized: boolean }) => {
+console.log("oi")
     const { allUser, userId } = useContext(AuthContext);
     const { allClient} = useContext(ClientContext);
     const { excluirCard, editarCard, excluirTask } = useContext(CardsContext);
 
-    const userAuthorized = allUser!.map(user => {
-        if (user.function && user.function.includes('Instalação')) {
-            return user;
-        }
-        return null;
-    }).filter(user => user !== null);
-    const isAuthorized = userAuthorized.some((user: any) => user.id === userId);
+    // const userAuthorized = allUser!.map(user => {
+    //     if (user.function && user.function.includes('Faturamento')) {
+    //         return user;
+    //     }
+    //     return null;
+    // }).filter(user => user !== null);
+    // const isAuthorized = userAuthorized.some((user: any) => user.id === userId);
 
     const [editingTitle, setEditingTitle] = useState(false);
     const handleEditTitle = () => {
@@ -40,11 +40,11 @@ export const ModalEditCardInst = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
     };
 
     const handleCriarTarefa = () => {
-    if (novaTarefa.trim() !== '') {
-        const novaTarefaObj = { task: novaTarefa, completed: false };
-        setTasksDB((prevTasks: any) => [...prevTasks, novaTarefaObj]);
-        setNovaTarefa('');
-    }
+        if (novaTarefa.trim() !== '') {
+            const novaTarefaObj = { task: novaTarefa, completed: false };
+            setTasksDB((prevTasks: any) => [...prevTasks, novaTarefaObj]);
+            setNovaTarefa('');
+        }
     };
     const excluirTarefa = (index: number, id: any | undefined) => {
         const novaListaTarefas = [...tasksDB];
@@ -88,7 +88,7 @@ export const ModalEditCardInst = ({ infoCard, setOpenModalEdit }:{ infoCard: iCa
     });
     const onSubmit = (form: iDataForm) => {
         if(selectedOptions.length > 0){
-            const dataForm = { ...form, type: selectedOptions, clients: selectedNames  };
+            const dataForm = { ...form, type: selectedOptions, clients: selectedNames };
             editarCard(infoCard.id, dataForm, tasksDB);
             setOpenModalEdit(false);
         }
