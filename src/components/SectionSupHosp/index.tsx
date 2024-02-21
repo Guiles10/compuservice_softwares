@@ -72,7 +72,6 @@ export const SectionSupHosp = () => {
       <div className={styled.divTitleHeader}>
         <div className={styled.divTitle}>
             <h1 className={styled.h1Title}>SUPORTE HOSPITAL</h1>
-            <button className={styled.btnCriar} onClick={() => setOpenModal(true)}>Nova Tarefa</button>
         </div>
         <div className={styled.divShare}>
           <p className={styled.pShare}>Filtro: </p>
