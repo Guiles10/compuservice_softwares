@@ -34,8 +34,9 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
   const [allCommentsSup, setAllCommentsSup] = useState<iComment[]>([])
 
     const getAllComments = async () => {
+      console.log("Get Comments")
       try {
-        const response = await axios.get('https://compuservice-bd.vercel.app/comments');
+        const response = await axios.get('http://localhost:3001/comments');
         setAllCommentsSup(response.data);
       } catch (error) {
         console.error(error);
@@ -47,11 +48,12 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
 
     const creatComment = async (dataForm: iComment ) => {
        try {
-        const response = await axios.post(`https://compuservice-bd.vercel.app/comments/${userId}`, dataForm, {
+        const response = await axios.post(`http://localhost:3001/comments/${userId}`, dataForm, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
         getAllComments()
+        
       } catch (error) {
         console.error(error);
       }
@@ -59,7 +61,7 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
 
     const editarComment = async (itemId: string, dataForm: iComment ) => {
       try {
-        const response = await axios.patch(`https://compuservice-bd.vercel.app/comments/${itemId}`, dataForm, {
+        const response = await axios.patch(`http://localhost:3001/comments/${itemId}`, dataForm, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
@@ -70,7 +72,7 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
 
     const excluirComment = async (itemId: string) => {
       try {
-        const response = await axios.delete(`https://compuservice-bd.vercel.app/comments/${itemId}`, {
+        const response = await axios.delete(`http://localhost:3001/comments/${itemId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
