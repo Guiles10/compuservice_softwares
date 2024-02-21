@@ -3,7 +3,7 @@ import styled from './styles.module.scss'
 import { useContext, useState } from 'react';
 import { CardsContext, iCard } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
-import { ModalEditCardFatu } from '../ModalEditCardFatu';
+import { ModalEditCard } from '@/components/ModalEditCard';
 
 export const FatuCards = ({ item }: any ) => {
 
@@ -32,7 +32,6 @@ export const FatuCards = ({ item }: any ) => {
         }
         return null;
     }).filter(user => user !== null);
-
     const isAuthorized = userAuthorized.some((user: any) => user.id === userId);
 
     return (
@@ -61,7 +60,7 @@ export const FatuCards = ({ item }: any ) => {
                     </div>
                 )}
             </div>
-            {openModalEdit && <ModalEditCardFatu infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
+            {openModalEdit && <ModalEditCard infoCard={item} setOpenModalEdit={setOpenModalEdit} isAuthorized={isAuthorized}/>}
         </section>
     );
 };

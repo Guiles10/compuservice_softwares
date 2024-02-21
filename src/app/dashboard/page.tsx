@@ -13,9 +13,10 @@ import { SectionFatu } from '@/components/SectionFatu';
 import { SectionInst } from '@/components/SectionInst';
 import { ListClient } from '@/components/ListClient';
 import { ClientContext } from '@/context/client.context';
+import { ModalCriaCards } from '@/components/ModalCriaCard';
 
 const Dashboard = () => {
-  const { allCardsSup, openModal, setOpenModal } = useContext(CardsContext);
+  const { openModal, setOpenModal } = useContext(CardsContext);
 
   const { selectedMenu, setSelectedMenu, infoUser } = useContext(AuthContext);
   const { modalClient, setModalClient } = useContext(ClientContext);
@@ -43,6 +44,7 @@ const Dashboard = () => {
           <button onClick={() => setModalClient(true)} className={styled.btnListClient} >Lista Clientes</button>
         </div>
           {modalClient && <ListClient/>}
+          {openModal && <ModalCriaCards />}
 
         <section className={styled.secBody}>
           {selectedMenu === 'Suporte' && <SectionSup />}

@@ -92,7 +92,7 @@ export const SectionSupHosp = () => {
           </div>
         </div>
       </div>
-      {openModal && <ModalCriaCards />}
+
       <div className={styled.divSup}>
         <div className={styled.divTarefa}>
           <h1>A Fazer</h1>

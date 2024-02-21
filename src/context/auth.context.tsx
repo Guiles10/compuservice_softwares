@@ -86,6 +86,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   };
 
   const [allUser, setAllUser] = useState<iUser[]| null>(null);
+  console.log(allUser)
   const userAll = async () => {
     try {
       const response = await axios.get(`https://compuservice-db-8ca85a38ff76.herokuapp.com/users/`);

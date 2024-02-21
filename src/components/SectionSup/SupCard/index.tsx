@@ -1,9 +1,9 @@
 
 import styled from './styles.module.scss'
 import { useContext, useState } from 'react';
-import { CardsContext, iCard } from '@/context/cards.context';
+import { CardsContext } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
-import { ModalEditCardSup } from '../ModalEditCardSup';
+import { ModalEditCard } from '@/components/ModalEditCard';
 
 
 export const SupCards = ({ item }: any) => {
@@ -62,7 +62,7 @@ export const SupCards = ({ item }: any) => {
                     </div>
                 )}
             </div>
-            {openModalEdit && <ModalEditCardSup infoCard={item} setOpenModalEdit={setOpenModalEdit}/>}
+            {openModalEdit && <ModalEditCard infoCard={item} setOpenModalEdit={setOpenModalEdit} isAuthorized={isAuthorized}/>}
         </section>
     );
 };
