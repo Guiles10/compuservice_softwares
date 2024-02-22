@@ -11,7 +11,7 @@ export const ModalCriaCards = () => {
 
     const { allUser } = useContext(AuthContext);
     const { allClient } = useContext(ClientContext);
-    const { setOpenModal, creatCard } = useContext(CardsContext);
+    const { setOpenModal, creatCard, isLoading, setIsLoading } = useContext(CardsContext);
 
 /////////////////////////////////////////////////// TASK ///////////////////////////////////////////////////
     const [novaTarefa, setNovaTarefa] = useState('');
@@ -113,29 +113,15 @@ export const ModalCriaCards = () => {
     };
 
 /////////////////////////////////////////////////// FORM ///////////////////////////////////////////////////
-    const [isLoading, setIsLoading] = useState(false);
-
     const { register, handleSubmit, formState: { errors } } = useForm<cardSchemaType>({
         resolver: zodResolver(cardSchema),
     });
+
     const onSubmit = (data: any) => {
         setIsLoading(true); 
-
         if(selectedOptions.length > 0){
             const dataForm = { ...data, type: selectedOptions, clients: selectedNames };
             creatCard(dataForm, tarefas, selectedFiles);
-
-            if(selectedFiles.length > 0){
-                setTimeout(() => {
-                    setIsLoading(false);
-                    setOpenModal(false);
-                }, 4000);
-            } else {
-                setTimeout(() => {
-                    setIsLoading(false);
-                    setOpenModal(false);
-                }, 1000);
-            }
         }
     };
 
@@ -147,7 +133,7 @@ export const ModalCriaCards = () => {
 
                     <div className={styled.divHeader}>
                         <div className={styled.divInputTitle}>
-                            <input className={styled.inputTitle} id="title" type="text" {...register("title")} placeholder="Digite o Titulo"/>
+                            <input className={styled.inputTitle} id="title" type="text" disabled={isLoading} {...register("title")} placeholder="Digite o Titulo"/>
                             {errors.title?.message && ( <p className={styled.pError}>{errors.title.message}</p> )}
                         </div>
                         <button className={styled.btnFecha} onClick={() => setOpenModal(false)} disabled={isLoading}>Fechar</button>
@@ -157,7 +143,7 @@ export const ModalCriaCards = () => {
                         <div className={styled.divSelectClient}>
                             <p className={styled.pDesc}>Usuário: </p>
                             <div>
-                                <select className={styled.selectClient} onChange={(event) => setSelectedUser(event.target.value)}>
+                                <select className={styled.selectClient} disabled={isLoading} onChange={(event) => setSelectedUser(event.target.value)}>
                                     <option value=''> - Selecione - </option>
                                     {allUser!.map((user: any, index: any) => (
                                         <option key={index} value={user.name}>{user.name}</option>
@@ -176,12 +162,12 @@ export const ModalCriaCards = () => {
                             ))}
                             </div>
                         )}
-                        </div>
+                    </div>
 
                     <div  className={styled.divTypePrioryt}>
                         <div className={styled.divSelect}>
                             <p className={styled.pDesc}>Prioridade: </p>
-                            <select className={styled.select} id="opcoes" {...register('priority')}>
+                            <select className={styled.select} disabled={isLoading} id="opcoes" {...register('priority')}>
                                 <option value="Basica">Basica</option>
                                 <option value="Normal">Normal</option>
                                 <option value="Urgente">Urgente</option>
@@ -193,19 +179,19 @@ export const ModalCriaCards = () => {
                             <p className={styled.pDesc}>Setor: </p>
                             <div className={styled.checkboxContainer}>
                                 <label>
-                                    <input type="checkbox" {...register('type')} value="Suporte" checked={selectedOptions.includes('Suporte')} onChange={handleCheckboxChange}/>Suporte
+                                    <input type="checkbox" disabled={isLoading} {...register('type')} value="Suporte" checked={selectedOptions.includes('Suporte')} onChange={handleCheckboxChange}/>Suporte
                                 </label>
                                 <label>
-                                    <input type="checkbox" {...register('type')} value="Programação" checked={selectedOptions.includes('Programação')} onChange={handleCheckboxChange}/>Programação
+                                    <input type="checkbox" disabled={isLoading} {...register('type')} value="Programação" checked={selectedOptions.includes('Programação')} onChange={handleCheckboxChange}/>Programação
                                 </label>
                                 <label>
-                                    <input type="checkbox" {...register('type')} value="Faturamento" checked={selectedOptions.includes('Faturamento')} onChange={handleCheckboxChange}/>Faturamento
+                                    <input type="checkbox" disabled={isLoading} {...register('type')} value="Faturamento" checked={selectedOptions.includes('Faturamento')} onChange={handleCheckboxChange}/>Faturamento
                                 </label>
                                 <label>
-                                    <input type="checkbox" {...register('type')} value="Suporte Hospital" checked={selectedOptions.includes('Suporte Hospital')} onChange={handleCheckboxChange}/>Suporte Hospital
+                                    <input type="checkbox" disabled={isLoading} {...register('type')} value="Suporte Hospital" checked={selectedOptions.includes('Suporte Hospital')} onChange={handleCheckboxChange}/>Suporte Hospital
                                 </label>
                                 <label>
-                                    <input type="checkbox" {...register('type')} value="Instalação" checked={selectedOptions.includes('Instalação')} onChange={handleCheckboxChange}/>Instalação
+                                    <input type="checkbox" disabled={isLoading} {...register('type')} value="Instalação" checked={selectedOptions.includes('Instalação')} onChange={handleCheckboxChange}/>Instalação
                                 </label>
                                 {selectedOptions.length === 0 && (
                                     <p className={styled.pError}>Escolha ao menos um Setor</p>
@@ -218,7 +204,7 @@ export const ModalCriaCards = () => {
                         <div className={styled.divSelectClient}>
                             <p className={styled.pDesc}>Cliente: </p>
                             <div>
-                                <select className={styled.selectClient} onChange={(event) => setSelectedClient(event.target.value)}>
+                                <select className={styled.selectClient} disabled={isLoading} onChange={(event) => setSelectedClient(event.target.value)}>
                                     <option value=''> - Selecione - </option>
                                     {allClient.map((cliente, index) => (
                                         <option key={index} value={cliente.companyName}>{cliente.companyName}</option>
@@ -242,7 +228,7 @@ export const ModalCriaCards = () => {
                     <div className={styled.divDesc}>
                         <p className={styled.pDesc}>Descrição:</p>
                         <div>
-                            <textarea className={styled.textarea} id="descriptin" {...register("description")} placeholder="Digite a descrição"/>
+                            <textarea className={styled.textarea} disabled={isLoading} id="descriptin" {...register("description")} placeholder="Digite a descrição"/>
                         </div>
                     </div>
 
@@ -252,7 +238,7 @@ export const ModalCriaCards = () => {
                         </div>
                         <div className={styled.divInput}>
                             <div className={styled.divAddTarefa}>
-                                <input type="text" value={novaTarefa} onChange={(e) => setNovaTarefa(e.target.value)} placeholder="Digite a nova tarefa"/>
+                                <input type="text" disabled={isLoading} value={novaTarefa} onChange={(e) => setNovaTarefa(e.target.value)} placeholder="Digite a nova tarefa"/>
                                 <button className={styled.btnSlavar}type="button" onClick={adicionarTarefa} disabled={isLoading}>Adicionar</button>
                             </div>
                             <div className={styled.divUl}>

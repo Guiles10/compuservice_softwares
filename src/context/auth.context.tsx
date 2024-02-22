@@ -1,11 +1,10 @@
 "use client";
+
 import React, { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
-// import { Api } from "../service/urlAxios";
-import axios from "axios";
-
+import { Api } from "../service/Api";
 
 
 export const AuthContext = createContext({} as iProviderValue);
@@ -49,7 +48,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
 
   const loginFunction = async (infoLogin: iInfoLogin) => {
     try {
-      const response = await axios.post('https://compuservice-db-8ca85a38ff76.herokuapp.com/login', infoLogin);
+      const response = await Api.post('/login', infoLogin);
 
       setCookie(null, "@token", response.data.token, {
         maxAge: 60 * 610,
@@ -86,10 +85,9 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   };
 
   const [allUser, setAllUser] = useState<iUser[]| null>(null);
-  console.log(allUser)
   const userAll = async () => {
     try {
-      const response = await axios.get(`https://compuservice-db-8ca85a38ff76.herokuapp.com/users/`);
+      const response = await Api.get(`/users`);
       setAllUser(response.data);
     } catch (error) {
       console.error(error);
@@ -102,7 +100,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   useEffect(() => {
     const findUser = async (id: string) => {
       try {
-        const response = await axios.get(`https://compuservice-db-8ca85a38ff76.herokuapp.com/users/${id}`, {
+        const response = await Api.get(`/users/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

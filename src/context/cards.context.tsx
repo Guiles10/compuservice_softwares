@@ -1,7 +1,8 @@
 'use client'
-import axios from "axios";
+
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext, iUser } from "./auth.context";
+import { Api } from "@/service/Api";
 
 export const CardsContext = createContext({} as iProviderValue);
 interface iAuthProviderChildren {
@@ -66,7 +67,12 @@ interface iProviderValue {
   allCardsInst: iCard[]
   setAllCardsInst: React.Dispatch<React.SetStateAction<iCard[]>>
 
+  isLoading: boolean
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+
   creatCard: (dataForm: iDataForm, tarefas: string[], file: any) => Promise<void>
+  editarCard: (item: string, dataForm: iDataForm, tarefas: iTask[]) => Promise<void>
+  excluirCard: (infoCard: any) => Promise<void>
 
   moveCard: (item: iCard, idCard: string) => void
   moveCardReves: (item: iCard, idCard: string) => Promise<void>
@@ -74,8 +80,6 @@ interface iProviderValue {
   openModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 
-  editarCard: (item: string, dataForm: iDataForm, tarefas: iTask[]) => Promise<void>
-  excluirCard: (infoCard: any) => Promise<void>
 
   excluirTask: (tasksId: string) => Promise<void>
 
@@ -96,7 +100,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
   
     const getAllCards = async () => {
       try {
-        const response = await axios.get('https://compuservice-db-8ca85a38ff76.herokuapp.com/cards');
+        const response = await Api.get('/cards');
         const allCards = response.data;
 
         const atendimentoCards = allCards.filter((card: iCard) => card.type!.includes('Atendimento'));
@@ -122,17 +126,17 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
 ///////////////////////////////////////////////// CARDS E TAREFAS /////////////////////////////////////////////////
     const [openModal, setOpenModal] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const creatCard = async (dataForm: iDataForm, tarefas: string[], file: any) => {
        try {
-        const responseCard = await axios.post('https://compuservice-db-8ca85a38ff76.herokuapp.com/cards', dataForm, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const responseCard = await Api.post('/cards', dataForm, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         let createTesks: iTask[] = []
         for (const tarefa of tarefas) {
-          const responseTask = await axios.post(`https://compuservice-db-8ca85a38ff76.herokuapp.com/tasks/${responseCard.data.id}`, { task: tarefa }, {
+          const responseTask = await Api.post(`/tasks/${responseCard.data.id}`, { task: tarefa }, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -145,7 +149,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           const formData = new FormData();
           formData.append('file', fileItem);
           try {
-            const response = await axios.post(`https://compuservice-db-8ca85a38ff76.herokuapp.com/file/${responseCard.data.id}`, 
+            const response = await Api.post(`/file/${responseCard.data.id}`, 
                 formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -159,15 +163,16 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         }
 
         getAllCards()
+        setIsLoading(false);
+        setOpenModal(false);
       } catch (error) {
         console.error(error);
       }
-  
     };
 
     const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
       try {
-        const responseCard = await axios.patch(`https://compuservice-db-8ca85a38ff76.herokuapp.com/cards/${itemId}`, dataForm, {
+        const responseCard = await Api.patch(`/cards/${itemId}`, dataForm, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
@@ -186,7 +191,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
       try {
         for (const tarefa of semIdTasks) {
-          const responseCreateTask = await axios.post(`https://compuservice-db-8ca85a38ff76.herokuapp.com/tasks/${itemId}`, tarefa,{ 
+          const responseCreateTask = await Api.post(`/tasks/${itemId}`, tarefa,{ 
             headers: { Authorization: `Bearer ${token}` } 
           });
         }
@@ -196,7 +201,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
       try {
         for (const tarefa of idTasks) {
-          const responseEditeTask = await axios.patch(`https://compuservice-db-8ca85a38ff76.herokuapp.com/tasks/${itemId}/${tarefa.id}`, tarefa,{ 
+          const responseEditeTask = await Api.patch(`/tasks/${itemId}/${tarefa.id}`, tarefa,{ 
             headers: { Authorization: `Bearer ${token}` } 
           });
         }
@@ -210,7 +215,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
       for (const file of infoCard.files) {
         try {
-          const response = await axios.delete(`https://compuservice-db-8ca85a38ff76.herokuapp.com/file/${file.filename}`, {
+          const response = await Api.delete(`/file/${file.filename}`, {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
@@ -219,7 +224,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         }
 
         try {
-          const response = await axios.delete(`https://compuservice-db-8ca85a38ff76.herokuapp.com/cards/${infoCard.id}/${file.filename}`, {
+          const response = await Api.delete(`/cards/${infoCard.id}/${file.filename}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
         } catch (error) {
@@ -228,13 +233,12 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
 
       try {
-        const response = await axios.delete(`https://compuservice-db-8ca85a38ff76.herokuapp.com/cards/${infoCard.id}`, {
+        const response = await Api.delete(`/cards/${infoCard.id}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
 
         getAllCards()
-        alert('Card excluido com Sucesso')
 
       } catch (error) {
         console.error(error);
@@ -254,7 +258,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       const cardAtualizado = { ...item, status: novoStatus };
 
         try {
-          const response = await axios.patch(`https://compuservice-db-8ca85a38ff76.herokuapp.com/cards/${idCard}`, cardAtualizado, {
+          const response = await Api.patch(`/cards/${idCard}`, cardAtualizado, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -276,7 +280,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
       const cardAtualizado = {... item, status: novoStatus }
         try {
-          const response = await axios.patch(`https://compuservice-db-8ca85a38ff76.herokuapp.com/cards/${idCard}`, cardAtualizado, {
+          const response = await Api.patch(`/cards/${idCard}`, cardAtualizado, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -291,7 +295,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 ///////////////////////////////////////////////// TAREFAS /////////////////////////////////////////////////
     const excluirTask = async (tasksId: string) => {
       try {
-        const response = await axios.delete(`https://compuservice-db-8ca85a38ff76.herokuapp.com/tasks/${tasksId}`, {
+        const response = await Api.delete(`/tasks/${tasksId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
@@ -310,7 +314,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       try {
           const formData = new FormData();
           formData.append('file', file);
-          const response = await axios.post(`https://compuservice-db-8ca85a38ff76.herokuapp.com/file/${cardId}`, 
+          const response = await Api.post(`/file/${cardId}`, 
               formData, {
                   headers: {
                       Authorization: `Bearer ${token}`,
@@ -319,6 +323,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
               }
           );
           getAllCards()
+          setIsLoading(false)
       } catch (error) {
           console.error('Erro ao enviar arquivo:', error);
       }
@@ -326,7 +331,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
     const deleteFile = async (nameDoc: string, cardId: string) => {
       try {
-        const response = await axios.delete(`https://compuservice-db-8ca85a38ff76.herokuapp.com/file/${nameDoc}`, {
+        const response = await Api.delete(`/file/${nameDoc}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
@@ -335,10 +340,11 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }
 
       try {
-        const response = await axios.delete(`https://compuservice-db-8ca85a38ff76.herokuapp.com/cards/${cardId}/${nameDoc}`, {
+        const response = await Api.delete(`/cards/${cardId}/${nameDoc}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         getAllCards()
+        setIsLoading(false)
       } catch (error) {
         console.error(error);
       }
@@ -364,16 +370,18 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         allCardsInst,
         setAllCardsInst,
 
+        isLoading,
+        setIsLoading,
+
         creatCard,
+        editarCard,
+        excluirCard,
 
         moveCard,
         moveCardReves,
 
         openModal,
         setOpenModal,
-
-        editarCard,
-        excluirCard,
 
         excluirTask,
 
