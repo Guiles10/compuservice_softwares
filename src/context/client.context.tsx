@@ -1,7 +1,8 @@
 'use client'
-import axios from "axios";
+
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { AuthContext, iUser } from "./auth.context";
+import { AuthContext } from "./auth.context";
+import { Api } from "@/service/Api";
 
 export const ClientContext = createContext({} as iProviderValue);
 interface iAuthProviderChildren {
@@ -77,7 +78,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
 
     const getAllClient = async () => {
       try {
-        const response = await axios.get('https://compuservice-db-8ca85a38ff76.herokuapp.com/client', {
+        const response = await Api.get('/client', {
           headers: { Authorization: `Bearer ${token}`}
         })
         setAllClient(response.data);
@@ -93,7 +94,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
     const [modalCriaClient, setModalCriaClient] = useState<boolean>(false)
     const creatClient = async (dataForm: iDataForm, responsibles: iResponsible[]) => {
        try {
-        const responseClinet = await axios.post('https://compuservice-db-8ca85a38ff76.herokuapp.com/client', dataForm, {
+        const responseClinet = await Api.post('/client', dataForm, {
             headers: { Authorization: `Bearer ${token}`},
           }
         );
@@ -101,7 +102,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
         let createResp: iResponsible[] = []
         for (const responsible of responsibles) {
           try {
-            const responseResp = await axios.post(`https://compuservice-db-8ca85a38ff76.herokuapp.com/responsible/${responseClinet.data.id}`, responsible, {
+            const responseResp = await Api.post(`/responsible/${responseClinet.data.id}`, responsible, {
                 headers: { Authorization: `Bearer ${token}`},
               }
             );
@@ -119,7 +120,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
 
     const editarClient = async (clientId: string, dataForm: iClient, newRespFrom: iResponsible[], respClint:iResponsible[]) => {
       try {
-        const responseClient = await axios.patch(`https://compuservice-db-8ca85a38ff76.herokuapp.com/client/${clientId}`, dataForm, {
+        const responseClient = await Api.patch(`/client/${clientId}`, dataForm, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
@@ -128,7 +129,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
       let createResp: iResponsible[] = []
       for (const responsible of newRespFrom) {
         try {
-          const responseResp = await axios.post(`https://compuservice-db-8ca85a38ff76.herokuapp.com/responsible/${clientId}`, responsible, {
+          const responseResp = await Api.post(`/responsible/${clientId}`, responsible, {
               headers: { Authorization: `Bearer ${token}`},
             }
           );
@@ -140,7 +141,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
       let editResp: iResponsible[] = []
       for (const responsible of respClint) {
         try {
-          const responseResp = await axios.patch(`https://compuservice-db-8ca85a38ff76.herokuapp.com/responsible/${clientId}/${responsible.id}`, responsible, {
+          const responseResp = await Api.patch(`/responsible/${clientId}/${responsible.id}`, responsible, {
               headers: { Authorization: `Bearer ${token}`},
             }
           );
@@ -155,7 +156,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
   
     const excluirClient = async (clientId: string) => {
       try {
-        const response = await axios.delete(`https://compuservice-db-8ca85a38ff76.herokuapp.com/client/${clientId}`, {
+        const response = await Api.delete(`/client/${clientId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
@@ -168,7 +169,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
 
     const excluirRespnsible = async (respnsibleId: string) => {
       try {
-        const response = await axios.delete(`https://compuservice-db-8ca85a38ff76.herokuapp.com/responsible/${respnsibleId}`, {
+        const response = await Api.delete(`/responsible/${respnsibleId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );

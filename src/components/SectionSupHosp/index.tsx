@@ -3,7 +3,6 @@ import styled from './styles.module.scss';
 import { CardsContext } from '@/context/cards.context';
 import { iUser } from '@/context/auth.context';
 import { SupHospCards } from './SupHospCard';
-import { ModalCriaCards } from '../ModalCriaCard';
 
 interface iPropity {
   'Muito Urgente': number;
@@ -12,7 +11,7 @@ interface iPropity {
   'Basica': number;
 }
 
-interface iCardSupPropity {
+interface iCardPropity {
   id: string;
   title: string;
   description?: string | null;
@@ -28,15 +27,14 @@ interface iCardSupPropity {
 
 export const SectionSupHosp = () => {
 
-  const { allCardsSupHosp, openModal, setOpenModal } = useContext(CardsContext);
+  const { allCardsSupHosp } = useContext(CardsContext);
 
-  const [filter, setFilter] = useState({
-    date: '',
-    creator: '',
-    title: '',
-  });
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
 
-  const sortByPriority = (cards: iCardSupPropity[]) => {
+  const sortByPriority = (cards: iCardPropity[]) => {
     const priorityOrder: iPropity = {
       'Muito Urgente': 1,
       'Urgente': 2,
@@ -44,67 +42,52 @@ export const SectionSupHosp = () => {
       'Basica': 4,
     };
     return cards.sort(
-      (a: iCardSupPropity, b: iCardSupPropity) =>
+      (a: iCardPropity, b: iCardPropity) =>
         priorityOrder[a.priority] - priorityOrder[b.priority]
     );
   };
-  const filterCards = (cards: iCardSupPropity[]) => {
-    return cards.filter(
-      (item) =>
-        item.createdAt?.includes(filter.date) &&
-        item.user?.name?.toLowerCase().includes(filter.creator.toLowerCase()) &&
-        item.title?.toLowerCase().includes(filter.title.toLowerCase())
-    );
+
+  const filterCards = (cards: iCardPropity[]) => {
+    const lowerCaseSearchQuery = searchQuery.toLowerCase();
+    return cards.filter((item) => (
+      item.createdAt?.toLowerCase().includes(lowerCaseSearchQuery) ||
+      item.user.name.toLowerCase().includes(lowerCaseSearchQuery) ||
+      item.title.toLowerCase().includes(lowerCaseSearchQuery)
+    ));
   };
 
-
-  const cardsAfa: any = allCardsSupHosp.filter((item) => item.status === 'A Fazer');
-  const cardsEa: any = allCardsSupHosp.filter((item) => item.status === 'Em Andamento');
-  const cardsConcluido: any = allCardsSupHosp.filter((item) => item.status === 'Concluido');
-
-  const sortedAfa = sortByPriority(filterCards(cardsAfa));
-  const sortedEa = sortByPriority(filterCards(cardsEa));
-  const sortedConcluido = sortByPriority(filterCards(cardsConcluido));
+  const cardsByStatus = (status: string) => {
+    const cards: any = allCardsSupHosp.filter((item) => item.status === status);
+    return sortByPriority(filterCards(cards));
+  };
 
   return (
     <section className={styled.secSup}>
 
       <div className={styled.divTitleHeader}>
         <div className={styled.divTitle}>
-            <h1 className={styled.h1Title}>SUPORTE HOSPITAL</h1>
+            <h1 className={styled.h1Title}>FATURAMENTO</h1>
         </div>
         <div className={styled.divShare}>
-          <p className={styled.pShare}>Filtro: </p>
-          <div className={styled.divInputs}>
-            <div className={styled.divShareInput}>
-              <p>Título:</p>
-              <input className={styled.inputShare} placeholder="Digite um Título" value={filter.title} onChange={(e) => setFilter({ ...filter, title: e.target.value })}/>
-            </div>
-            <div className={styled.divShareInput}>
-              <p>Criador:</p>
-              <input className={styled.inputShare} placeholder="Digite um Nome" value={filter.creator} onChange={(e) => setFilter({ ...filter, creator: e.target.value })}/>
-            </div>
-            <div className={styled.divShareInput}>
-              <p>Data:</p>
-              <input className={styled.inputShare} placeholder="Digite uma Data" value={filter.date} onChange={(e) => setFilter({ ...filter, date: e.target.value })}/>
-            </div>
-           
+        <p className={styled.pShare}>Pesquisa: </p>
+          <div className={styled.divShareInput}>
+            <input className={styled.inputShare} placeholder="Título, Criador ou Data" value={searchQuery} onChange={handleInputChange}/>
           </div>
         </div>
       </div>
 
-      <div className={styled.divSup}>
+      <div className={styled.divSup}> 
         <div className={styled.divTarefa}>
           <h1>A Fazer</h1>
-          <div>{sortedAfa.map((item) => <SupHospCards key={item.id} item={item} />)}</div>
+          <div>{cardsByStatus('A Fazer').map((item) => <SupHospCards key={item.id} item={item} />)}</div>
         </div>
         <div className={styled.divTarefa}>
           <h1>Em Andamento</h1>
-          <div>{sortedEa.map((item) => <SupHospCards key={item.id} item={item} />)}</div>
+          <div>{cardsByStatus('Em Andamento').map((item) => <SupHospCards key={item.id} item={item} />)}</div>
         </div>
         <div className={styled.divTarefa}>
           <h1>Concluído</h1>
-          <div>{sortedConcluido.map((item) => <SupHospCards key={item.id} item={item} />)}</div>
+          <div>{cardsByStatus('Concluido').map((item) => <SupHospCards key={item.id} item={item} />)}</div>
         </div>
       </div>
     </section>
