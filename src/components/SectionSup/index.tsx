@@ -3,7 +3,6 @@ import styled from './styles.module.scss';
 import { CardsContext } from '@/context/cards.context';
 import { iUser } from '@/context/auth.context';
 import { SupCards } from './SupCard';
-import { ModalCriaCards } from '../ModalCriaCard';
 
 interface iPropity {
   'Muito Urgente': number;
@@ -11,7 +10,7 @@ interface iPropity {
   'Normal': number;
   'Basica': number;
 }
-interface iCardSupPropity {
+interface iCardPropity {
   id: string;
   title: string;
   description?: string | null;
@@ -26,15 +25,14 @@ interface iCardSupPropity {
 }
 
 export const SectionSup = () => {
-  const { allCardsSup, openModal } = useContext(CardsContext);
+  const { allCardsSup } = useContext(CardsContext);
 
   const [searchQuery, setSearchQuery] = useState('');
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value.toLowerCase());
   };
 
-  const sortByPriority = (cards: iCardSupPropity[]) => {
+  const sortByPriority = (cards: iCardPropity[]) => {
     const priorityOrder: iPropity = {
       'Muito Urgente': 1,
       'Urgente': 2,
@@ -42,12 +40,12 @@ export const SectionSup = () => {
       'Basica': 4,
     };
     return cards.sort(
-      (a: iCardSupPropity, b: iCardSupPropity) =>
+      (a: iCardPropity, b: iCardPropity) =>
         priorityOrder[a.priority] - priorityOrder[b.priority]
     );
   };
 
-  const filterCards = (cards: iCardSupPropity[]) => {
+  const filterCards = (cards: iCardPropity[]) => {
     const lowerCaseSearchQuery = searchQuery.toLowerCase();
     return cards.filter((item) => (
       item.createdAt?.toLowerCase().includes(lowerCaseSearchQuery) ||
@@ -70,9 +68,9 @@ export const SectionSup = () => {
         </div>
         <div className={styled.divShare}>
           <p className={styled.pShare}>Pesquisa: </p>
-            <div className={styled.divShareInput}>
-              <input className={styled.inputShare} placeholder="Título, Criador ou Data" value={searchQuery} onChange={handleInputChange}/>
-            </div>
+          <div className={styled.divShareInput}>
+            <input className={styled.inputShare} placeholder="Título, Criador ou Data" value={searchQuery} onChange={handleInputChange}/>
+          </div>
         </div>
       </div>
 

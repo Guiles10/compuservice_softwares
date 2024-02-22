@@ -4,16 +4,17 @@ import { useContext, useRef, useState } from 'react';
 
 interface iUploadFileComponente{
     infoCard: iCard,
-    isAuthorized: boolean
+    isAuthorized: boolean,
+    isLoading: boolean,
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
-export const UploadFileComponente = ({ infoCard, isAuthorized }: iUploadFileComponente) => {
+export const UploadFileComponente = ({ infoCard, isAuthorized, isLoading, setIsLoading }: iUploadFileComponente) => {
     const { uploadFile, deleteFile } = useContext(CardsContext);
 
     const [selectedFileName, setSelectedFileName] = useState('');
     const [fileSelected, setFileSelected] = useState(false);
 
-    const [isUploading, setIsUploading] = useState(false);
-    const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
+    // const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,22 +34,18 @@ export const UploadFileComponente = ({ infoCard, isAuthorized }: iUploadFileComp
             const file = fileInputRef.current.files[0];
             setSelectedFileName('');
             setFileSelected(false);
-            setIsUploading(true);
+            setIsLoading(true)
             uploadFile(file, infoCard.id);
-
-            setTimeout(() => {
-                setIsUploading(false);
-            }, 3500);
         }
     };
 
     const handleFileDelete = (fileName: string, fileId: string) => {
-        setDeletingFileId(fileId);
+        // setDeletingFileId(fileId);
         deleteFile(fileName, infoCard.id);
-
-        setTimeout(() => {
-            setDeletingFileId(null); 
-        }, 3500);
+        setIsLoading(true)
+        // setTimeout(() => {
+        //     setDeletingFileId(null); 
+        // }, 3500);
     };
 
     const handleButtonClick = () => {
@@ -59,9 +56,9 @@ export const UploadFileComponente = ({ infoCard, isAuthorized }: iUploadFileComp
         <section className={styled.secFile}>
             <p className={styled.pDesc}>Selecionar Arquivo:</p>
             <div className={styled.divAddFile}>
-                <input className={styled.inputFile} type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileSelect} />
+                <input className={styled.inputFile} type="file" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileSelect} disabled={isLoading}/>
                 {isAuthorized && (
-                    <button className={styled.btnSelectFile} type="button" onClick={handleButtonClick}>Selecionar Arquivo</button>
+                    <button className={styled.btnSelectFile} type="button" onClick={handleButtonClick} disabled={isLoading}>Selecionar Arquivo</button>
                 )}
                 {selectedFileName &&
                     <div className={styled.divSpan}>
@@ -70,8 +67,8 @@ export const UploadFileComponente = ({ infoCard, isAuthorized }: iUploadFileComp
                     </div>
                 }
                 {isAuthorized && (
-                    <button className={styled.btnSalveFile} type='button' onClick={handleFileUpload} disabled={!fileSelected || isUploading}>
-                        {isUploading ? 'Carregando...' : 'Salvar'} 
+                    <button className={styled.btnSalveFile} type='button' onClick={handleFileUpload} disabled={!fileSelected  || isLoading}>
+                        {isLoading ? 'Carregando...' : 'Salvar'} 
                     </button>
                 )}
             </div>
@@ -81,10 +78,12 @@ export const UploadFileComponente = ({ infoCard, isAuthorized }: iUploadFileComp
                     <div className={styled.divFile} key={file.id}>
                         <p className={styled.fileName} >{file.filename} </p>
                         <div>
-                            <a className={styled.fileLink} href={file.url} target="_blank" rel="noopener noreferrer">Visualizar</a>
+                            <a className={styled.fileLink} href={file.url} target="_blank" rel="noopener noreferrer" style={{ pointerEvents: isLoading ? 'none' : 'auto'}}>
+                                Visualizar
+                            </a>
                             {isAuthorized && (
-                                <button className={styled.fileExcluir} type='button' disabled={deletingFileId === file.id} onDoubleClick={() => handleFileDelete(file.filename, file.id)}>
-                                    {deletingFileId === file.id ? 'Excluindo...' : 'Excluir'}
+                                <button className={styled.fileExcluir} type='button' disabled={ isLoading} onDoubleClick={() => handleFileDelete(file.filename, file.id)}>
+                                    {isLoading ? 'Excluindo...' : 'Excluir'}
                                 </button>
                             )}
                         </div>
