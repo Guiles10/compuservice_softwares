@@ -26,7 +26,7 @@ interface iCardPropity {
 }
 
 export const SectionFatu = () => {
-  const { allCardsSup } = useContext(CardsContext);
+  const { allCardsFatu } = useContext(CardsContext);
 
   const [searchQuery, setSearchQuery] = useState('');
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +56,7 @@ export const SectionFatu = () => {
   };
 
   const cardsByStatus = (status: string) => {
-    const cards: any = allCardsSup.filter((item) => item.status === status);
+    const cards: any = allCardsFatu.filter((item) => item.status === status);
     return sortByPriority(filterCards(cards));
   };
 
