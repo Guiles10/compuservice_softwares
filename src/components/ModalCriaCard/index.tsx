@@ -120,11 +120,10 @@ export const ModalCriaCards = () => {
     const onSubmit = (data: any) => {
         setIsLoading(true); 
         if(selectedOptions.length > 0){
-            const dataForm = { ...data, type: selectedOptions, clients: selectedNames };
+            const dataForm = { ...data, type: selectedOptions, clients: selectedNames, worker: selectedUserNames};
             creatCard(dataForm, tarefas, selectedFiles);
         }
     };
-
 
     return (
         <section className={styled.modal}>

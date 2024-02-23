@@ -83,7 +83,7 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit, isAuthorized }:{ inf
 
 /////////////////////////////////////////////////// USUÁRIO ///////////////////////////////////////////////////
     const [selectedUser, setSelectedUser] = useState<string>('');
-    const [selectedNamesUser, setSelectedNamesUser] = useState<string[]>([]);
+    const [selectedNamesUser, setSelectedNamesUser] = useState(infoCard.worker || []);
 
     const handleSaveUser = () => {
         if (selectedUser && !selectedNamesUser.includes(selectedUser)) {
@@ -102,7 +102,7 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit, isAuthorized }:{ inf
     const onSubmit = (form: iDataForm) => {
         setIsLoading(true);
         if(selectedOptions.length > 0){
-            const dataForm = { ...form, type: selectedOptions, clients: selectedNames };
+            const dataForm = { ...form, type: selectedOptions, clients: selectedNames, worker: selectedNamesUser  };
             editarCard(infoCard.id, dataForm, tasksDB);
             setIsLoading(false)
             setOpenModalEdit(false);           

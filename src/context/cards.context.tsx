@@ -24,6 +24,7 @@ export interface iCard {
   type?: String[]
   files: iFiles[] | []
   clients?: String[]
+  worker?: String[]
 }
 export interface iFiles {
   cardId: string
@@ -80,11 +81,15 @@ interface iProviderValue {
   openModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 
-
   excluirTask: (tasksId: string) => Promise<void>
 
   uploadFile: (file: any, cardId: string) => Promise<void>
   deleteFile: (nameDoc: string, cardId: string) => Promise<void>
+
+  userNamesWithCardIds: any
+  getAllCardsForUser: () => Promise<void>
+
+  allCardsForUser: iCard[]
 }
 
 export const CardsProvider = ({ children }: iAuthProviderChildren) => {
@@ -92,6 +97,8 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
   const { userId, token} = useContext(AuthContext);
 
 ///////////////////////////////////////////////// GET TODOS OS CARDS /////////////////////////////////////////////////
+  const [allCards, setAllCards] = useState<iCard[]>([])
+
   const [allCardsFatu, setAllCardsFatu] = useState<iCard[]>([])
   const [allCardsProg, setAllCardsProg] = useState<iCard[]>([])
   const [allCardsSup, setAllCardsSup] = useState<iCard[]>([])
@@ -109,12 +116,15 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         const faturamentoCards = allCards.filter((card: iCard)=> card.type!.includes('Faturamento'));
         const suporteHospCards = allCards.filter((card: iCard) => card.type!.includes('Suporte Hospital'));
         const instalacaoCards = allCards.filter((card: iCard) => card.type!.includes('Instalação'));
+        
+        setAllCards(allCards);
 
         setAllCardsSup(suporteCards);
         setAllCardsFatu(faturamentoCards);
         setAllCardsProg(programacaoCards);
         setAllCardsSupHosp(suporteHospCards);
         setAllCardsInst(instalacaoCards);
+
 
       } catch (error) {
         console.error(error);
@@ -123,6 +133,43 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
     useEffect(() => {
       getAllCards()
     }, []);
+
+///////////////////////////////////////////////// NOTIFICAÇÂO USUARIO /////////////////////////////////////////////////
+  const { infoUser, logout } = useContext(AuthContext);
+
+  const userNamesWithCardIds: {[key: string]: string[]} = {};
+  const notifiesWork = async () => {
+    const worksArrays: any= allCards.map(card => card.worker || [])
+    const allUserNames = worksArrays.flat();
+
+    allUserNames.forEach((userName: any) => {
+      userNamesWithCardIds[userName] = [];
+      allCards.forEach(card => {
+        if (card.worker && card.worker.includes(userName)) {
+           userNamesWithCardIds[userName].push(card.id);
+        }
+      });
+    });
+  };
+  notifiesWork()
+
+  const infoUserName = infoUser?.name || '';
+  const userCountForInfoUser: any = userNamesWithCardIds[infoUserName];
+
+  const [allCardsForUser, setAllCardsForUser] = useState<iCard[]>([])
+  const getAllCardsForUser = async () => {
+    try {
+      let allCards = [];
+      for (const IdCardForUser of userCountForInfoUser) {
+        const response = await Api.get(`/cards/${IdCardForUser}`);
+        allCards.push(response.data);
+      }
+      setAllCardsForUser(allCards);
+    } catch (error) {
+        console.error(error);
+    }
+  };
+
 
 ///////////////////////////////////////////////// CARDS E TAREFAS /////////////////////////////////////////////////
     const [openModal, setOpenModal] = useState<boolean>(false)
@@ -163,6 +210,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         }
 
         getAllCards()
+        getAllCardsForUser()
         setIsLoading(false);
         setOpenModal(false);
       } catch (error) {
@@ -208,6 +256,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       }catch (error) {
         console.error(error);
       }
+      getAllCardsForUser()
       getAllCards()
     };
 
@@ -239,6 +288,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         );
 
         getAllCards()
+        getAllCardsForUser()
 
       } catch (error) {
         console.error(error);
@@ -265,6 +315,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
             }
           );
           getAllCards()
+          getAllCardsForUser()
         } catch (error) {
           console.error(error)
         }
@@ -287,6 +338,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
             }
           );
           getAllCards()
+          getAllCardsForUser()
         } catch (error) {
           console.error(error);
         }
@@ -300,6 +352,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           }
         );
         getAllCards()
+        getAllCardsForUser()
       } catch (error) {
         console.error(error);
       }
@@ -323,6 +376,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
               }
           );
           getAllCards()
+          getAllCardsForUser()
           setIsLoading(false)
       } catch (error) {
           console.error('Erro ao enviar arquivo:', error);
@@ -344,6 +398,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         getAllCards()
+        getAllCardsForUser()
         setIsLoading(false)
       } catch (error) {
         console.error(error);
@@ -388,6 +443,10 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         uploadFile,
         deleteFile,
 
+        userNamesWithCardIds,
+        getAllCardsForUser,
+
+        allCardsForUser,
       }}
     >
       {children}

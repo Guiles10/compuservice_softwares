@@ -4,15 +4,19 @@ import { useContext } from 'react';
 
 export const Menu = () => {
 
-  const { setSelectedMenu } = useContext(AuthContext);
-
-    return (
-      <section className={styled.lateralMenuMain}>
-        <p className={styled.pMenu} onClick={() => setSelectedMenu('Suporte')}>Suporte</p>
-        <p className={styled.pMenu} onClick={() => setSelectedMenu('Programação')}>Programação</p>
-        <p className={styled.pMenu} onClick={() => setSelectedMenu('Faturamento')}>Faturamento</p>
-        <p className={styled.pMenu} onClick={() => setSelectedMenu('SuporteHosp')}>Suporte Hospital</p>
-        <p className={styled.pMenu} onClick={() => setSelectedMenu('Instalação')}>Instalação</p>
-      </section>
-    );
+  const { setSelectedMenu, setShowCards} = useContext(AuthContext);
+  const handleMenuClick = (menu: string) => {
+    setSelectedMenu(menu);
+    setShowCards(false);
   };
+
+  return (
+    <section className={styled.lateralMenuMain}>
+      <p className={styled.pMenu} onClick={() => handleMenuClick('Suporte')}>Suporte</p>
+      <p className={styled.pMenu} onClick={() => handleMenuClick('Programação')}>Programação</p>
+      <p className={styled.pMenu} onClick={() => handleMenuClick('Faturamento')}>Faturamento</p>
+      <p className={styled.pMenu} onClick={() => handleMenuClick('SuporteHosp')}>Suporte Hospital</p>
+      <p className={styled.pMenu} onClick={() => handleMenuClick('Instalação')}>Instalação</p>
+    </section>
+  );
+};
