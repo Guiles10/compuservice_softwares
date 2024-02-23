@@ -66,7 +66,7 @@ export const SectionProg = () => {
 
       <div className={styled.divTitleHeader}>
         <div className={styled.divTitle}>
-            <h1 className={styled.h1Title}>FATURAMENTO</h1>
+            <h1 className={styled.h1Title}>PROGRAMAÇÃO</h1>
         </div>
         <div className={styled.divShare}>
         <p className={styled.pShare}>Pesquisa: </p>
