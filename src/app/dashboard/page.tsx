@@ -14,47 +14,62 @@ import { SectionInst } from '@/components/SectionInst';
 import { ListClient } from '@/components/ListClient';
 import { ClientContext } from '@/context/client.context';
 import { ModalCriaCards } from '@/components/ModalCriaCard';
+import { SectionCardForUser } from '@/components/SectionCardForUser';
 
 const Dashboard = () => {
   const { openModal, setOpenModal } = useContext(CardsContext);
 
-  const { selectedMenu, setSelectedMenu, infoUser } = useContext(AuthContext);
+  const { selectedMenu, setSelectedMenu, showCards, setShowCards, infoUser } = useContext(AuthContext);
   const { modalClient, setModalClient } = useContext(ClientContext);
 
   useEffect(() => {
-    if (infoUser && infoUser.function && Array.isArray(infoUser.function)) {
-      const firstMatchingMenu = infoUser.function.find((menuItem: string) =>
-        ['Suporte', 'Programação', 'Faturamento', 'SuporteHosp', 'Instalação'].includes(menuItem)
-      );
-
-      if (firstMatchingMenu) {
-        setSelectedMenu(firstMatchingMenu);
-      }
-    }
+    setShowCards(true);
   }, [infoUser]);
 
+  const { userNamesWithCardIds, getAllCardsForUser } = useContext(CardsContext);
+  
+  const infoUserName = infoUser?.name || '';
+  const userCountForInfoUser = userNamesWithCardIds[infoUserName] || 0;
+
+  const handleGetAllCardsForUser = () => {
+    getAllCardsForUser();
+    setShowCards(true);
+  }
 
   return (
     <main className={styled.main}>
       <div className={styled.divHeaderSec}>
+        
         <Header />
         
         <div className={styled.divBtn}>
           <button className={styled.btnCriarTarefa} onClick={() => setOpenModal(true)}>Criar Tarefa</button>
-          <button onClick={() => setModalClient(true)} className={styled.btnListClient} >Lista Clientes</button>
+          <button onClick={() => setModalClient(true)} className={styled.btnListClient}>Lista Clientes</button>
+          <div className={styled.cardsContainer}>
+            <p className={styled.number}>{userCountForInfoUser.length}</p>
+            <button className={styled.btnCards} onClick={handleGetAllCardsForUser}>Minhas Tarefas</button>
+          </div>
         </div>
-          {modalClient && <ListClient/>}
-          {openModal && <ModalCriaCards />}
-
-        <section className={styled.secBody}>
-          {selectedMenu === 'Suporte' && <SectionSup />}
-          {selectedMenu === 'Programação' && <SectionProg />}
-          {selectedMenu === 'Faturamento' && <SectionFatu />}
-          {selectedMenu === 'SuporteHosp' && <SectionSupHosp />}
-          {selectedMenu === 'Instalação' && <SectionInst />}
-        </section>
+        {modalClient && <ListClient/>}
+        {openModal && <ModalCriaCards />}
+        
+        {showCards ? (
+          <section className={styled.secBody}>
+            <SectionCardForUser />
+          </section>
+        ) : (
+          <section className={styled.secBody}>
+            {selectedMenu === 'Suporte' && <SectionSup />}
+            {selectedMenu === 'Programação' && <SectionProg />}
+            {selectedMenu === 'Faturamento' && <SectionFatu />}
+            {selectedMenu === 'SuporteHosp' && <SectionSupHosp />}
+            {selectedMenu === 'Instalação' && <SectionInst />}
+          </section>
+        )}
       </div>
+
       <SectionComments />
+
     </main>
   );
 };

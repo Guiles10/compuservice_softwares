@@ -38,6 +38,9 @@ interface iProviderValue {
 
   selectedMenu: string
   setSelectedMenu: React.Dispatch<React.SetStateAction<string>>
+
+  showCards: boolean
+  setShowCards: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const AuthProvider = ({ children }: iAuthProviderChildren) => {
@@ -131,7 +134,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
 
 
   const [selectedMenu, setSelectedMenu] = useState<string>('');
-
+  const [showCards, setShowCards] = useState(false);
 
   return (
     <AuthContext.Provider
@@ -145,6 +148,10 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
 
         selectedMenu,
         setSelectedMenu,
+
+        showCards,
+        setShowCards
+
       }}
     >
       {children}

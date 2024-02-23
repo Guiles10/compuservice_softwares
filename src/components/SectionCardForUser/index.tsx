@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import styled from './styles.module.scss';
 import { CardsContext } from '@/context/cards.context';
 import { iUser } from '@/context/auth.context';
-import { InstCards } from './InstCard';
+import { ForUserCard } from './ForUserCard';
 
 interface iPropity {
   'Muito Urgente': number;
@@ -10,12 +10,12 @@ interface iPropity {
   'Normal': number;
   'Basica': number;
 }
-
 interface iCardPropity {
   id: string;
   title: string;
   description?: string | null;
   tasks: string[] | null;
+  clientes: string[] | null;
   solution?: string | null;
   status?: string;
   priority: keyof iPropity;
@@ -25,9 +25,8 @@ interface iCardPropity {
   user: iUser;
 }
 
-export const SectionInst = () => {
-
-  const { allCardsInst } = useContext(CardsContext);
+export const SectionCardForUser = () => {
+  const { allCardsForUser } = useContext(CardsContext);
 
   const [searchQuery, setSearchQuery] = useState('');
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +56,7 @@ export const SectionInst = () => {
   };
 
   const cardsByStatus = (status: string) => {
-    const cards: any = allCardsInst.filter((item) => item.status === status);
+    const cards: any = allCardsForUser.filter((item) => item.status === status);
     return sortByPriority(filterCards(cards));
   };
 
@@ -66,7 +65,7 @@ export const SectionInst = () => {
 
       <div className={styled.divTitleHeader}>
         <div className={styled.divTitle}>
-            <h1 className={styled.h1Title}>INSTALAÇÃO</h1>
+            <h1 className={styled.h1Title}>MINHAS TAREFAS</h1>
         </div>
         <div className={styled.divShare}>
         <p className={styled.pShare}>Pesquisa: </p>
@@ -79,15 +78,15 @@ export const SectionInst = () => {
       <div className={styled.divSup}> 
         <div className={styled.divTarefa}>
           <h1>A Fazer</h1>
-          <div>{cardsByStatus('A Fazer').map((item) => <InstCards key={item.id} item={item} />)}</div>
+          <div>{cardsByStatus('A Fazer').map((item) => <ForUserCard key={item.id} item={item} />)}</div>
         </div>
         <div className={styled.divTarefa}>
           <h1>Em Andamento</h1>
-          <div>{cardsByStatus('Em Andamento').map((item) => <InstCards key={item.id} item={item} />)}</div>
+          <div>{cardsByStatus('Em Andamento').map((item) => <ForUserCard key={item.id} item={item} />)}</div>
         </div>
         <div className={styled.divTarefa}>
           <h1>Concluído</h1>
-          <div>{cardsByStatus('Concluido').map((item) => <InstCards key={item.id} item={item} />)}</div>
+          <div>{cardsByStatus('Concluido').map((item) => <ForUserCard key={item.id} item={item} />)}</div>
         </div>
       </div>
     </section>
