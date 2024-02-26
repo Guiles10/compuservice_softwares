@@ -15,18 +15,18 @@ import { ListClient } from '@/components/ListClient';
 import { ClientContext } from '@/context/client.context';
 import { ModalCriaCards } from '@/components/ModalCriaCard';
 import { SectionCardForUser } from '@/components/SectionCardForUser';
+import { CriaUser } from '@/components/CriaUser';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const Dashboard = () => {
-  const { openModal, setOpenModal } = useContext(CardsContext);
-
-  const { selectedMenu, setSelectedMenu, showCards, setShowCards, infoUser } = useContext(AuthContext);
+  const { selectedMenu, showCards, setShowCards, infoUser, openRegisterUser, setOpenRegisterUser } = useContext(AuthContext);
   const { modalClient, setModalClient } = useContext(ClientContext);
+  const { openModal, setOpenModal, userNamesWithCardIds, getAllCardsForUser } = useContext(CardsContext);
 
   useEffect(() => {
     setShowCards(true);
   }, [infoUser]);
-
-  const { userNamesWithCardIds, getAllCardsForUser } = useContext(CardsContext);
   
   const infoUserName = infoUser?.name || '';
   const userCountForInfoUser = userNamesWithCardIds[infoUserName] || 0;
@@ -37,6 +37,19 @@ const Dashboard = () => {
   }
 
   return (
+    <>
+    <ToastContainer
+    position="top-right"
+    autoClose={3000}
+    hideProgressBar={false}
+    newestOnTop={false}
+    closeOnClick
+    rtl={false}
+    pauseOnFocusLoss
+    draggable
+    pauseOnHover
+    theme="light"
+    /><ToastContainer />
     <main className={styled.main}>
       <div className={styled.divHeaderSec}>
         
@@ -45,6 +58,13 @@ const Dashboard = () => {
         <div className={styled.divBtn}>
           <button className={styled.btnCriarTarefa} onClick={() => setOpenModal(true)}>Criar Tarefa</button>
           <button onClick={() => setModalClient(true)} className={styled.btnListClient}>Lista Clientes</button>
+         
+          {infoUser?.isAdmin ? 
+            <button className={styled.btnListClient} onClick={() => setOpenRegisterUser(true)}>Cadastrar Usuario</button>
+          :
+            null
+          }
+          
           <div className={styled.cardsContainer}>
             <p className={styled.number}>{userCountForInfoUser.length}</p>
             <button className={styled.btnCards} onClick={handleGetAllCardsForUser}>Minhas Tarefas</button>
@@ -52,6 +72,7 @@ const Dashboard = () => {
         </div>
         {modalClient && <ListClient/>}
         {openModal && <ModalCriaCards />}
+        {openRegisterUser && <CriaUser />}
         
         {showCards ? (
           <section className={styled.secBody}>
@@ -71,6 +92,7 @@ const Dashboard = () => {
       <SectionComments />
 
     </main>
+    </>
   );
 };
 

@@ -41,6 +41,11 @@ interface iProviderValue {
 
   showCards: boolean
   setShowCards: React.Dispatch<React.SetStateAction<boolean>>
+
+  openRegisterUser: boolean
+  setOpenRegisterUser: React.Dispatch<React.SetStateAction<boolean>>
+
+  registerUser: (formData: any) => Promise<void>
 }
 
 export const AuthProvider = ({ children }: iAuthProviderChildren) => {
@@ -136,6 +141,22 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
   const [selectedMenu, setSelectedMenu] = useState<string>('');
   const [showCards, setShowCards] = useState(false);
 
+  const [openRegisterUser, setOpenRegisterUser] = useState(false);
+
+  
+  
+  const registerUser = async (formData: any) => {
+    try {
+      const response = await Api.post(`/users`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success("Usuario Cadastrado!");
+    } catch (error) {
+      toast.error("E-mail já utilizado!");
+    }
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -150,7 +171,12 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
         setSelectedMenu,
 
         showCards,
-        setShowCards
+        setShowCards,
+
+        openRegisterUser,
+        setOpenRegisterUser,
+
+        registerUser,
 
       }}
     >

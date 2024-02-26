@@ -27,7 +27,7 @@ export const ForUserCard = ({ item }: any ) => {
     }; 
 
     const userAuthorized = allUser!.map(user => {
-        if (user.function && user.function.includes('Faturamento')) {
+        if (user.function && user.function.includes('Suporte' || 'Programação' || 'Suporte Hospital' || 'Instalação' || 'Faturamento')) {
             return user;
         }
         return null;
