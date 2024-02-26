@@ -125,7 +125,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         setAllCardsSupHosp(suporteHospCards);
         setAllCardsInst(instalacaoCards);
 
-
       } catch (error) {
         console.error(error);
       }
@@ -135,7 +134,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
     }, []);
 
 ///////////////////////////////////////////////// NOTIFICAÇÂO USUARIO /////////////////////////////////////////////////
-  const { infoUser, logout } = useContext(AuthContext);
+  const { infoUser } = useContext(AuthContext);
 
   const userNamesWithCardIds: {[key: string]: string[]} = {};
   const notifiesWork = async () => {
@@ -151,6 +150,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
       });
     });
   };
+  
   notifiesWork()
 
   const infoUserName = infoUser?.name || '';
@@ -169,7 +169,9 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         console.error(error);
     }
   };
-
+  useEffect(() => {
+    getAllCardsForUser()
+  }, []);
 
 ///////////////////////////////////////////////// CARDS E TAREFAS /////////////////////////////////////////////////
     const [openModal, setOpenModal] = useState<boolean>(false)

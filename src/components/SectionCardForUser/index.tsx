@@ -30,7 +30,7 @@ export const SectionCardForUser = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value.toLowerCase());
+    setSearchQuery(event.target.value.toLowerCase()); 
   };
 
   const sortByPriority = (cards: iCardPropity[]) => {
