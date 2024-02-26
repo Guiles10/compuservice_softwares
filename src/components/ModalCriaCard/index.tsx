@@ -33,6 +33,7 @@ export const ModalCriaCards = () => {
         setConfirmacaoExclusao(false);
     };
 
+/////////////////////////////////////////////////// SETOR ///////////////////////////////////////////////////
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const handleCheckboxChange = (event: any) => {
         const optionValue = event.target.value;

@@ -32,7 +32,7 @@ export const SectionSup = () => {
     setSearchQuery(event.target.value.toLowerCase());
   };
 
-  const sortByPriority = (cards: iCardPropity[]) => {
+  const sortByPriority = (cards: iCardPropity[]) => { 
     const priorityOrder: iPropity = {
       'Muito Urgente': 1,
       'Urgente': 2,
