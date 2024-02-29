@@ -4,8 +4,11 @@ import styled from './styles.module.scss'
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ClientContext, iDataForm, iResponsible } from '@/context/client.context';
+import { ClientContext } from '@/context/client.context';
 import { clientSchema, clientSchemaType } from '@/schema/client.schema';
+import InputMask from 'react-input-mask';
+import { FaTrash } from 'react-icons/fa';
+
 
 
 export const ModalCriaClient = () => {
@@ -47,41 +50,51 @@ export const ModalCriaClient = () => {
 
                 <div className={styled.divHeaderModal}>
                     <p className={styled.pTitleModal}>CADASTRAR CLIENTE</p>
-                    <button className={styled.btnFecha} onClick={() => setModalCriaClient(false)}>Fechar</button>
+                    <button className={styled.btnFecha} onClick={() => setModalCriaClient(false)} type='button'>Fechar</button>
                 </div>
 
                 <section className={styled.secForm}>
-                    <div className={styled.formGroup}>
-                        <label htmlFor="codigo">Código:</label>
-                        <input type="text" id="codigo" {...register('codigo')} />
-                        {errors.codigo && <span className={styled.errorMsg}>{errors.codigo.message}</span>}
+
+                <div className={styled.divInfoBussines}>
+                        <div className={styled.formGroup}>
+                            <label htmlFor="codigo">Código:</label>
+                            <input className={styled.inputRegister} type="number" id="codigo" {...register('codigo')} />
+                            {errors.codigo && <span className={styled.errorMsg}>{errors.codigo.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="companyName">Nome da Empresa:</label>
+                            <input className={styled.inputRegister} type="text" id="companyName" {...register('companyName')} />
+                            {errors.companyName && <span className={styled.errorMsg}>{errors.companyName.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="cnpj">CNPJ:</label>
+                            <InputMask className={styled.inputRegister} mask="99.999.999/9999-99" maskChar="" type="text" id="cnpj" {...register('cnpj')} />
+                            {errors.cnpj && <span className={styled.errorMsg}>{errors.cnpj.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="businessPhone">Telefone Comercial:</label>
+                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999" maskChar="" type="text" id="businessPhone" {...register('businessPhone')} />
+                            {errors.businessPhone && <span className={styled.errorMsg}>{errors.businessPhone.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="businessEmail">E-mail Comercial:</label>
+                            <input className={styled.inputRegister} type="text" id="businessEmail" {...register('businessEmail')} />
+                            {errors.businessEmail && <span className={styled.errorMsg}>{errors.businessEmail.message}</span>}
+                        </div>
                     </div>
-                    <div className={styled.formGroup}>
-                        <label htmlFor="companyName">Nome da Empresa:</label>
-                        <input type="text" id="companyName" {...register('companyName')} />
-                        {errors.companyName && <span className={styled.errorMsg}>{errors.companyName.message}</span>}
-                    </div>
-                    <div className={styled.formGroup}>
-                        <label htmlFor="cnpj">CNPJ:</label>
-                        <input type="text" id="cnpj" {...register('cnpj')} />
-                        {errors.cnpj && <span className={styled.errorMsg}>{errors.cnpj.message}</span>}
-                    </div>
-                    <div className={styled.formGroup}>
-                        <label htmlFor="businessPhone">Telefone Comercial:</label>
-                        <input type="text" id="businessPhone" {...register('businessPhone')} />
-                        {errors.businessPhone && <span className={styled.errorMsg}>{errors.businessPhone.message}</span>}
-                    </div>
-                    <div className={styled.formGroup}>
-                        <label htmlFor="businessEmail">E-mail Comercial:</label>
-                        <input type="text" id="businessEmail" {...register('businessEmail')} />
-                        {errors.businessEmail && <span className={styled.errorMsg}>{errors.businessEmail.message}</span>}
-                    </div>
+
                     <div className={styled.address}>
+
                         <div className={styled.formGroup}>
                             <label htmlFor="cep">CEP:</label>
-                            <input type="text" id="cep" {...register('cep')} />
+                            <InputMask className={styled.inputAddress} mask="99999-999" maskChar="" type="text" id="cep" {...register('cep')} />
                             {errors.cep && <span className={styled.errorMsg}>{errors.cep.message}</span>}
                         </div>
+
                         <div className={styled.formGroup}>
                             <label htmlFor="state">Estado:</label>
                             <select id="state" {...register('state')}>
@@ -116,54 +129,62 @@ export const ModalCriaClient = () => {
                             </select>
                             {errors.state && <span className={styled.errorMsg}>{errors.state.message}</span>}
                         </div>
+
                         <div className={styled.formGroup}>
                             <label htmlFor="city">Cidade:</label>
-                            <input type="text" id="city" {...register('city')} />
+                            <input className={styled.inputAddress} type="text" id="city" {...register('city')} />
                             {errors.city && <span className={styled.errorMsg}>{errors.city.message}</span>}
                         </div>
+
                         <div className={styled.formGroup}>
                             <label htmlFor="street">Rua:</label>
-                            <input type="text" id="street" {...register('street')} />
+                            <input className={styled.inputAddress} type="text" id="street" {...register('street')} />
                             {errors.street && <span className={styled.errorMsg}>{errors.street.message}</span>}
                         </div>
+
                         <div className={styled.formGroup}>
                             <label htmlFor="neighborhood">Bairro:</label>
-                            <input type="text" id="neighborhood" {...register('neighborhood')} />
+                            <input className={styled.inputAddress} type="text" id="neighborhood" {...register('neighborhood')} />
                             {errors.neighborhood && <span className={styled.errorMsg}>{errors.neighborhood.message}</span>}
                         </div>
+
                         <div className={styled.formGroup}>
                             <label htmlFor="number">Número:</label>
-                            <input type="text" id="number" {...register('number')} />
+                            <input className={styled.inputAddress} type="text" id="number" {...register('number')} />
                             {errors.number && <span className={styled.errorMsg}>{errors.number.message}</span>}
                         </div>
+
                     </div>
+                    
                     <div className={styled.formGroup}>
                         <label htmlFor="comment">Comentário:</label>
                         <textarea id="comment" {...register('comment')} />
                         {errors.comment && <span className={styled.errorMsg}>{errors.comment.message}</span>}
                     </div>
+
                 </section>
 
-                <button className={styled.addRespBtn} type='button' onClick={handleAddResponsibleClick}>Add Responsável</button>
+                <button className={styled.addRespBtn} type='button' onClick={handleAddResponsibleClick}>Criar Responsável</button>
+                
                 <section className={styled.secResponsible}>
                     {showResponsibleForms.map(formId => (
                         <div key={formId} className={styled.responsibleForm}>
-                            <button className={styled.btnClose} onClick={() => handleCloseResponsibleForm(formId)}>X</button>
+                            <button className={styled.btnClose} onClick={() => handleCloseResponsibleForm(formId)}><FaTrash /></button>
                             <div className={styled.formGroup}>
                                 <label htmlFor={`name-${formId}`}>Nome:</label>
-                                <input type="text" id={`name-${formId}`} name={`name-${formId}`} />
+                                <input className={styled.inputResp} type="text" id={`name-${formId}`} name={`name-${formId}`} />
                             </div>
                             <div className={styled.formGroup}>
                                 <label htmlFor="function">Função:</label>
-                                <input type="text" id={`function-${formId}`} name={`function-${formId}`} />
+                                <input className={styled.inputResp} type="text" id={`function-${formId}`} name={`function-${formId}`} />
                             </div>
                             <div className={styled.formGroup}>
                                 <label htmlFor="email">E-mail:</label>
-                                <input type="text" id={`email-${formId}`} name={`email-${formId}`} />
+                                <input className={styled.inputResp} type="text" id={`email-${formId}`} name={`email-${formId}`} />
                             </div>
                             <div className={styled.formGroup}>
                                 <label htmlFor="phone">Telefone:</label>
-                                <input type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
+                                <InputMask className={styled.inputResp} mask="(99) 99999-9999" maskChar="" type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
                             </div>
                         </div>
                     ))}

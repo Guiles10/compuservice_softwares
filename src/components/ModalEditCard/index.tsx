@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form';
 import { editCardSchema, editCardSchemaType } from '@/schema/cards.schema';
 import { Dispatch, SetStateAction } from 'react';
 import { AuthContext } from '@/context/auth.context';
-import { FaPen } from 'react-icons/fa';
+import { FaArrowAltCircleDown, FaArrowAltCircleUp, FaPen } from 'react-icons/fa';
 import { ClientContext } from '@/context/client.context';
 import { UploadFileComponente } from '@/components/UploadFileComponente';
+import { FaTrashCan } from 'react-icons/fa6';
 
 
 export const ModalEditCard = ({ infoCard, setOpenModalEdit, isAuthorized }:{ infoCard: iCard, setOpenModalEdit: Dispatch<SetStateAction<boolean>>, isAuthorized: boolean }) => {
@@ -49,6 +50,26 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit, isAuthorized }:{ inf
         setTasksDB(novaListaTarefas);
     };
 
+    const moverTarefaParaCima = (index: number) => {
+        if (index > 0) {
+            const updatedTasks = [...tasksDB];
+            const temp = updatedTasks[index];
+            updatedTasks[index] = updatedTasks[index - 1];
+            updatedTasks[index - 1] = temp;
+            setTasksDB(updatedTasks);
+        }
+    };
+    
+    const moverTarefaParaBaixo = (index: number) => {
+        if (index < tasksDB.length - 1) {
+            const updatedTasks = [...tasksDB];
+            const temp = updatedTasks[index];
+            updatedTasks[index] = updatedTasks[index + 1];
+            updatedTasks[index + 1] = temp;
+            setTasksDB(updatedTasks);
+        }
+    };
+    
 /////////////////////////////////////////////////// EXLUIR CARD ///////////////////////////////////////////////////
     const [confirmacaoExclusao, setConfirmacaoExclusao] = useState(false);
     const confirmaExcluir = (infoCard: any)=> {
@@ -142,7 +163,7 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit, isAuthorized }:{ inf
                     <p className={styled.pAuthorized}>Você não é autorizado a fazer edições</p>
                 )}
 
-                <div className={styled.divClientSelect}>
+                <div className={styled.divUserSelect}>
                     <div className={styled.divSelectClient}>
                         <p className={styled.pDesc}>Usuario: </p>
                         {isAuthorized && (
@@ -247,14 +268,16 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit, isAuthorized }:{ inf
                             <ul className={styled.ul}>
                                 {tasksDB.map((tarefa: iTask, index: number) => (
                                     <li className={styled.li} key={index}>
-                                        <div>
-                                            <div>
-                                                <input type="checkbox" checked={tarefa.completed} onChange={() => handleCheckboxChange(index)} disabled={!isAuthorized || isLoading}/> 
-                                                <label className={styled.newLabol} htmlFor={`tarefa-${index}`}>{tarefa.task}</label>
-                                            </div>
+                                        <div className={styled.dibTextTask}>
+                                            <input type="checkbox" checked={tarefa.completed} onChange={() => handleCheckboxChange(index)} disabled={!isAuthorized || isLoading}/> 
+                                            <label className={styled.newLabol} htmlFor={`tarefa-${index}`}>{tarefa.task}</label>
                                         </div>
                                         {isAuthorized && (
-                                            <button className={styled.btnExcluir} type="button" onDoubleClick={() => excluirTarefa(index, tarefa.id)} disabled={isLoading}>X</button>
+                                            <div className={styled.dibBtnTask}>
+                                                <FaArrowAltCircleUp className={styled.moveTask} onClick={() => moverTarefaParaCima(index)}/>
+                                                <FaArrowAltCircleDown className={styled.moveTask} onClick={() => moverTarefaParaBaixo(index)}/>
+                                                <FaTrashCan className={styled.excluiTask} onDoubleClick={() => excluirTarefa(index, tarefa.id)} disabled={isLoading}/>
+                                            </div>
                                         )}
                                     </li>
                                 ))}

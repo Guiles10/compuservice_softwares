@@ -16,7 +16,7 @@
     background-color: white;
     border-radius: 8px;
     text-align: center;
-    width: 700px;
+    width: 850px;
     max-width: 95%;
     max-height: 95%;
     overflow-y: auto;
@@ -103,14 +103,20 @@
 }
 
 /******************************************** CLIENTES **********************************************/
+.divUserSelect{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background-color: rgba(88, 88, 88, 0.1);
+    padding: 5px 10px;
+}
 .divClientSelect {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     background-color: rgba(88, 88, 88, 0.1);
-    flex-direction: column;
     padding: 5px 10px;
-  }
+}
 .divSelectClient{
     padding: 6px 3px;
     display: flex;
@@ -124,6 +130,7 @@
     border-radius: 4px;
 }
 .divClient {
+    padding: 6px 3px;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
@@ -216,6 +223,7 @@
     justify-content: center;
     input{
         padding: 8px;
+        margin-right: 10px;
         border-radius: 4px;
         width: 400px;
         outline: none;
@@ -248,24 +256,34 @@
     > div {
         display: flex;
         align-items: center;
+        max-width: 85%;
     }
     label{
         margin-left: 5px;
     }
-    > button{
-        border: 1px solid red;
-        color: red;
-    }
-    > button:hover{
-        font-weight: 600;
-        background-color: rgba(255, 0, 0, 0.1);
-    }
 }
-.divExcluir{
+
+.dibBtnTask{
     display: flex;
     align-items: center;
-    flex-direction: row-reverse;
-    padding: 5px;
+    flex-direction: row;
+    width: 20%;
+    justify-content: space-between;
+}
+.moveTask{
+    color: blue;
+    cursor: pointer;
+}
+.moveTask:hover{
+    color: black;
+}
+.excluiTask{
+    color: red;
+    cursor: pointer;
+}
+.excluiTask:hover{
+    font-weight: 600;
+    background-color: rgba(255, 0, 0, 0.1);
 }
 
 /******************************************** FILE **********************************************/
