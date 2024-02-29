@@ -1,0 +1,163 @@
+@use "../../scss/abstract/" as *;
+
+
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modalCard{
+    background-color: white;
+    border-radius: 8px;
+    text-align: center;
+    width: 450px;
+    max-width: 95%;
+    max-height: 95%;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+}
+.form{
+    border-radius: 8px;
+    max-height: 90%;
+    overflow: auto;
+    padding: 10px;
+}
+
+/********************************************HEADER**********************************************/
+.divHeader{
+    max-width: 100%;
+    border-radius: 8px 8px 0 0;
+    background-color: rgb(190, 190, 190);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+}
+.pHeader{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.btnFecha{
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px;
+    border-radius: 4px;
+    color: black;
+    border: 2px solid rgba(0, 0, 0, 0.8);
+}
+.btnFecha:hover{
+    color: red;
+    border: 2px solid red;
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.pError{
+    display: flex;
+    margin: 5px 0;
+    font-size: 12px;
+    color: red;
+}
+/******************************************** FORM **********************************************/
+.divName, .divEmail, .divPass, .divPassConf{
+    display: flex;
+    justify-content: center;
+    padding: 6px;
+    font-weight: 600;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.input{
+    padding: 3px;
+    margin-top: 3px;
+    margin-left: 10px;
+}
+.passwordContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+.toggleButton{
+    margin-top: 3px;
+    margin-left: 10px;
+}
+
+.divType{
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin: 4px 0;
+}
+.pTitle{
+    font-size: 18px;
+    font-weight: 600;
+}
+.checkboxContainer{
+    display: flex;
+    margin-left: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.divIsAdmin{
+    display: flex;
+    padding: 6px;
+    font-weight: 600;
+    flex-direction: column;
+    align-items: flex-start;
+    > div {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.divBtn{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+.salvar{
+    font-size: 16px;
+    color: green;
+    border-radius: 4px;
+    width: 70px;
+    height: 25px;
+    max-width: 90%;
+    border: 2px solid green;
+    font-weight: 700;
+}
+.salvar:hover{
+    background-color: rgba(0, 128, 0, 0.3);
+}
+.disabled{
+    font-size: 16px;
+    color: gray;
+    border-radius: 4px;
+    width: 70px;
+    height: 25px;
+    max-width: 90%;
+    border: 2px solid grey;
+    font-weight: 700;
+}
+
+.excluir{
+    font-size: 16px;
+    color: red;
+    border-radius: 4px;
+    width: 70px;
+    height: 25px;
+    max-width: 90%;
+    border: 2px solid red;
+    font-weight: 700;
+}
+.excluir:hover{
+    background-color: rgba(128, 0, 0, 0.3);
+}

@@ -8,8 +8,7 @@ import { AuthContext } from "@/context/auth.context";
 import { useContext } from "react";
 import Logo from '../assets/Logo Compuservice.png'
 import Image from "next/image";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+
 
 export default function Login() {
   const { loginFunction } = useContext(AuthContext);
@@ -20,20 +19,6 @@ export default function Login() {
   });
 
   return (
-    <>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      /><ToastContainer />
-
       <section className={styled.secLogin}>
         <div className={styled.divLogin}>
             <figure className={styled.figure}>
@@ -63,6 +48,5 @@ export default function Login() {
           </div> */}
         </div>
       </section>
-    </>
   );
 }

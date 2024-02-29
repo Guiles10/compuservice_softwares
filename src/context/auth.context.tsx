@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 import { Api } from "../service/Api";
+import Error from "next/error";
 
 
 export const AuthContext = createContext({} as iProviderValue);
@@ -14,15 +15,12 @@ interface iAuthProviderChildren {
 }
 export interface iUser {
   email: string
-  function: string
+  function: string[]
   id: string
   isAdmin: boolean
   name: string
 }
-interface iInfoUserToken {
-  user: iUser;
-  token: string;
-}
+
 export interface iInfoLogin {
   email: string;
   password: string;
@@ -44,8 +42,18 @@ interface iProviderValue {
 
   openRegisterUser: boolean
   setOpenRegisterUser: React.Dispatch<React.SetStateAction<boolean>>
-
   registerUser: (formData: any) => Promise<void>
+
+  setUserSelect: React.Dispatch<React.SetStateAction<any>>
+  userSelect: any
+  selectUser: (formData: any) => Promise<void>
+
+  openEditUser: boolean
+  setOpenEditUser: React.Dispatch<React.SetStateAction<boolean>>
+  editeUser: (formData: iUser, idUser: any) => Promise<void>
+
+  excluirUser: (idUser: string) => Promise<void>
+
 }
 
 export const AuthProvider = ({ children }: iAuthProviderChildren) => {
@@ -105,7 +113,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
     userAll()
   }, [token]);
 
-  useEffect(() => {
+
     const findUser = async (id: string) => {
       try {
         const response = await Api.get(`/users/${id}`, {
@@ -118,6 +126,7 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
         console.error(error);
       }
     };
+  useEffect(() => {
     if (userId) {
       findUser(userId);
     }
@@ -136,15 +145,14 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
     }
   };
   protectRoutes(router, token)
-
+////////////////////////////////////// MENUS //////////////////////////////////////
 
   const [selectedMenu, setSelectedMenu] = useState<string>('');
   const [showCards, setShowCards] = useState(false);
 
-  const [openRegisterUser, setOpenRegisterUser] = useState(false);
+  const [ openRegisterUser, setOpenRegisterUser] = useState(false);
 
-  
-  
+////////////////////////////////////// USUARIO //////////////////////////////////////
   const registerUser = async (formData: any) => {
     try {
       const response = await Api.post(`/users`, formData, {
@@ -152,11 +160,57 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      toast.success("Usuario Cadastrado!");
-    } catch (error) {
-      toast.error("E-mail já utilizado!");
+      userAll()
+      toast.success("Usuario cadastrado!");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   }
+
+  const [ userSelect, setUserSelect] = useState<iUser | null>(null);
+  const selectUser = async (idUser: string) => {
+    try {
+      const resp = await Api.get(`/users/${idUser}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUserSelect(resp.data)
+    } catch (error) {
+
+    }
+  }
+  
+  const [ openEditUser, setOpenEditUser] = useState(false);
+  const editeUser = async (formData: iUser, idUser: string) => {
+    try {
+      const response = await Api.patch(`/users/${idUser}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      findUser(userId)
+      userAll()
+      toast.success("Usuario editado!");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    }
+  }
+
+  const excluirUser = async (idUser: string) => {
+    try {
+      const response = await Api.delete(`/users/${idUser}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      userAll()
+      toast.success("Usuario excluido!");
+    } catch (error) {
+      toast.error("Erro ao excluir!");
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -175,8 +229,17 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
 
         openRegisterUser,
         setOpenRegisterUser,
-
         registerUser,
+
+        setUserSelect,
+        userSelect,
+        selectUser,
+
+        openEditUser,
+        setOpenEditUser,
+        editeUser,
+
+        excluirUser,
 
       }}
     >

@@ -7,6 +7,9 @@ import { AuthProvider } from '@/context/auth.context'
 import { CommentProvider } from '@/context/comment.context'
 import { ClientProvider } from '@/context/client.context'
 
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -28,6 +31,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <ClientProvider>
             <CardsProvider>
               <CommentProvider>
+                <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false}
+                closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light"/>
                 {children}
               </CommentProvider>
             </CardsProvider>

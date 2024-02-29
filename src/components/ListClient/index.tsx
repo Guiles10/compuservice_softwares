@@ -7,7 +7,6 @@ import { ClientCard } from './ClientCard';
 
 export const ListClient = () => {
     const { allClient, setModalClient, modalCriaClient, setModalCriaClient } = useContext(ClientContext);
-    const { userId, allUser } = useContext(AuthContext);
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleInputChange = (event: any) => {

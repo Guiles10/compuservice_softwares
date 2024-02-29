@@ -7,6 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ClientContext } from '@/context/client.context';
 import { AuthContext } from '@/context/auth.context';
 
+import { FaArrowAltCircleDown } from "react-icons/fa";
+import { FaArrowAltCircleUp } from "react-icons/fa";
+import { FaTrashCan } from "react-icons/fa6";
+
+
+
+
 export const ModalCriaCards = () => {
 
     const { allUser } = useContext(AuthContext);
@@ -15,22 +22,38 @@ export const ModalCriaCards = () => {
 
 /////////////////////////////////////////////////// TASK ///////////////////////////////////////////////////
     const [novaTarefa, setNovaTarefa] = useState('');
-    const [tarefas, setTarefas] = useState<string[]>([]);
+    const [tarefas, setTarefas] = useState<{ id: string, texto: string }[]>([]);
+    const [confirmacaoExclusao, setConfirmacaoExclusao] = useState(false);
 
     const adicionarTarefa = () => {
         if (novaTarefa.trim()) {
-            setTarefas((prevTarefas) => [...prevTarefas, novaTarefa]);
+            const novaTarefaObj = { id: Date.now().toString(), texto: novaTarefa };
+            setTarefas((prevTarefas) => [...prevTarefas, novaTarefaObj]);
             setNovaTarefa('');
         }
     };
-    const [confirmacaoExclusao, setConfirmacaoExclusao] = useState(false);
-    const excluirTarefa = (index: number) => {
-        setTarefas((prevTarefas) => {
-          const novasTarefas = [...prevTarefas];
-          novasTarefas.splice(index, 1);
-          return novasTarefas;
-        });
+
+    const excluirTarefa = (id: string) => {
+        setTarefas((prevTarefas) => prevTarefas.filter(tarefa => tarefa.id !== id));
         setConfirmacaoExclusao(false);
+    };
+
+    const moverTarefaParaCima = (id: string) => {
+        const index = tarefas.findIndex(tarefa => tarefa.id === id);
+        if (index > 0) {
+            const novaLista = [...tarefas];
+            [novaLista[index - 1], novaLista[index]] = [novaLista[index], novaLista[index - 1]];
+            setTarefas(novaLista);
+        }
+    };
+
+    const moverTarefaParaBaixo = (id: string) => {
+        const index = tarefas.findIndex(tarefa => tarefa.id === id);
+        if (index < tarefas.length - 1) {
+            const novaLista = [...tarefas];
+            [novaLista[index], novaLista[index + 1]] = [novaLista[index + 1], novaLista[index]];
+            setTarefas(novaLista);
+        }
     };
 
 /////////////////////////////////////////////////// SETOR ///////////////////////////////////////////////////
@@ -120,9 +143,10 @@ export const ModalCriaCards = () => {
 
     const onSubmit = (data: any) => {
         setIsLoading(true); 
+        const taskRequest = tarefas.map(tarefa => tarefa.texto);
         if(selectedOptions.length > 0){
             const dataForm = { ...data, type: selectedOptions, clients: selectedNames, worker: selectedUserNames};
-            creatCard(dataForm, tarefas, selectedFiles);
+            creatCard(dataForm, taskRequest, selectedFiles);
         }
     };
 
@@ -139,7 +163,7 @@ export const ModalCriaCards = () => {
                         <button className={styled.btnFecha} onClick={() => setOpenModal(false)} disabled={isLoading}>Fechar</button>
                     </div>
 
-                    <div className={styled.divClientSelect}>
+                    <div className={styled.divUserSelect}>
                         <div className={styled.divSelectClient}>
                             <p className={styled.pDesc}>Usuário: </p>
                             <div>
@@ -238,17 +262,21 @@ export const ModalCriaCards = () => {
                         </div>
                         <div className={styled.divInput}>
                             <div className={styled.divAddTarefa}>
-                                <input type="text" disabled={isLoading} value={novaTarefa} onChange={(e) => setNovaTarefa(e.target.value)} placeholder="Digite a nova tarefa"/>
-                                <button className={styled.btnSlavar}type="button" onClick={adicionarTarefa} disabled={isLoading}>Adicionar</button>
+                                <input type="text" value={novaTarefa} onChange={(e) => setNovaTarefa(e.target.value)} placeholder="Digite a nova tarefa"/>
+                                <button type="button" onClick={adicionarTarefa} className={styled.btnSalveFile}>Adicionar</button>
                             </div>
                             <div className={styled.divUl}>
                                 <ul className={styled.ul}>
-                                    {tarefas.map((tarefa, index) => (
-                                        <li className={styled.li} key={index}>
+                                    {tarefas.map((tarefa) => (
+                                        <li className={styled.li} key={tarefa.id}>
                                             <div>
-                                                <label htmlFor={`tarefa-${index}`}>{tarefa}</label>
+                                                <label htmlFor={`tarefa-${tarefa.id}`}>{tarefa.texto}</label>
                                             </div>
-                                            <button type='button' onDoubleClick={() => excluirTarefa(index)} disabled={isLoading}>X</button>
+                                            <div className={styled.dibBtnTask}>
+                                                <FaArrowAltCircleUp className={styled.moveTask} onClick={() => moverTarefaParaCima(tarefa.id)}/>
+                                                <FaArrowAltCircleDown className={styled.moveTask} onClick={() => moverTarefaParaBaixo(tarefa.id)}/>
+                                                <FaTrashCan className={styled.excluiTask} onDoubleClick={() => excluirTarefa(tarefa.id)}/>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>
@@ -279,7 +307,7 @@ export const ModalCriaCards = () => {
                     </section>
 
                     <div className={styled.divSalvar}>
-                        <button type='submit' className={isLoading ? styled.salvarLoading : styled.salvar} disabled={isLoading}>
+                        <button type='submit' className={isLoading ? styled.salvarLoading : styled.salvar} disabled={isLoading || selectedOptions.length === 0}>
                             {isLoading ? 'Criando Card ...' : 'Criar Card'}
                         </button>
                     </div>
