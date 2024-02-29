@@ -1,7 +1,7 @@
 'use client'
 
 import styled from './styles.module.scss';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/Header';
 import { SectionSup } from '@/components/SectionSup';
 import { SectionComments } from '@/components/SectionComments';
@@ -16,11 +16,11 @@ import { ClientContext } from '@/context/client.context';
 import { ModalCriaCards } from '@/components/ModalCriaCard';
 import { SectionCardForUser } from '@/components/SectionCardForUser';
 import { CriaUser } from '@/components/CriaUser';
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { EditaUser } from '@/components/EditaUser';
 
 const Dashboard = () => {
-  const { selectedMenu, showCards, setShowCards, infoUser, openRegisterUser, setOpenRegisterUser } = useContext(AuthContext);
+
+  const { allUser, selectedMenu, showCards, setShowCards, infoUser, openRegisterUser, setOpenRegisterUser, selectUser, openEditUser, setOpenEditUser } = useContext(AuthContext);
   const { modalClient, setModalClient } = useContext(ClientContext);
   const { openModal, setOpenModal, userNamesWithCardIds, getAllCardsForUser } = useContext(CardsContext);
 
@@ -34,22 +34,45 @@ const Dashboard = () => {
   const handleGetAllCardsForUser = () => {
     getAllCardsForUser();
     setShowCards(true);
-  }
+  } 
+  
+  const [selectedUserId, setSelectedUserId] = useState<string>(''); 
+  const handleUserSelect = (userId: any) => {
+    setSelectedUserId(userId);
+    selectUser(userId)
+  };
+
+  const [openMenuEditaUser, setOpenMenuEditaUser] = useState<boolean>(false);
+  const userModal = () => {
+    setOpenMenuEditaUser(prevState => !prevState);
+    setSelectedUserId('')
+  };
+
+
+  const handleBtnRegister = (boolean: boolean) => {
+    setOpenRegisterUser(boolean);
+    setOpenMenuEditaUser(false);
+  };
+
+  const handleBtnEdite = () => {
+    setOpenEditUser(true);
+    setOpenMenuEditaUser(false);
+  };
+
+  const menuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenuEditaUser(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []); 
 
   return (
-    <>
-    <ToastContainer
-    position="top-right"
-    autoClose={3000}
-    hideProgressBar={false}
-    newestOnTop={false}
-    closeOnClick
-    rtl={false}
-    pauseOnFocusLoss
-    draggable
-    pauseOnHover
-    theme="light"
-    /><ToastContainer />
     <main className={styled.main}>
       <div className={styled.divHeaderSec}>
         
@@ -57,22 +80,44 @@ const Dashboard = () => {
         
         <div className={styled.divBtn}>
           <button className={styled.btnCriarTarefa} onClick={() => setOpenModal(true)}>Criar Tarefa</button>
-          <button onClick={() => setModalClient(true)} className={styled.btnListClient}>Lista Clientes</button>
+          <button onClick={() => setModalClient(true)} className={styled.btnListClient}>Clientes</button>
          
-          {infoUser?.isAdmin ? 
-            <button className={styled.btnListClient} onClick={() => setOpenRegisterUser(true)}>Cadastrar Usuario</button>
-          :
-            null
-          }
+          <div className={styled.divUser}>
+            {infoUser?.isAdmin && (
+              <button className={styled.btnListClient} onClick={() => userModal()}>Usuario</button>
+            )}
+
+            {openMenuEditaUser && (
+              <div className={styled.menuSanduiche} ref={menuRef}>
+                <div className={styled.divEditar}>
+                  <select onChange={(e) => handleUserSelect(e.target.value)}>
+                    <option value=""> - Selecione um usuário - </option>
+                    {allUser && allUser.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button className={styled.btnEdit} onClick={handleBtnEdite} disabled={!selectedUserId}>Editar</button> {/* Desabilita o botão se nenhum usuário estiver selecionado */}
+                </div>
+                <button className={styled.btnRegister} onClick={() => handleBtnRegister(true)}>Cadastrar</button>
+              </div>
+            )}
+          </div>
           
           <div className={styled.cardsContainer}>
             <p className={styled.number}>{userCountForInfoUser.length}</p>
             <button className={styled.btnCards} onClick={handleGetAllCardsForUser}>Minhas Tarefas</button>
           </div>
         </div>
+
         {modalClient && <ListClient/>}
+
         {openModal && <ModalCriaCards />}
+
         {openRegisterUser && <CriaUser />}
+
+        {openEditUser && <EditaUser />}
         
         {showCards ? (
           <section className={styled.secBody}>
@@ -92,7 +137,6 @@ const Dashboard = () => {
       <SectionComments />
 
     </main>
-    </>
   );
 };
 
