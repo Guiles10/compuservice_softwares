@@ -17,6 +17,7 @@ export const CommentCard = ({ item }: { item: iComment }) => {
   const [confirmacaoExclusao, setConfirmacaoExclusao] = useState(false);
   const [modoEdicao, setModoEdicao] = useState<boolean>(false);
   const [novoComment, setNovoComment] = useState<string>(item.comment);
+  const [novotitle, setNovoTitle] = useState<string>(item.title);
 
   const exibirConfirmacaoExclusao = () => {
     setConfirmacaoExclusao(true);
@@ -32,6 +33,7 @@ export const CommentCard = ({ item }: { item: iComment }) => {
   });
 
   const onSubmit = (dataForm: iComment) => {
+    console.log(dataForm)
     editarComment(item.id!, dataForm);
     setModoEdicao(false);
   };
@@ -63,9 +65,10 @@ export const CommentCard = ({ item }: { item: iComment }) => {
           <div className={styled.divName}>
             <p className={styled.pName}>{item.user!.name}</p>
             <div>
-              <p className={styled.pData}>{item.createdAt!.slice(0, 10)}</p>
-              <p className={styled.pData}>{item.updatedAt!.slice(0, 10)}</p>
+              <p className={styled.pData}>C:{item.createdAt!.slice(0, 10)}</p>
+              <p className={styled.pData}>E:{item.updatedAt!.slice(0, 10)}</p>
             </div>
+            <p className={styled.pTitle}>{item.title}</p>
           </div>
           {headerButtons}
         </div>
@@ -79,6 +82,10 @@ export const CommentCard = ({ item }: { item: iComment }) => {
         </>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={styled.divTitleComment}>
+            <input className={styled.criaTitleComm} value={novotitle} {...register('title')}  onChange={(e) => setNovoTitle(e.target.value)} />
+            {errors.title?.message && (<p className={styled.pError}>{errors.title.message}</p> )}
+          </div>
           <div className={styled.divComment}>
             <textarea className={styled.textareaEditComment} value={novoComment} {...register('comment')} onChange={(e) => setNovoComment(e.target.value)} />
             {errors.comment?.message && (<p className={styled.pError}>{errors.comment.message}</p>)}

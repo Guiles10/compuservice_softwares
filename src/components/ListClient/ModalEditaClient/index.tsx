@@ -49,6 +49,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
     React.useEffect(() => {
         setValue('codigo', client.codigo!);
         setValue('companyName', client.companyName!);
+        setValue('socialName', client.socialName!);
         setValue('cnpj', client.cnpj!);
         setValue('businessPhone', client.businessPhone!);
         setValue('businessEmail', client.businessEmail!);
@@ -62,6 +63,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
     }, [client, setValue]);
 
     const onSubmit = (dataForm: any) => {
+
         const newRespForm = showResponsibleForms.map(formId => {
             return {
                 name: (document.getElementById(`name-${formId}`) as HTMLInputElement).value,
@@ -80,7 +82,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
             <form className={styled.form} onSubmit={handleSubmit(onSubmit)}>
 
                 <div className={styled.divHeaderModal}>
-                    <p className={styled.pTitleModal}>EDITAR - {client.companyName}</p>
+                    <p className={styled.pTitleModal}>EDITAR - {client.socialName}</p>
                     <div className={styled.divBtnEdit}>
                         <button type='button' onDoubleClick={() => excluirClient(client.id)} className={styled.excluir}>Excluir</button>
                         <button type='submit' className={styled.salvar}>Salvar</button>
@@ -98,9 +100,15 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
                         </div>
 
                         <div className={styled.formGroup}>
-                            <label htmlFor="companyName">Nome da Empresa:</label>
+                            <label htmlFor="companyName">Razão Social:</label>
                             <input className={styled.inputRegister} type="text" id="companyName" {...register('companyName')} />
                             {errors.companyName && <span className={styled.errorMsg}>{errors.companyName.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="socialName">Nome Fantasia:</label>
+                            <input className={styled.inputRegister} type="text" id="socialName" {...register('socialName')} />
+                            {errors.socialName && <span className={styled.errorMsg}>{errors.socialName.message}</span>}
                         </div>
 
                         <div className={styled.formGroup}>
@@ -223,7 +231,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
 
                             <div className={styled.formGroup}>
                                 <label htmlFor={`phone-${formId}`}>Telefone:</label>
-                                <input className={styled.inputResp} type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
+                                <InputMask className={styled.inputResp} mask="(99) 99999-9999" maskChar="" type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
                             </div>
 
                         </div>

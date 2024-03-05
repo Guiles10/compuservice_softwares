@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./auth.context";
 import { Api } from "@/service/Api";
+import { toast } from "react-toastify";
 
 export const ClientContext = createContext({} as iProviderValue);
 interface iAuthProviderChildren {
@@ -13,6 +14,7 @@ export interface iClient {
   id: string 
   codigo: string
   companyName: string
+  socialName: string
   cnpj: string
   businessPhone: string | null
   businessEmail: string | null
@@ -37,6 +39,7 @@ export interface iResponsible{
 export interface iDataForm {
   codigo:         string;
   companyName:    string;
+  socialName:    string;
   cnpj:           string;
   businessPhone:  string;
   businessEmail:  string;
@@ -88,7 +91,6 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
     };
     useEffect(() => {
       getAllClient()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token, userId ]);
 
     const [modalCriaClient, setModalCriaClient] = useState<boolean>(false)
@@ -107,16 +109,15 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
               }
             );
             createResp.push(responseResp.data);
-          } catch (error) {
-            console.error("Erro ao criar responsável:");
+          } catch (error: any) {
+            toast.error(error.response.data.message);
           }
         }
         getAllClient()
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
       }
     };
-
 
     const editarClient = async (clientId: string, dataForm: iClient, newRespFrom: iResponsible[], respClint:iResponsible[]) => {
       try {
@@ -153,7 +154,6 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
       getAllClient()
     };
 
-  
     const excluirClient = async (clientId: string) => {
       try {
         const response = await Api.delete(`/client/${clientId}`, {
