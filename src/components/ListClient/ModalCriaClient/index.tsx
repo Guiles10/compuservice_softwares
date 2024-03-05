@@ -63,9 +63,15 @@ export const ModalCriaClient = () => {
                         </div>
 
                         <div className={styled.formGroup}>
-                            <label htmlFor="companyName">Nome da Empresa:</label>
+                            <label htmlFor="companyName">Razão Social:</label>
                             <input className={styled.inputRegister} type="text" id="companyName" {...register('companyName')} />
                             {errors.companyName && <span className={styled.errorMsg}>{errors.companyName.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="socialName">Nome Fantasia:</label>
+                            <input className={styled.inputRegister} type="text" id="socialName" {...register('socialName')} />
+                            {errors.socialName && <span className={styled.errorMsg}>{errors.socialName.message}</span>}
                         </div>
 
                         <div className={styled.formGroup}>

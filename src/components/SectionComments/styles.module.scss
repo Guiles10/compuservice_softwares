@@ -125,24 +125,38 @@
             background-color: rgba(0, 0, 0, 0.3);
         }
     }
-    .divComment{
-        display: flex;
-        flex-direction: column;
-        width: 100%;
+}
 
-        .textareaCriaComment{
-            height: 75px;
-            padding: 6px;
-            border-radius: 6px;
-            resize: vertical;
-            border: 1px solid rgba(0, 0, 0, 0.3);
-        }
-        .pError{
-            display: flex;
-            margin: 5px;
-            font-size: 10px;
-            font-weight: 600;
-            color: red;
-        }
-    }
+.divComment{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.textareaCriaComment{
+    height: 75px;
+    padding: 6px;
+    border-radius: 6px;
+    resize: vertical;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.divTitleComment{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.criaTitleComm{
+    padding: 6px;
+    border-radius: 6px;
+    resize: vertical;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+
+.pError{
+    display: flex;
+    margin: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    color: red;
 }

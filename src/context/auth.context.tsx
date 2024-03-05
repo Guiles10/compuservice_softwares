@@ -189,8 +189,9 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      findUser(userId)
-      userAll()
+      await findUser(userId)
+      await userAll()
+
       toast.success("Usuario editado!");
     } catch (error: any) {
       toast.error(error.response.data.message);
