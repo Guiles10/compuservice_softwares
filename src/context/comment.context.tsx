@@ -12,6 +12,7 @@ interface iAuthProviderChildren {
 export interface iComment {
   id?: string 
   comment: string
+  title: string
   priority?: string | null
   createdAt?: string
   updatedAt?: string | null

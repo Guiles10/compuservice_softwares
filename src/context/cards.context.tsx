@@ -1,8 +1,9 @@
 'use client'
 
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext, iUser } from "./auth.context";
 import { Api } from "@/service/Api";
+import { toast } from "react-toastify";
 
 export const CardsContext = createContext({} as iProviderValue);
 interface iAuthProviderChildren {
@@ -206,6 +207,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
                     }
                 }
             );
+            toast.success("Tarefa criada com sucesso!");
           } catch (error) {
             console.error('Error uploading file:', error);
           }
@@ -215,20 +217,14 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         getAllCardsForUser()
         setIsLoading(false);
         setOpenModal(false);
-      } catch (error) {
-        console.error(error);
+
+        toast.success("Tarefa criada com sucesso!");
+      } catch (error: any) {
+        toast.error(error.response.data.message);
       }
     };
 
     const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
-      try {
-        const responseCard = await Api.patch(`/cards/${itemId}`, dataForm, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      } catch (error) {
-        console.error(error);
-      }
-
       let idTasks: iTask[] = [];
       let semIdTasks: iTask[] = [];
       tarefas.forEach((tarefa) => {
@@ -245,8 +241,8 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
             headers: { Authorization: `Bearer ${token}` } 
           });
         }
-      }catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
       }
 
       try {
@@ -255,15 +251,24 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
             headers: { Authorization: `Bearer ${token}` } 
           });
         }
-      }catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
       }
+
+      try {
+        const responseCard = await Api.patch(`/cards/${itemId}`, dataForm, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        toast.success("Tarefa editada com sucesso!");
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+      }
+
       getAllCardsForUser()
       getAllCards()
     };
 
     const excluirCard = async (infoCard: any) => {
-
       for (const file of infoCard.files) {
         try {
           const response = await Api.delete(`/file/${file.filename}`, {
@@ -278,6 +283,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           const response = await Api.delete(`/cards/${infoCard.id}/${file.filename}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
+
         } catch (error) {
           console.error(error);
         }
@@ -288,10 +294,10 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
         getAllCards()
         getAllCardsForUser()
 
+        toast.success("Tarefa Excluida!");
       } catch (error) {
         console.error(error);
       }
@@ -299,6 +305,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 
 ///////////////////////////////////////////////// MOVER CARD /////////////////////////////////////////////////
     const moveCard = async (item: iCard, idCard: string) => {
+      console.log(item)
       let novoStatus = ''
       if (item.status === 'A Fazer') {
         novoStatus = 'Em Andamento'
@@ -308,7 +315,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         return
       }
       const cardAtualizado = { ...item, status: novoStatus };
-
         try {
           const response = await Api.patch(`/cards/${idCard}`, cardAtualizado, {
               headers: {
@@ -318,11 +324,12 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           );
           getAllCards()
           getAllCardsForUser()
-        } catch (error) {
-          console.error(error)
+        } catch (error: any) {
+          toast.error(error.response.data.message);
         }
     }
     const moveCardReves = async (item: iCard, idCard: string) => {
+      console.log(item.status)
       let novoStatus = ''
       if (item.status === 'Concluido') {
         novoStatus = 'Em Andamento'
@@ -332,6 +339,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         return
       }
       const cardAtualizado = {... item, status: novoStatus }
+      console.log(cardAtualizado)
         try {
           const response = await Api.patch(`/cards/${idCard}`, cardAtualizado, {
               headers: {
@@ -380,9 +388,9 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           getAllCards()
           getAllCardsForUser()
           setIsLoading(false)
-      } catch (error) {
-          console.error('Erro ao enviar arquivo:', error);
-      }
+        } catch (error: any) {
+          toast.error(error.response.data.message);
+        }
     };
 
     const deleteFile = async (nameDoc: string, cardId: string) => {
@@ -402,12 +410,11 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         getAllCards()
         getAllCardsForUser()
         setIsLoading(false)
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
       }
 
     };
-
 
     return (
     <CardsContext.Provider

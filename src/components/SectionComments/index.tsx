@@ -15,7 +15,7 @@ interface iFilter {
 export const SectionComments = () => {
 
   const { allCommentsSup, creatComment } = useContext(CommentContext);
-
+  
   const [menuAberto, setMenuAberto] = useState(false);
 
   const [filter, setFilter] = useState<iFilter>({ date: '', creator: '', comment: '' });
@@ -47,11 +47,12 @@ export const SectionComments = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm<commentSchemaType>({
     resolver: zodResolver(commentSchema),
-});
-const onSubmit = (dataForm: any) => {
-  creatComment(dataForm);
-  setIsFormOpen(false);
-};
+  });
+  
+  const onSubmit = (dataForm: any) => {
+    creatComment(dataForm);
+    setIsFormOpen(false);
+  };
 
   return (
     <section className={styled.secComm}>
@@ -88,8 +89,12 @@ const onSubmit = (dataForm: any) => {
 
       {isFormOpen && (
         <form className={styled.formCriaComment} onSubmit={handleSubmit(onSubmit)}>
+          <div className={styled.divTitleComment}>
+            <input className={styled.criaTitleComm} {...register('title')}  placeholder="Digite o título" />
+            {errors.title?.message && (<p className={styled.pError}>{errors.title.message}</p> )}
+          </div>
           <div className={styled.divComment}>
-            <textarea className={styled.textareaCriaComment} {...register('comment')} />
+            <textarea className={styled.textareaCriaComment} {...register('comment')}  placeholder="Digite o comentário..." />
             {errors.comment?.message && (<p className={styled.pError}>{errors.comment.message}</p> )}
           </div>
           <div className={styled.divBtn}>
