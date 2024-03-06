@@ -14,8 +14,6 @@ export const UploadFileComponente = ({ infoCard, isAuthorized, isLoading, setIsL
     const [selectedFileName, setSelectedFileName] = useState('');
     const [fileSelected, setFileSelected] = useState(false);
 
-    // const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
-
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileSelect = () => {

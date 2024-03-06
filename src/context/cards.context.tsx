@@ -1,5 +1,4 @@
 'use client'
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext, iUser } from "./auth.context";
 import { Api } from "@/service/Api";
@@ -76,6 +75,8 @@ interface iProviderValue {
   editarCard: (item: string, dataForm: iDataForm, tarefas: iTask[]) => Promise<void>
   excluirCard: (infoCard: any) => Promise<void>
 
+  setIsLoadingMove: React.Dispatch<React.SetStateAction<boolean>>
+  isLoadingMove: boolean
   moveCard: (item: iCard, idCard: string) => void
   moveCardReves: (item: iCard, idCard: string) => Promise<void>
 
@@ -207,7 +208,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
                     }
                 }
             );
-            toast.success("Tarefa criada com sucesso!");
           } catch (error) {
             console.error('Error uploading file:', error);
           }
@@ -225,27 +225,18 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
     };
 
     const editarCard = async (itemId: string, dataForm: iDataForm, tarefas: iTask[]) => {
-      let idTasks: iTask[] = [];
-      let semIdTasks: iTask[] = [];
-      tarefas.forEach((tarefa) => {
-            if (tarefa.id) {
-                idTasks.push(tarefa);
-            } else {
-                semIdTasks.push(tarefa);
-            }
-      });
-
       try {
+        let idTasks: iTask[] = [];
+        let semIdTasks: iTask[] = [];
+        tarefas.forEach((tarefa) => {
+              if (tarefa.id) { idTasks.push(tarefa);
+              } else { semIdTasks.push(tarefa)}
+        });
         for (const tarefa of semIdTasks) {
           const responseCreateTask = await Api.post(`/tasks/${itemId}`, tarefa,{ 
             headers: { Authorization: `Bearer ${token}` } 
           });
         }
-      } catch (error: any) {
-        toast.error(error.response.data.message);
-      }
-
-      try {
         for (const tarefa of idTasks) {
           const responseEditeTask = await Api.patch(`/tasks/${itemId}/${tarefa.id}`, tarefa,{ 
             headers: { Authorization: `Bearer ${token}` } 
@@ -264,8 +255,8 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         toast.error(error.response.data.message);
       }
 
-      getAllCardsForUser()
-      getAllCards()
+      await getAllCardsForUser()
+      await getAllCards()
     };
 
     const excluirCard = async (infoCard: any) => {
@@ -304,8 +295,9 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
     };
 
 ///////////////////////////////////////////////// MOVER CARD /////////////////////////////////////////////////
+    const [isLoadingMove, setIsLoadingMove] = useState<boolean>(false);
     const moveCard = async (item: iCard, idCard: string) => {
-      console.log(item)
+      setIsLoadingMove(true)
       let novoStatus = ''
       if (item.status === 'A Fazer') {
         novoStatus = 'Em Andamento'
@@ -326,10 +318,12 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           getAllCardsForUser()
         } catch (error: any) {
           toast.error(error.response.data.message);
+        } finally {
+          setIsLoadingMove(false);
         }
     }
     const moveCardReves = async (item: iCard, idCard: string) => {
-      console.log(item.status)
+      setIsLoadingMove(true)
       let novoStatus = ''
       if (item.status === 'Concluido') {
         novoStatus = 'Em Andamento'
@@ -339,7 +333,6 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         return
       }
       const cardAtualizado = {... item, status: novoStatus }
-      console.log(cardAtualizado)
         try {
           const response = await Api.patch(`/cards/${idCard}`, cardAtualizado, {
               headers: {
@@ -351,6 +344,8 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
           getAllCardsForUser()
         } catch (error) {
           console.error(error);
+        } finally {
+          setIsLoadingMove(false);
         }
     }
 
@@ -371,7 +366,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
 ///////////////////////////////////////////////// FILES /////////////////////////////////////////////////
     const uploadFile = async (file: any, cardId: string) => {
       if (!file) {
-          console.error('Nenhum arquivo selecionado.');
+          toast.error('Nenhum arquivo selecionado');
           return;
       }
       try {
@@ -441,6 +436,8 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         editarCard,
         excluirCard,
 
+        setIsLoadingMove,
+        isLoadingMove,
         moveCard,
         moveCardReves,
 

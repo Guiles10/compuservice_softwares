@@ -3,7 +3,7 @@ import styled from './styles.module.scss';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ClientContext, iClient, iDataForm, iResponsible } from '@/context/client.context';
+import { ClientContext, iClient, iResponsible } from '@/context/client.context';
 import { clientSchema, clientSchemaType } from '@/schema/client.schema';
 import { FaTrash } from 'react-icons/fa';
 import InputMask from 'react-input-mask';
@@ -74,7 +74,9 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
         });
 
         editarClient(client.id, dataForm, newRespForm, respClint);
-        setModalEditClient(false);
+        setTimeout(function() {
+            setModalEditClient(false);
+        }, 2000);
     };
 
     return (
@@ -94,8 +96,8 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
 
                     <div className={styled.divInfoBussines}>
                         <div className={styled.formGroup}>
-                            <label htmlFor="codigo">Código:</label>
-                            <input className={styled.inputRegister} type="number" id="codigo" {...register('codigo')} />
+                            <label htmlFor="codigo">Código4:</label>
+                            <InputMask className={styled.inputRegister} mask="999999" maskChar="" type="text" id="codigo" {...register('codigo')} />
                             {errors.codigo && <span className={styled.errorMsg}>{errors.codigo.message}</span>}
                         </div>
 

@@ -71,13 +71,11 @@ interface iProviderValue {
 }
 
 export const ClientProvider = ({ children }: iAuthProviderChildren) => {
-
   const { userId, token} = useContext(AuthContext);
 
   const [modalClient, setModalClient] = useState<boolean>(false)
 
   const [allClient, setAllClient] = useState<iClient[]>([])
-
 
     const getAllClient = async () => {
       try {
@@ -113,7 +111,9 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
             toast.error(error.response.data.message);
           }
         }
-        getAllClient()
+        await getAllClient()
+        toast.success("Cliente cadastrado!");
+        setModalCriaClient(false);
       } catch (error: any) {
         toast.error(error.response.data.message);
       }
@@ -136,7 +136,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
           );
           createResp.push(responseResp.data);
         } catch (error) {
-          console.error("Erro ao criar responsável:");
+          toast.error("Erro ao criar responsável!");
         }
       }
       let editResp: iResponsible[] = []
@@ -148,10 +148,11 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
           );
           editResp.push(responseResp.data);
         } catch (error) {
-          console.error("Erro ao criar responsável:");
+          toast.error("Erro ao editar responsável!");
         }
       }
-      getAllClient()
+      toast.success("Cliente editado!");
+      await getAllClient()
     };
 
     const excluirClient = async (clientId: string) => {
@@ -165,7 +166,6 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
         console.error(error);
       }
     };
-
 
     const excluirRespnsible = async (respnsibleId: string) => {
       try {

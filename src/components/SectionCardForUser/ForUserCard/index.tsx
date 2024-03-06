@@ -3,7 +3,7 @@ import styled from './styles.module.scss'
 import { useContext, useState } from 'react';
 import { CardsContext, iCard } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
-import { ModalEditCard } from '@/components/ModalEditCard';
+import { ModalEditCard } from '@/components/ModalEditCard'; 
 
 export const ForUserCard = ({ item }: any ) => {
 
