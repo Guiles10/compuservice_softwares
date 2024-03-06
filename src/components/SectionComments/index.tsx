@@ -7,9 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 interface iFilter {
-  date: string;
-  creator: string;
-  comment: string;
+  search: string;
 }
 
 export const SectionComments = () => {
@@ -17,33 +15,20 @@ export const SectionComments = () => {
   const { allCommentsSup, creatComment } = useContext(CommentContext);
   
   const [menuAberto, setMenuAberto] = useState(false);
+  const [filter, setFilter] = useState<iFilter>({ search: '' });
 
-  const [filter, setFilter] = useState<iFilter>({ date: '', creator: '', comment: '' });
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const filterComments = (comments: iComment[]) => {
-    return comments
-      .filter(
-        (item) =>
-          item.createdAt?.includes(filter.date) &&
-          item.user?.name?.toLowerCase().includes(filter.creator.toLowerCase()) &&
-          item.comment?.toLowerCase().includes(filter.comment.toLowerCase())
-      )
+    return comments.filter(
+      (item) =>
+        item.createdAt?.includes(filter.search) || // Mudança: Buscar em todos os campos
+        item.user?.name?.toLowerCase().includes(filter.search.toLowerCase()) ||
+        item.comment?.toLowerCase().includes(filter.search.toLowerCase())
+    );
   };
 
   const sortedComments = filterComments(allCommentsSup);
-
-  const convertStringToDate = (dateString: string) => {
-    const [day, month, year, time] = dateString.split(/\/|\s/);
-    const [hour, minute, second] = time.split(':');
-    return new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute), Number(second));
-  };
-
-  sortedComments.sort((a, b) => {
-    const dateA = convertStringToDate(a.createdAt!);
-    const dateB = convertStringToDate(b.createdAt!);
-    return dateB.getTime() - dateA.getTime();
-  });
 
   const { register, handleSubmit, formState: { errors } } = useForm<commentSchemaType>({
     resolver: zodResolver(commentSchema),
@@ -70,16 +55,8 @@ export const SectionComments = () => {
           <div className={styled.divShareComm}>
             <div className={styled.divInputs}>
               <div className={styled.divShareInput}>
-                <p>Título:</p>
-                <input placeholder="Digite um Título " value={filter.comment} onChange={(e) => setFilter({ ...filter, comment: e.target.value })}/>
-              </div>
-              <div className={styled.divShareInput}>
-                <p>Nome:</p>
-                <input  placeholder="Digite um Nome" value={filter.creator} onChange={(e) => setFilter({ ...filter, creator: e.target.value })}/>
-              </div>
-              <div className={styled.divShareInput}>
-                <p>Data:</p>
-                <input  placeholder="Digite uma Data" value={filter.date} onChange={(e) => setFilter({ ...filter, date: e.target.value })}/>
+                <p>Pesquisa:</p>
+                <input placeholder="Digite um Título, Nome ou Data" value={filter.search} onChange={(e) => setFilter({ search: e.target.value })}/>
               </div>
             </div>
           </div>

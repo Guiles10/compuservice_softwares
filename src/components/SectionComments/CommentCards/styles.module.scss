@@ -182,6 +182,18 @@
     }
 }
 
+.divTitleComment{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.criaTitleComm{
+    padding: 6px;
+    border-radius: 6px;
+    resize: vertical;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
 .pError{
     display: flex;
     margin: 5px;

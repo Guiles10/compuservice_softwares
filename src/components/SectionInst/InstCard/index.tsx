@@ -4,11 +4,12 @@ import { useContext, useState } from 'react';
 import { CardsContext } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
 import { ModalEditCard } from '@/components/ModalEditCard';
-
+import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { TbReload } from "react-icons/tb";
 
 export const InstCards = ({ item }: any) => {
 
-    const { moveCardReves, moveCard } = useContext(CardsContext);
+    const { moveCardReves, moveCard, isLoadingMove } = useContext(CardsContext);
 
     const { userId, allUser } = useContext(AuthContext);
 
@@ -56,9 +57,9 @@ export const InstCards = ({ item }: any) => {
                     </div>
                 ) : (
                     <div className={styled.divBtnCard}>
-                        <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item, item.id)}>&lt;&lt;</button>
-                        <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)}>Visualizar</button>
-                        <button className={styled.btnMov} type='button' onClick={() => moveCard(item, item.id)} >&gt;&gt;</button>
+                        <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item, item.id)} disabled={isLoadingMove}>{isLoadingMove ? <TbReload /> : <MdKeyboardDoubleArrowLeft />}</button>
+                        <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)} disabled={isLoadingMove}>{isLoadingMove ? <TbReload /> : 'Visualizar'}</button>
+                        <button className={styled.btnMov} type='button' onClick={() => moveCard(item, item.id)} disabled={isLoadingMove}>{isLoadingMove ? <TbReload /> : <MdKeyboardDoubleArrowRight />}</button>
                     </div>
                 )}
             </div>

@@ -14,7 +14,6 @@ export const CriaUser = () => {
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     
-    
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const optionValue = event.target.value;
         if (selectedOptions.includes(optionValue)) {
@@ -29,8 +28,6 @@ export const CriaUser = () => {
         setIsAdmin(checked); 
     };
 
-    
-    
     const { register, handleSubmit, formState: { errors }, watch } = useForm<registerSchemaType>({
         resolver: zodResolver(registerSchema),
     });
@@ -46,7 +43,6 @@ export const CriaUser = () => {
     const onSubmit = (data: any) => {
         const dataForm = { ...data, function: selectedOptions, isAdmin: isAdmin };
         registerUser(dataForm);
-        setOpenRegisterUser(false)
     };
 
     return (
@@ -92,6 +88,9 @@ export const CriaUser = () => {
                     <div className={styled.divType}>
                         <p className={styled.pDesc}>Setor de Trabalho:</p>
                         <div className={styled.checkboxContainer}>
+                            <label>
+                                <input type="checkbox" value="Atendimento" checked={selectedOptions.includes('Atendimento')} onChange={handleCheckboxChange}/>Atendimento
+                            </label>
                             <label>
                                 <input type="checkbox" value="Suporte" checked={selectedOptions.includes('Suporte')} onChange={handleCheckboxChange}/>Suporte
                             </label>
