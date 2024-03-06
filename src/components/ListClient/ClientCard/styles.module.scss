@@ -79,6 +79,11 @@
 .thName{
     width: 510px;
     text-align: justify;
+    > p{
+        font-size: 14px;
+        font-weight: 700;
+        margin-right: 8px;
+    }
 }
 .thFone{
     width: 130px;

@@ -45,7 +45,7 @@ export const ListClient = () => {
                         <tr className={styled.trH} id='tr'>
                             <th className={styled.thSeta}>-</th>
                             <th className={styled.thCod}>Código</th>
-                            <th className={styled.thName}>Empresa</th>
+                            <th className={styled.thName}>Nome Fantasia</th>
                             <th className={styled.thFone}>Telefone</th>
                             <th className={styled.thCNPJ}>CNPJ</th>
                         </tr>

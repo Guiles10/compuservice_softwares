@@ -44,7 +44,6 @@ export const EditaUser = () => {
 ////////////////////////////////////////////// BTN EXLUIR //////////////////////////////////////////////
     const buttonExcluit = (idUser: string) => {
         excluirUser(idUser)
-        setOpenEditUser(false)
     }
 
 ////////////////////////////////////////////// FORM //////////////////////////////////////////////
@@ -60,7 +59,6 @@ export const EditaUser = () => {
             console.log(dataForm)
                 editeUser(dataForm, userSelect.id);
         }
-        setOpenEditUser(false)
     };
 
     return (

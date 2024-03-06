@@ -36,16 +36,8 @@ export default function Login() {
                   <input className={styled.input} id="password" type="password" {...register("password")} placeholder="Digite seu senha aqui"/>
                   {errors.password?.message && (<p className={styled.pError}>{errors.password.message}</p>)}
                 </div>
-                {/* <Link href={'/resetPassword'} className="self-end mt-8 mb-8 hover:text-[#4529E6] hover:underline hover:scale-105">
-                Esqueci minha senha
-                </Link> */}
                 <button className={styled.btnLogar} type="submit">Entrar</button>
             </form>
-
-          {/* <div className="w-full flex flex-col items-center">
-            <p className="mb-8 ">Ainda não possui conta?</p>
-            <Link href={"/register"}>Cadastrar</Link>
-          </div> */}
         </div>
       </section>
   );

@@ -41,7 +41,6 @@ export const ModalCriaClient = () => {
         });
 
         creatClient(dataForm, responsibleData);
-        setModalCriaClient(false);
     };
 
     return (
@@ -58,7 +57,7 @@ export const ModalCriaClient = () => {
                 <div className={styled.divInfoBussines}>
                         <div className={styled.formGroup}>
                             <label htmlFor="codigo">Código:</label>
-                            <input className={styled.inputRegister} type="number" id="codigo" {...register('codigo')} />
+                            <InputMask className={styled.inputRegister} mask="999999" maskChar="" type="text" id="codigo" {...register('codigo')} />
                             {errors.codigo && <span className={styled.errorMsg}>{errors.codigo.message}</span>}
                         </div>
 

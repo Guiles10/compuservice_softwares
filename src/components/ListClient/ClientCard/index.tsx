@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from './styles.module.scss';
 import { FaPen } from 'react-icons/fa';
 import { ModalEditaClient } from '../ModalEditaClient';
+import { ClientContext } from '@/context/client.context';
 
 export const ClientCard = ({ client }: any) => {
 
     const [modalEditClient, setModalEditClient] = useState<boolean>(false);
-    
+
     const [expandedClientId, setExpandedClientId] = useState<string | null>(null);
     const handleClientClick = (clientId: string) => {
         if(clientId === expandedClientId){
@@ -14,7 +15,6 @@ export const ClientCard = ({ client }: any) => {
         } else {
             setExpandedClientId(clientId);
         }
-
     };
 
     return (
@@ -29,13 +29,14 @@ export const ClientCard = ({ client }: any) => {
                             {expandedClientId === client.id ? '▼' : '►'}
                         </td>
                         <td className={styled.thCod}>{client.codigo}</td>
-                        <td className={styled.thName}>{client.companyName}</td>
+                        <td className={styled.thName}>{client.socialName}</td>
                         <td className={styled.thFone}>{client.businessPhone}</td>
                         <td className={styled.thCNPJ}>{client.cnpj}</td>
                     </tr>
                     {expandedClientId === client.id && (
                         <tr key={client.id + "_responsible"} className={styled.tr}>
                             <td className={styled.td} colSpan={6}>
+                                    <p className={styled.thName}><p>Razão Social: </p> {client.companyName} </p>
                                 <div className={styled.divInfoClient}>
                                     <div className={styled.divEmailComment}>
                                         <label className={styled.label}>E-mail: <textarea className={styled.textarea} readOnly value={client.businessEmail}></textarea></label>
