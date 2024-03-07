@@ -21,22 +21,25 @@ export interface iComment {
 }
 
 interface iProviderValue {
-  allCommentsSup: any
+  allComments: any
   creatComment: (dataForm: iComment) => Promise<void>
   editarComment: (itemId: string, dataForm: iComment) => Promise<void>
   excluirComment: (itemId: string) => Promise<void>
+
+  isLoadingComm: boolean
+  setIsLoadingComm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const CommentProvider = ({ children }: iAuthProviderChildren) => {
 
   const { userId, token} = useContext(AuthContext);
 
-  const [allCommentsSup, setAllCommentsSup] = useState<iComment[]>([])
+  const [allComments, setAllComments] = useState<iComment[]>([])
 
     const getAllComments = async () => {
       try {
         const response = await Api.get('/comments');
-        setAllCommentsSup(response.data);
+        setAllComments(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -45,16 +48,18 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
       getAllComments()
     }, []);
 
+    const [isLoadingComm, setIsLoadingComm] = useState<boolean>(false)
     const creatComment = async (dataForm: iComment ) => {
        try {
         const response = await Api.post(`/comments/${userId}`, dataForm, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        getAllComments()
-        
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoadingComm(false)
+        await getAllComments()
       }
     };
 
@@ -65,8 +70,10 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
         });
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoadingComm(false)
+        await getAllComments()
       }
-      getAllComments()
     }
 
     const excluirComment = async (itemId: string) => {
@@ -75,19 +82,24 @@ export const CommentProvider = ({ children }: iAuthProviderChildren) => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        getAllComments()
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoadingComm(false)
+        await getAllComments()
       }
     };
 
     return (
       <CommentContext.Provider
         value={{
-          allCommentsSup,
+          allComments,
           creatComment,
           editarComment,
           excluirComment,
+
+          isLoadingComm,
+          setIsLoadingComm,
         }}
       >
         {children}
