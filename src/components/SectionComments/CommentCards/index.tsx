@@ -9,7 +9,7 @@ import { AuthContext } from '@/context/auth.context';
 export const CommentCard = ({ item }: { item: iComment }) => {
   
   const { userId, token } = useContext(AuthContext);
-  const { editarComment, excluirComment} = useContext(CommentContext);
+  const { editarComment, excluirComment, isLoadingComm, setIsLoadingComm,} = useContext(CommentContext);
 
   const isOwner = item.userId === userId;
   const authorized = isOwner;
@@ -33,7 +33,7 @@ export const CommentCard = ({ item }: { item: iComment }) => {
   });
 
   const onSubmit = (dataForm: iComment) => {
-    console.log(dataForm)
+    setIsLoadingComm(true)
     editarComment(item.id!, dataForm);
     setModoEdicao(false);
   };
@@ -42,16 +42,16 @@ export const CommentCard = ({ item }: { item: iComment }) => {
     <div className={styled.divBtn}>
       {authorized && !modoEdicao && (
         <div className={styled.divEditExclui}>
-          <button className={styled.btnEdita} type='button' onClick={() => setModoEdicao(true)}>Editar</button>
-          <button type='button' onClick={exibirConfirmacaoExclusao} className={styled.btnExclui}>Excluir</button>
+          <button className={styled.btnEdita} disabled={isLoadingComm} type='button' onClick={() => setModoEdicao(true)}>Editar</button>
+          <button type='button' disabled={isLoadingComm} onClick={exibirConfirmacaoExclusao} className={styled.btnExclui}>Excluir</button>
         </div>
       )}
       {confirmacaoExclusao && (
         <span className={styled.spanExcluir}>
           <p className={styled.pExcluir}>Deseja Excluir?</p>
           <div className={styled.divSimNao}>
-            <button className={styled.btnSim} type='button' onClick={() => confirmaExcluir(item.id!)}>Excluir</button>
-            <button className={styled.btnNao} type='button' onClick={() => setConfirmacaoExclusao(false)}>Não</button>
+            <button className={styled.btnSim} disabled={isLoadingComm} type='button' onClick={() => confirmaExcluir(item.id!)}>Excluir</button>
+            <button className={styled.btnNao} disabled={isLoadingComm} type='button' onClick={() => setConfirmacaoExclusao(false)}>Não</button>
           </div>
         </span>
       )}
@@ -91,8 +91,8 @@ export const CommentCard = ({ item }: { item: iComment }) => {
             {errors.comment?.message && (<p className={styled.pError}>{errors.comment.message}</p>)}
           </div>
           <div className={styled.divBtnEdite}>
-            <button className={styled.btnSalvar} type='submit'>Salvar</button>
-            <button className={styled.btnCancelar} type='button' onClick={() => setModoEdicao(false)}>Cancelar</button>
+            <button className={styled.btnSalvar} disabled={isLoadingComm} type='submit'>Salvar</button>
+            <button className={styled.btnCancelar} disabled={isLoadingComm} type='button' onClick={() => setModoEdicao(false)}>Cancelar</button>
           </div>
         </form>
       )}

@@ -169,6 +169,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
           }
         );
         await getAllClient()
+        toast.success("Cliente excluido!");
         setIsLoadingCriaClient(false)
       } catch (error) {
         console.error(error);

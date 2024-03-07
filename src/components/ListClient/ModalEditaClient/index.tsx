@@ -97,7 +97,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
                     <div className={styled.divInfoBussines}>
                         <div className={styled.formGroup}>
                             <label htmlFor="codigo">Código4:</label>
-                            <InputMask className={styled.inputRegister} mask="999999" maskChar="" type="text" id="codigo" {...register('codigo')} />
+                            <InputMask className={styled.inputRegister} defaultValue={client.codigo} mask="999999" maskChar="" type="text" id="codigo" {...register('codigo')} />
                             {errors.codigo && <span className={styled.errorMsg}>{errors.codigo.message}</span>}
                         </div>
 
@@ -115,13 +115,13 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
 
                         <div className={styled.formGroup}>
                             <label htmlFor="cnpj">CNPJ:</label>
-                            <InputMask className={styled.inputRegister} mask="99.999.999/9999-99" maskChar="" type="text" id="cnpj" {...register('cnpj')} />
+                            <InputMask className={styled.inputRegister} mask="99.999.999/9999-99" defaultValue={client.cnpj} maskChar="" type="text" id="cnpj" {...register('cnpj')} />
                             {errors.cnpj && <span className={styled.errorMsg}>{errors.cnpj.message}</span>}
                         </div>
 
                         <div className={styled.formGroup}>
                             <label htmlFor="businessPhone">Telefone Comercial:</label>
-                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999" maskChar="" type="text" id="businessPhone" {...register('businessPhone')} />
+                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999"  defaultValue={client.businessPhone ?? ''} maskChar="" type="text" id="businessPhone" {...register('businessPhone')} />
                             {errors.businessPhone && <span className={styled.errorMsg}>{errors.businessPhone.message}</span>}
                         </div>
 
@@ -137,7 +137,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
 
                         <div className={styled.formGroup}>
                             <label htmlFor="cep">CEP:</label>
-                            <InputMask className={styled.inputAddress} mask="99999-999" maskChar="" type="text" id="cep" {...register('cep')} />
+                            <InputMask className={styled.inputAddress} defaultValue={client.cep ?? ''} mask="99999-999" maskChar="" type="text" id="cep" {...register('cep')} />
                             {errors.cep && <span className={styled.errorMsg}>{errors.cep.message}</span>}
                         </div>
 
@@ -233,7 +233,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
 
                             <div className={styled.formGroup}>
                                 <label htmlFor={`phone-${formId}`}>Telefone:</label>
-                                <InputMask className={styled.inputResp} mask="(99) 99999-9999" maskChar="" type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
+                                <InputMask className={styled.inputResp} defaultValue={`function-${formId}` ?? ''} mask="(99) 99999-9999" maskChar="" type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
                             </div>
 
                         </div>

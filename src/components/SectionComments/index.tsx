@@ -12,7 +12,7 @@ interface iFilter {
 
 export const SectionComments = () => {
 
-  const { allCommentsSup, creatComment } = useContext(CommentContext);
+  const { allComments, creatComment } = useContext(CommentContext);
   
   const [menuAberto, setMenuAberto] = useState(false);
   const [filter, setFilter] = useState<iFilter>({ search: '' });
@@ -28,7 +28,11 @@ export const SectionComments = () => {
     );
   };
 
-  const sortedComments = filterComments(allCommentsSup);
+  const sortedComments = [...allComments].sort((a, b) => {
+    const dateA: any = new Date(a.createdAt);
+    const dateB: any = new Date(b.createdAt);
+    return dateB - dateA;
+  });
 
   const { register, handleSubmit, formState: { errors } } = useForm<commentSchemaType>({
     resolver: zodResolver(commentSchema),

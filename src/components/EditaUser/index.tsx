@@ -58,7 +58,6 @@ export const EditaUser = () => {
             editeUser(dataForm, userSelect.id);
         } else {
             const dataForm = { ...data, function: selectedOptions, isAdmin: isAdmin, password: password };
-            console.log(dataForm)
                 editeUser(dataForm, userSelect.id);
         }
     };
