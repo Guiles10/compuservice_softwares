@@ -57,6 +57,10 @@
     border: 2px solid red;
     background-color: rgba(255, 0, 0, 0.1);
 }
+.btnFecha:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 .pError{
     display: flex;
@@ -128,4 +132,8 @@
 .salvar:hover{
     font-size: 22px;
     background-color: rgba(0, 128, 0, 0.3);
+}
+.salvar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

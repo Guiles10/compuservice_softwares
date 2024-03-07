@@ -10,7 +10,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 
 export const CriaUser = () => {
-    const { registerUser, setOpenRegisterUser } = useContext(AuthContext);
+    const { registerUser, setOpenRegisterUser, isLoadingUser, setIsLoadingUser } = useContext(AuthContext);
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     
@@ -41,6 +41,7 @@ export const CriaUser = () => {
     const confirmPassword = watch("confirmPassword");
 
     const onSubmit = (data: any) => {
+        setIsLoadingUser(true)
         const dataForm = { ...data, function: selectedOptions, isAdmin: isAdmin };
         registerUser(dataForm);
     };
@@ -51,7 +52,7 @@ export const CriaUser = () => {
 
                 <div className={styled.divHeader}>
                     <p className={styled.pHeader}>Cadastrar Usuario</p>
-                    <button className={styled.btnFecha} onClick={() => setOpenRegisterUser(false)}>Fechar</button>
+                    <button className={styled.btnFecha} disabled={isLoadingUser} onClick={() => setOpenRegisterUser(false)}>Fechar</button>
                 </div>
 
                 <form className={styled.form} onSubmit={handleSubmit(onSubmit)}>
@@ -116,7 +117,7 @@ export const CriaUser = () => {
                     </div>
 
                     <div className={styled.divSalvar}>
-                        <button type='submit' className={styled.salvar}>Cadastrar</button>
+                        <button type='submit' className={styled.salvar} disabled={isLoadingUser}>Cadastrar</button>
                     </div>
                 </form>
 

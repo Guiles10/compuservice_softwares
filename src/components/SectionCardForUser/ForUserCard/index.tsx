@@ -3,11 +3,13 @@ import styled from './styles.module.scss'
 import { useContext, useState } from 'react';
 import { CardsContext, iCard } from '@/context/cards.context';
 import { AuthContext } from '@/context/auth.context';
-import { ModalEditCard } from '@/components/ModalEditCard'; 
+import { ModalEditCard } from '@/components/ModalEditCard';
+import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight } from "react-icons/md";
+
 
 export const ForUserCard = ({ item }: any ) => {
 
-    const { moveCardReves, moveCard } = useContext(CardsContext);
+    const { moveCardReves, moveCard, isLoadingMove } = useContext(CardsContext);
 
     const { userId, allUser } = useContext(AuthContext);
 
@@ -54,9 +56,9 @@ export const ForUserCard = ({ item }: any ) => {
                     </div>
                 ) : (
                     <div className={styled.divBtnCard}>
-                        <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item, item.id)}>&lt;&lt;</button>
-                        <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)}>Visualizar</button>
-                        <button className={styled.btnMov} type='button' onClick={() => moveCard(item, item.id)} >&gt;&gt;</button>
+                        <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item, item.id)} disabled={isLoadingMove}><MdKeyboardDoubleArrowLeft /></button>
+                        <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)} disabled={isLoadingMove}>Visualizar</button>
+                        <button className={styled.btnMov} type='button' onClick={() => moveCard(item, item.id)} disabled={isLoadingMove}> <MdKeyboardDoubleArrowRight /></button>
                     </div>
                 )}
             </div>

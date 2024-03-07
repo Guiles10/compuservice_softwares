@@ -57,9 +57,9 @@ export const ProgCards = ({ item }: any) => {
                     </div>
                 ) : (
                     <div className={styled.divBtnCard}>
-                        <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item, item.id)} disabled={isLoadingMove}>{isLoadingMove ? <TbReload /> : <MdKeyboardDoubleArrowLeft />}</button>
-                        <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)} disabled={isLoadingMove}>{isLoadingMove ? <TbReload /> : 'Visualizar'}</button>
-                        <button className={styled.btnMov} type='button' onClick={() => moveCard(item, item.id)} disabled={isLoadingMove}>{isLoadingMove ? <TbReload /> : <MdKeyboardDoubleArrowRight />}</button>
+                        <button className={styled.btnMov} type='button' onClick={() => moveCardReves(item, item.id)} disabled={isLoadingMove}><MdKeyboardDoubleArrowLeft /></button>
+                        <button className={styled.btnMov} onClick={() => setOpenModalEdit(true)} disabled={isLoadingMove}>Visualizar</button>
+                        <button className={styled.btnMov} type='button' onClick={() => moveCard(item, item.id)} disabled={isLoadingMove}><MdKeyboardDoubleArrowRight /></button>
                     </div>
                 )}
             </div>

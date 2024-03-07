@@ -71,6 +71,11 @@
     font-weight: 600;
     background-color: rgba(128, 128, 128, 0.6);
 }
+.btnMov:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .btnEdit{
     font-size: 14px;
     font-weight: 600;

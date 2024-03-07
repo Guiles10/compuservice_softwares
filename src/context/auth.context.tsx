@@ -37,6 +37,10 @@ interface iProviderValue {
   showCards: boolean
   setShowCards: React.Dispatch<React.SetStateAction<boolean>>
 
+  isLoadingUser: boolean
+  setIsLoadingUser: React.Dispatch<React.SetStateAction<boolean>>
+
+
   openRegisterUser: boolean
   setOpenRegisterUser: React.Dispatch<React.SetStateAction<boolean>>
   registerUser: (formData: any) => Promise<void>
@@ -144,11 +148,13 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
 ////////////////////////////////////// MENUS //////////////////////////////////////
 
   const [selectedMenu, setSelectedMenu] = useState<string>('');
-  const [showCards, setShowCards] = useState(false);
+  const [showCards, setShowCards] = useState<boolean>(false);
 
-  const [ openRegisterUser, setOpenRegisterUser] = useState(false);
+  const [ openRegisterUser, setOpenRegisterUser] = useState<boolean>(false);
 
 ////////////////////////////////////// USUARIO //////////////////////////////////////
+  const [ isLoadingUser, setIsLoadingUser] = useState<boolean>(false);
+
   const registerUser = async (formData: any) => {
     try {
       const response = await Api.post(`/users`, formData, {
@@ -161,6 +167,8 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
       setOpenRegisterUser(false)
     } catch (error: any) {
       toast.error(error.response.data.message);
+    } finally {
+      setIsLoadingUser(false)
     }
   }
 
@@ -192,6 +200,8 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
       setOpenEditUser(false)
     } catch (error: any) {
       toast.error(error.response.data.message);
+    } finally {
+      setIsLoadingUser(false)
     }
   }
 
@@ -207,6 +217,8 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
       setOpenEditUser(false)
     } catch (error) {
       toast.error("Erro ao excluir!");
+    } finally {
+      setIsLoadingUser(false)
     }
   }
 
@@ -225,6 +237,9 @@ export const AuthProvider = ({ children }: iAuthProviderChildren) => {
 
         showCards,
         setShowCards,
+
+        isLoadingUser,
+        setIsLoadingUser,
 
         openRegisterUser,
         setOpenRegisterUser,
