@@ -16,7 +16,7 @@ interface iPropsEditClient {
 
 export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClient) => {
 
-    const { editarClient, excluirRespnsible, excluirClient} = useContext(ClientContext);
+    const { editarClient, excluirRespnsible, excluirClient, setIsLoadingCriaClient, isLoadingCriaClient } = useContext(ClientContext);
     const [showResponsibleForms, setShowResponsibleForms] = useState<number[]>([]);
 
     const [respClint, setRespClient] = useState<any>(client.responsibles);
@@ -63,7 +63,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
     }, [client, setValue]);
 
     const onSubmit = (dataForm: any) => {
-
+        setIsLoadingCriaClient(true)
         const newRespForm = showResponsibleForms.map(formId => {
             return {
                 name: (document.getElementById(`name-${formId}`) as HTMLInputElement).value,
@@ -76,7 +76,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
         editarClient(client.id, dataForm, newRespForm, respClint);
         setTimeout(function() {
             setModalEditClient(false);
-        }, 2000);
+        }, 3000);
     };
 
     return (
@@ -86,9 +86,9 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
                 <div className={styled.divHeaderModal}>
                     <p className={styled.pTitleModal}>EDITAR - {client.socialName}</p>
                     <div className={styled.divBtnEdit}>
-                        <button type='button' onDoubleClick={() => excluirClient(client.id)} className={styled.excluir}>Excluir</button>
-                        <button type='submit' className={styled.salvar}>Salvar</button>
-                        <button type='button' className={styled.fechar} onClick={() => setModalEditClient(false)}>Fechar</button>
+                        <button disabled={isLoadingCriaClient} type='button' onDoubleClick={() => excluirClient(client.id)} className={styled.excluir}>Excluir</button>
+                        <button disabled={isLoadingCriaClient} type='submit' className={styled.salvar}>Salvar</button>
+                        <button disabled={isLoadingCriaClient} type='button' className={styled.fechar} onClick={() => setModalEditClient(false)}>Fechar</button>
                     </div>
                 </div>
 
@@ -209,12 +209,12 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
 
                 </section>
 
-                <button className={styled.addRespBtn} type='button' onClick={handleAddResponsibleClick}>Criar Responsável</button>
+                <button className={styled.addRespBtn} disabled={isLoadingCriaClient} type='button' onClick={handleAddResponsibleClick}>Criar Responsável</button>
                 
                 <section className={styled.secResponsible}>
                     {showResponsibleForms.map(formId => (
                         <div key={formId} className={styled.responsibleForm}>
-                            <button className={styled.btnClose} type='button' onClick={() => handleCloseResponsibleForm(formId)}><FaTrash /></button>
+                            <button className={styled.btnClose} disabled={isLoadingCriaClient} type='button' onClick={() => handleCloseResponsibleForm(formId)}><FaTrash /></button>
                             
                             <div className={styled.formGroup}>
                                 <label htmlFor={`name-${formId}`}>Nome:</label>

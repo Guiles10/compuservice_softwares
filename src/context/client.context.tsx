@@ -57,6 +57,9 @@ interface iProviderValue {
   allClient: iClient[]
   setAllClient: React.Dispatch<React.SetStateAction<iClient[]>>
 
+  setIsLoadingCriaClient: React.Dispatch<React.SetStateAction<boolean>>
+  isLoadingCriaClient: boolean
+
   modalClient: boolean
   setModalClient: React.Dispatch<React.SetStateAction<boolean>>
 
@@ -92,6 +95,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
     }, [token, userId ]);
 
     const [modalCriaClient, setModalCriaClient] = useState<boolean>(false)
+    const [isLoadingCriaClient, setIsLoadingCriaClient] = useState<boolean>(false)
     const creatClient = async (dataForm: iDataForm, responsibles: iResponsible[]) => {
        try {
         const responseClinet = await Api.post('/client', dataForm, {
@@ -114,6 +118,7 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
         await getAllClient()
         toast.success("Cliente cadastrado!");
         setModalCriaClient(false);
+        setIsLoadingCriaClient(false)
       } catch (error: any) {
         toast.error(error.response.data.message);
       }
@@ -153,27 +158,32 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
       }
       toast.success("Cliente editado!");
       await getAllClient()
+      setIsLoadingCriaClient(false)
     };
 
     const excluirClient = async (clientId: string) => {
+      setIsLoadingCriaClient(true)
       try {
         const response = await Api.delete(`/client/${clientId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        getAllClient()
+        await getAllClient()
+        setIsLoadingCriaClient(false)
       } catch (error) {
         console.error(error);
       }
     };
 
     const excluirRespnsible = async (respnsibleId: string) => {
+      setIsLoadingCriaClient(true)
       try {
         const response = await Api.delete(`/responsible/${respnsibleId}`, {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        getAllClient()
+        await getAllClient()
+        setIsLoadingCriaClient(false)
       } catch (error) {
         console.error(error);
       }
@@ -185,6 +195,9 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
         allClient,
         setAllClient,
       
+        setIsLoadingCriaClient,
+        isLoadingCriaClient,
+
         modalCriaClient,
         setModalCriaClient,
 

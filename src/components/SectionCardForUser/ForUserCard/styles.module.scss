@@ -67,6 +67,10 @@
     color: rgb(0, 0, 0);
     background-color: rgba(128, 128, 128, 0.3);
 }
+.btnMov:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 .btnMov:hover{
     font-weight: 600;
     background-color: rgba(128, 128, 128, 0.6);

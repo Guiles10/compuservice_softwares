@@ -9,7 +9,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const EditaUser = () => {
     
-    const { editeUser, setOpenEditUser, excluirUser, userSelect} = useContext(AuthContext);
+    const { editeUser, setOpenEditUser, excluirUser, userSelect, isLoadingUser, setIsLoadingUser } = useContext(AuthContext);
 
 ////////////////////////////////////////////// FUNÇÕES //////////////////////////////////////////////
     const [selectedOptions, setSelectedOptions] = useState<string[]>(userSelect.function || []);
@@ -43,6 +43,7 @@ export const EditaUser = () => {
 
 ////////////////////////////////////////////// BTN EXLUIR //////////////////////////////////////////////
     const buttonExcluit = (idUser: string) => {
+        setIsLoadingUser(true)
         excluirUser(idUser)
     }
 
@@ -51,6 +52,7 @@ export const EditaUser = () => {
         resolver: zodResolver(editaSchema),
     });
     const onSubmit = (data: any) => {
+        setIsLoadingUser(true)
         if(password == '' || password.length < 6){
             const dataForm = { ...data, function: selectedOptions, isAdmin: isAdmin};
             editeUser(dataForm, userSelect.id);
@@ -67,7 +69,7 @@ export const EditaUser = () => {
 
                 <div className={styled.divHeader}>
                     <p className={styled.pHeader}>Editar Usuario - {userSelect.name}</p>
-                    <button className={styled.btnFecha} onClick={() => setOpenEditUser(false)}>Fechar</button>
+                    <button className={styled.btnFecha} disabled={isLoadingUser} onClick={() => setOpenEditUser(false)}>Fechar</button>
                 </div>
 
                 <form className={styled.form} onSubmit={handleSubmit(onSubmit)}>
@@ -136,8 +138,8 @@ export const EditaUser = () => {
                     </div>
 
                     <div className={styled.divBtn}>
-                        <button type='submit' className={!passwordsMatch || selectedOptions.length === 0 ? styled.disabled : styled.salvar} disabled={ !passwordsMatch  || selectedOptions.length == 0}>Editar</button>
-                        <button type='button' className={styled.excluir} onDoubleClick={() => buttonExcluit(userSelect.id)}>Excluir</button>
+                        <button type='submit' className={!passwordsMatch || selectedOptions.length === 0 ? styled.disabled : styled.salvar} disabled={ !passwordsMatch  || selectedOptions.length == 0 || isLoadingUser}>Editar</button>
+                        <button type='button' disabled={isLoadingUser} className={styled.excluir} onDoubleClick={() => buttonExcluit(userSelect.id)}>Excluir</button>
                     </div>
                 </form>
 

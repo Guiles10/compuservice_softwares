@@ -60,6 +60,10 @@
     font-weight: 700;
     background-color: rgba(0, 0, 0, 0.3);
 }
+.fechar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 .salvar{
     font-size: 18px;
     font-weight: 600;
@@ -73,6 +77,10 @@
     font-size: 20px;
     font-weight: 700;
     background-color: rgba(0, 128, 0, 0.3);
+}
+.salvar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 .excluir{
     font-size: 18px;
@@ -88,6 +96,10 @@
     font-size: 20px;
     font-weight: 700;
     background-color: rgba(128, 0, 0, 0.3);
+}
+.excluir:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 
@@ -185,7 +197,10 @@
 .addRespBtn:hover{
     background-color: rgba(0, 0, 128, 0.3);
 }
-
+.addRespBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 .secResponsible{
     display: flex;
     align-items: flex-start;
@@ -219,4 +234,8 @@
 .btnClose:hover{
     background-color: rgba(255, 0, 0, 0.3);
     font-weight: 700;
+}
+.btnClose:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
