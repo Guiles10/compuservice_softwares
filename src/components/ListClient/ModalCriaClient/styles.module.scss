@@ -54,7 +54,10 @@
     border: 2px solid black;
     background-color: rgba(0, 0, 0, 0.3);
 }
-
+.btnFecha:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 /********************************************FORMULÁRIO**********************************************/
 .secForm{
@@ -149,6 +152,10 @@
 .addRespBtn:hover{
     background-color: rgba(0, 0, 128, 0.3);
 }
+.addRespBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 .secResponsible{
     display: flex;
@@ -184,6 +191,10 @@
     background-color: rgba(255, 0, 0, 0.3);
     font-weight: 700;
 }
+.btnClose:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 /********************************************BOTÂO SALVAR**********************************************/
 .salvar{
@@ -201,4 +212,8 @@
     font-size: 20px;
     font-weight: 700;
     background-color: rgba(0, 128, 0, 0.3);
+}
+.salvar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

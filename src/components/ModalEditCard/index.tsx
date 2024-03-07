@@ -74,8 +74,10 @@ export const ModalEditCard = ({ infoCard, setOpenModalEdit, isAuthorized }:{ inf
     const [confirmacaoExclusao, setConfirmacaoExclusao] = useState(false);
     const confirmaExcluir = (infoCard: any)=> {
         if (isAuthorized) {
-            excluirCard(infoCard)
-            setOpenModalEdit(false)
+            setTimeout(() => {
+                excluirCard(infoCard)
+                setOpenModalEdit(false)
+              }, 2000);
         }
     }
 

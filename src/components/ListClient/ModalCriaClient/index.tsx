@@ -13,7 +13,7 @@ import { FaTrash } from 'react-icons/fa';
 
 export const ModalCriaClient = () => {
 
-    const { setModalCriaClient, creatClient } = useContext(ClientContext);
+    const { setModalCriaClient, creatClient, setIsLoadingCriaClient, isLoadingCriaClient } = useContext(ClientContext);
 
     const [showResponsibleForms, setShowResponsibleForms] = useState<number[]>([]);
 
@@ -31,6 +31,7 @@ export const ModalCriaClient = () => {
     });
     
     const onSubmit = (dataForm: any) => {
+        setIsLoadingCriaClient(true)
         const responsibleData = showResponsibleForms.map(formId => {
             return {
                 name: (document.getElementById(`name-${formId}`) as HTMLInputElement).value,
@@ -39,7 +40,6 @@ export const ModalCriaClient = () => {
                 phone: (document.getElementById(`phone-${formId}`) as HTMLInputElement).value,
             };
         });
-
         creatClient(dataForm, responsibleData);
     };
 
@@ -49,7 +49,7 @@ export const ModalCriaClient = () => {
 
                 <div className={styled.divHeaderModal}>
                     <p className={styled.pTitleModal}>CADASTRAR CLIENTE</p>
-                    <button className={styled.btnFecha} onClick={() => setModalCriaClient(false)} type='button'>Fechar</button>
+                    <button className={styled.btnFecha} onClick={() => setModalCriaClient(false)} type='button' disabled={isLoadingCriaClient}>Fechar</button>
                 </div>
 
                 <section className={styled.secForm}>
@@ -169,12 +169,12 @@ export const ModalCriaClient = () => {
 
                 </section>
 
-                <button className={styled.addRespBtn} type='button' onClick={handleAddResponsibleClick}>Criar Responsável</button>
+                <button className={styled.addRespBtn} type='button' disabled={isLoadingCriaClient} onClick={handleAddResponsibleClick}>Criar Responsável</button>
                 
                 <section className={styled.secResponsible}>
                     {showResponsibleForms.map(formId => (
                         <div key={formId} className={styled.responsibleForm}>
-                            <button className={styled.btnClose} onClick={() => handleCloseResponsibleForm(formId)}><FaTrash /></button>
+                            <button className={styled.btnClose} disabled={isLoadingCriaClient} onClick={() => handleCloseResponsibleForm(formId)}><FaTrash /></button>
                             <div className={styled.formGroup}>
                                 <label htmlFor={`name-${formId}`}>Nome:</label>
                                 <input className={styled.inputResp} type="text" id={`name-${formId}`} name={`name-${formId}`} />
@@ -196,7 +196,7 @@ export const ModalCriaClient = () => {
                 </section>
 
                 <div className={styled.divSalvar}>
-                    <button type='submit' className={styled.salvar}>Salvar</button>
+                    <button type='submit' className={styled.salvar} disabled={isLoadingCriaClient}>Salvar</button>
                 </div>
 
             </form>
