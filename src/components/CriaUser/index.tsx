@@ -117,8 +117,8 @@ export const CriaUser = () => {
                     </div>
 
                     <div className={styled.divSalvar}>
-                        <button type='submit' className={styled.salvar} disabled={isLoadingUser}>Cadastrar</button>
-                    </div>
+                    
+                    <button type='submit' className={styled.salvar} disabled={isLoadingUser || selectedOptions.length === 0}>Cadastrar</button>                    </div>
                 </form>
 
             </div>

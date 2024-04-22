@@ -29,7 +29,7 @@ export interface iCard {
 export interface iFiles {
   cardId: string
   createdAt: string
-  filename: string
+  fileName: string
   id: string
   updatedAt: string
   url: string
@@ -262,7 +262,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
     const excluirCard = async (infoCard: any) => {
       for (const file of infoCard.files) {
         try {
-          const response = await Api.delete(`/file/${file.filename}`, {
+          const response = await Api.delete(`/file/${file.fileName}`, {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
@@ -271,7 +271,7 @@ export const CardsProvider = ({ children }: iAuthProviderChildren) => {
         }
 
         try {
-          const response = await Api.delete(`/cards/${infoCard.id}/${file.filename}`, {
+          const response = await Api.delete(`/cards/${infoCard.id}/${file.fileName}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
 

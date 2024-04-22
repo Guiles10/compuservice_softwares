@@ -12,12 +12,15 @@ interface iAuthProviderChildren {
 
 export interface iClient {
   id: string 
-  codigo: string
+  codigo: string | null
   companyName: string
   socialName: string
-  cnpj: string
-  businessPhone: string | null
+  cnpj: string | null
+  cpf: string | null
+  businessPhone_1: string | null
+  businessPhone_2: string | null
   businessEmail: string | null
+  site: string | null
   comment?: string | null
   cep?: string | null
   state?: string | null
@@ -37,12 +40,15 @@ export interface iResponsible{
 }
 
 export interface iDataForm {
-  codigo:         string;
+  codigo?:         string | null;
   companyName:    string;
   socialName:    string;
-  cnpj:           string;
-  businessPhone:  string;
-  businessEmail:  string;
+  cnpj?:           string | null;
+  cpf?:           string | null;
+  businessPhone_1?:  string | null;
+  businessPhone_2?:  string | null;
+  businessEmail?:  string | null;
+  site?:  string | null;
   comment?:        string | null;
   cep?:            string | null;
   state?:          string | null;
@@ -117,9 +123,10 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
         }
         await getAllClient()
         toast.success("Cliente cadastrado!");
-        setModalCriaClient(false);
         setIsLoadingCriaClient(false)
+        setModalCriaClient(false);
       } catch (error: any) {
+        setIsLoadingCriaClient(false)
         toast.error(error.response.data.message);
       }
     };
@@ -127,38 +134,43 @@ export const ClientProvider = ({ children }: iAuthProviderChildren) => {
     const editarClient = async (clientId: string, dataForm: iClient, newRespFrom: iResponsible[], respClint:iResponsible[]) => {
       try {
         const responseClient = await Api.patch(`/client/${clientId}`, dataForm, {
-          headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}` },
         });
-      } catch (error) {
-        console.error(error);
-      }
-      let createResp: iResponsible[] = []
-      for (const responsible of newRespFrom) {
-        try {
-          const responseResp = await Api.post(`/responsible/${clientId}`, responsible, {
-              headers: { Authorization: `Bearer ${token}`},
+    
+        let createResp: iResponsible[] = [];
+        for (const responsible of newRespFrom) {
+            try {
+                const responseResp = await Api.post(`/responsible/${clientId}`, responsible, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                createResp.push(responseResp.data);
+            } catch (error) {
+                toast.error("Erro ao criar responsável!");
             }
-          );
-          createResp.push(responseResp.data);
-        } catch (error) {
-          toast.error("Erro ao criar responsável!");
         }
-      }
-      let editResp: iResponsible[] = []
-      for (const responsible of respClint) {
-        try {
-          const responseResp = await Api.patch(`/responsible/${clientId}/${responsible.id}`, responsible, {
-              headers: { Authorization: `Bearer ${token}`},
+    
+        let editResp: iResponsible[] = [];
+        for (const responsible of respClint) {
+            try {
+                const responseResp = await Api.patch(`/responsible/${clientId}/${responsible.id}`, responsible, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                editResp.push(responseResp.data);
+            } catch (error) {
+                toast.error("Erro ao editar responsável!");
             }
-          );
-          editResp.push(responseResp.data);
-        } catch (error) {
-          toast.error("Erro ao editar responsável!");
         }
-      }
-      toast.success("Cliente editado!");
-      await getAllClient()
-      setIsLoadingCriaClient(false)
+    
+        toast.success("Cliente editado!");
+        await getAllClient();
+        setTimeout(function() {
+            setIsLoadingCriaClient(false);
+        }, 3000);
+    } catch (error: any) {
+        setIsLoadingCriaClient(false);
+        toast.error(error.response.data.message);
+    }
+
     };
 
     const excluirClient = async (clientId: string) => {

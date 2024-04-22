@@ -30,13 +30,16 @@ export const ClientCard = ({ client }: any) => {
                         </td>
                         <td className={styled.thCod}>{client.codigo}</td>
                         <td className={styled.thName}>{client.socialName}</td>
-                        <td className={styled.thFone}>{client.businessPhone}</td>
-                        <td className={styled.thCNPJ}>{client.cnpj}</td>
+                        <td className={styled.thFone}>{client.businessPhone_1 ? client.businessPhone_1 : client.businessPhone_2}</td>
+                        <td className={styled.thCNPJ}>{client.cnpj ? client.cnpj : client.cpf}</td>
                     </tr>
                     {expandedClientId === client.id && (
                         <tr key={client.id + "_responsible"} className={styled.tr}>
                             <td className={styled.td} colSpan={6}>
                                     <p className={styled.thName}><p>Razão Social: </p> {client.companyName} </p>
+                                    <p className={styled.thName}><p>Telefone 2: </p> {client.businessPhone_2} </p>
+                                    <p className={styled.thName}><p>Site: </p> {client.site} </p>
+                                    <p className={styled.thName}><p>cpf: </p> {client.cnpj ? client.cnpj : client.cpf} </p>
                                 <div className={styled.divInfoClient}>
                                     <div className={styled.divEmailComment}>
                                         <label className={styled.label}>E-mail: <textarea className={styled.textarea} readOnly value={client.businessEmail}></textarea></label>

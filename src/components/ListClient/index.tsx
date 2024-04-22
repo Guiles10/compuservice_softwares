@@ -9,6 +9,7 @@ export const ListClient = () => {
     const { allClient, setModalClient, modalCriaClient, setModalCriaClient } = useContext(ClientContext);
     const [searchQuery, setSearchQuery] = useState('');
 
+
     const handleInputChange = (event: any) => {
         setSearchQuery(event.target.value.toLowerCase());
     };
@@ -47,7 +48,7 @@ export const ListClient = () => {
                             <th className={styled.thCod}>Código</th>
                             <th className={styled.thName}>Nome Fantasia</th>
                             <th className={styled.thFone}>Telefone</th>
-                            <th className={styled.thCNPJ}>CNPJ</th>
+                            <th className={styled.thCNPJ}>CNPJ / CPF</th>
                         </tr>
                     </thead>
                     <tbody>

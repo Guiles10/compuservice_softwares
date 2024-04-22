@@ -12,7 +12,6 @@ export type registerSchemaType = z.infer<typeof registerSchema>;
 export const editaSchema = z.object({
     name: z.string().min(3, { message: 'Informe o nome do Usuario' }),
     email: z.string().email('o e-mail inserido não é inválido'),
-
 });
 
 export type editaSchemaType = z.infer<typeof editaSchema>;

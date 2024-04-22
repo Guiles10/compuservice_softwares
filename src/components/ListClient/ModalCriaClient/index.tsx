@@ -32,6 +32,7 @@ export const ModalCriaClient = () => {
     
     const onSubmit = (dataForm: any) => {
         setIsLoadingCriaClient(true)
+
         const responsibleData = showResponsibleForms.map(formId => {
             return {
                 name: (document.getElementById(`name-${formId}`) as HTMLInputElement).value,
@@ -80,9 +81,21 @@ export const ModalCriaClient = () => {
                         </div>
 
                         <div className={styled.formGroup}>
-                            <label htmlFor="businessPhone">Telefone Comercial:</label>
-                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999" maskChar="" type="text" id="businessPhone" {...register('businessPhone')} />
-                            {errors.businessPhone && <span className={styled.errorMsg}>{errors.businessPhone.message}</span>}
+                            <label htmlFor="cpf">CPF:</label>
+                            <InputMask className={styled.inputRegister} mask="999.999.999-99" maskChar="" type="text" id="cpf" {...register('cpf')} />
+                            {errors.cpf && <span className={styled.errorMsg}>{errors.cpf.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="businessPhone_1">Telefone Comercial 1:</label>
+                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999" maskChar="" type="text" id="businessPhone_1" {...register('businessPhone_1')} />
+                            {errors.businessPhone_1 && <span className={styled.errorMsg}>{errors.businessPhone_1.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="businessPhone_2">Telefone Comercial 2:</label>
+                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999" maskChar="" type="text" id="businessPhone_2" {...register('businessPhone_2')} />
+                            {errors.businessPhone_2 && <span className={styled.errorMsg}>{errors.businessPhone_2.message}</span>}
                         </div>
 
                         <div className={styled.formGroup}>
@@ -90,6 +103,13 @@ export const ModalCriaClient = () => {
                             <input className={styled.inputRegister} type="text" id="businessEmail" {...register('businessEmail')} />
                             {errors.businessEmail && <span className={styled.errorMsg}>{errors.businessEmail.message}</span>}
                         </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="site">Site:</label>
+                            <input className={styled.inputRegister} type="text" id="site" {...register('site')} />
+                            {errors.site && <span className={styled.errorMsg}>{errors.site.message}</span>}
+                        </div>
+
                     </div>
 
                     <div className={styled.address}>
@@ -191,6 +211,7 @@ export const ModalCriaClient = () => {
                                 <label htmlFor="phone">Telefone:</label>
                                 <InputMask className={styled.inputResp} mask="(99) 99999-9999" maskChar="" type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
                             </div>
+                            
                         </div>
                     ))}
                 </section>

@@ -239,3 +239,52 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.divExcluirSpan{
+    display: flex;
+    justify-content: flex-end;
+}
+.spanExcluir{
+    margin-top: 3px;
+    padding: 5px;
+    border: 1px dashed red;
+    display: flex;
+    align-items: center;
+}
+
+.pExcluir{
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 15px;
+}
+.divSimNao{
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+}
+.btnSim{
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px;
+    width: 50px;
+    margin-right: 3px;
+    border-radius: 4px;
+    color: grey;
+    border: 1px solid red;
+}
+.btnSim:hover{
+    color: red;
+    background-color: rgba(128, 0, 0, 0.3);
+}
+.btnNao{
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px;
+    width: 50px;
+    color: grey;
+    border-radius: 4px;
+    border: 1px solid grey;
+}
+.btnNao:hover{
+    background-color: rgba(128, 128, 128, 0.3);
+}

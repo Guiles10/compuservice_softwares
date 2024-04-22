@@ -12,7 +12,7 @@ export const EditaUser = () => {
     const { editeUser, setOpenEditUser, excluirUser, userSelect, isLoadingUser, setIsLoadingUser } = useContext(AuthContext);
 
 ////////////////////////////////////////////// FUNÇÕES //////////////////////////////////////////////
-    const [selectedOptions, setSelectedOptions] = useState<string[]>(userSelect.function || []);
+    const [selectedOptions, setSelectedOptions] = useState<string[]>(userSelect?.function || []);
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const optionValue = event.target.value;
         if (selectedOptions.includes(optionValue)) {
@@ -39,6 +39,9 @@ export const EditaUser = () => {
     const handleInputChange = (event: any) => {
         const { name, value } = event.target;
         name === 'password' ? setPassword(value) : setConfirmPassword(value);
+        if (value === '' || (/^\d{6}$/).test(value)) {
+          setPassword(value);
+        }
     };
 
 ////////////////////////////////////////////// BTN EXLUIR //////////////////////////////////////////////
@@ -85,6 +88,7 @@ export const EditaUser = () => {
                     </div>
 
                     <div className={styled.divPassword}>
+
                         <div className={styled.divPass}>
                             <label htmlFor="password">Nova Senha:</label>
                             <div className={styled.passwordContainer}>
@@ -93,6 +97,7 @@ export const EditaUser = () => {
                                     {showPassword ? <FaEye /> : <FaEyeSlash />}
                                 </div>
                             </div>
+                                <p className={styled.pSenha6D}>* A senha deve conter 6 digitos</p>
                         </div>
 
                         <div className={styled.divPassConf}>
@@ -123,7 +128,6 @@ export const EditaUser = () => {
                             <label>
                                 <input type="checkbox" value="Instalação" checked={selectedOptions.includes('Instalação')} onChange={handleCheckboxChange}/>Instalação
                             </label>
-                            {/* Adicione outras opções de checkbox semelhantes aqui */}
                             {selectedOptions.length === 0 && (<p className={styled.pError}>Escolha ao menos um Setor</p>)}
                         </div>
                     </div>
@@ -137,7 +141,7 @@ export const EditaUser = () => {
                     </div>
 
                     <div className={styled.divBtn}>
-                        <button type='submit' className={!passwordsMatch || selectedOptions.length === 0 ? styled.disabled : styled.salvar} disabled={ !passwordsMatch  || selectedOptions.length == 0 || isLoadingUser}>Editar</button>
+                        <button type='submit' className={!passwordsMatch || selectedOptions.length === 0 || password.length > 0 && password.length <= 5 ? styled.disabled : styled.salvar} disabled={!passwordsMatch || selectedOptions.length == 0 || password.length > 0 && password.length <= 5 || isLoadingUser}>Editar</button>
                         <button type='button' disabled={isLoadingUser} className={styled.excluir} onDoubleClick={() => buttonExcluit(userSelect.id)}>Excluir</button>
                     </div>
                 </form>
