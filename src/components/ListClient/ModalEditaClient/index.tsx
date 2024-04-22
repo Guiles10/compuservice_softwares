@@ -42,17 +42,29 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
         setShowResponsibleForms(showResponsibleForms.filter(id => id !== formId));
     };
 
+    const [confirmacaoExclusao, setConfirmacaoExclusao] = useState(false);
+    const exibirConfirmacaoExclusao = () => {
+        setConfirmacaoExclusao(true);
+      };
+      const confirmaExcluir = (clientId: string) => {
+        excluirClient(clientId);
+        setConfirmacaoExclusao(false);
+      };
+
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<clientSchemaType>({
         resolver: zodResolver(clientSchema),
     });
-
+    
     React.useEffect(() => {
-        setValue('codigo', client.codigo!);
+        setValue('codigo', client.codigo !== null ? client.codigo : "");
         setValue('companyName', client.companyName!);
         setValue('socialName', client.socialName!);
-        setValue('cnpj', client.cnpj!);
-        setValue('businessPhone', client.businessPhone!);
+        setValue('cnpj', client.cnpj !== null ? client.cnpj : "");
+        setValue('cpf', client.cpf !== null ? client.cpf : "");
+        setValue('businessPhone_1', client.businessPhone_1!);
+        setValue('businessPhone_2', client.businessPhone_2!);
         setValue('businessEmail', client.businessEmail!);
+        setValue('site', client.site!);
         setValue('cep', client.cep!);
         setValue('state', client.state!);
         setValue('city', client.city!);
@@ -86,18 +98,28 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
                 <div className={styled.divHeaderModal}>
                     <p className={styled.pTitleModal}>EDITAR - {client.socialName}</p>
                     <div className={styled.divBtnEdit}>
-                        <button disabled={isLoadingCriaClient} type='button' onDoubleClick={() => excluirClient(client.id)} className={styled.excluir}>Excluir</button>
+                        <button disabled={isLoadingCriaClient} type='button'onClick={exibirConfirmacaoExclusao} className={styled.excluir}>Excluir</button>
                         <button disabled={isLoadingCriaClient} type='submit' className={styled.salvar}>Salvar</button>
                         <button disabled={isLoadingCriaClient} type='button' className={styled.fechar} onClick={() => setModalEditClient(false)}>Fechar</button>
                     </div>
                 </div>
-
+                    {confirmacaoExclusao && (
+                        <div className={styled.divExcluirSpan}>
+                            <span className={styled.spanExcluir}>
+                            <p className={styled.pExcluir}>Deseja Excluir?</p>
+                            <div className={styled.divSimNao}>
+                                <button className={styled.btnSim} type='button' onClick={() => confirmaExcluir(client.id!)}>Excluir</button>
+                                <button className={styled.btnNao} type='button' onClick={() => setConfirmacaoExclusao(false)}>Não</button>
+                            </div>
+                            </span>
+                        </div>
+                    )}
                 <section className={styled.secForm}>
 
                     <div className={styled.divInfoBussines}>
                         <div className={styled.formGroup}>
-                            <label htmlFor="codigo">Código4:</label>
-                            <InputMask className={styled.inputRegister} defaultValue={client.codigo} mask="999999" maskChar="" type="text" id="codigo" {...register('codigo')} />
+                            <label htmlFor="codigo">Código:</label>
+                            <InputMask className={styled.inputRegister} defaultValue={client.codigo == null ? "" : client.codigo} mask="999999" maskChar="" type="text" id="codigo" {...register('codigo')} />
                             {errors.codigo && <span className={styled.errorMsg}>{errors.codigo.message}</span>}
                         </div>
 
@@ -115,20 +137,38 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
 
                         <div className={styled.formGroup}>
                             <label htmlFor="cnpj">CNPJ:</label>
-                            <InputMask className={styled.inputRegister} mask="99.999.999/9999-99" defaultValue={client.cnpj} maskChar="" type="text" id="cnpj" {...register('cnpj')} />
+                            <InputMask className={styled.inputRegister} mask="99.999.999/9999-99" defaultValue={client.cnpj == null ? "" : client.cnpj} maskChar="" type="text" id="cnpj" {...register('cnpj')} />
                             {errors.cnpj && <span className={styled.errorMsg}>{errors.cnpj.message}</span>}
                         </div>
 
                         <div className={styled.formGroup}>
-                            <label htmlFor="businessPhone">Telefone Comercial:</label>
-                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999"  defaultValue={client.businessPhone ?? ''} maskChar="" type="text" id="businessPhone" {...register('businessPhone')} />
-                            {errors.businessPhone && <span className={styled.errorMsg}>{errors.businessPhone.message}</span>}
+                            <label htmlFor="cpf">CPF:</label>
+                            <InputMask className={styled.inputRegister} mask="999.999.999-99" defaultValue={client.cpf == null ? "" : client.cpf} maskChar="" type="text" id="cpf" {...register('cpf')} />
+                            {errors.cpf && <span className={styled.errorMsg}>{errors.cpf.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="businessPhone_1">Telefone Comercial 1:</label>
+                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999"  defaultValue={client.businessPhone_1 ?? ''} maskChar="" type="text" id="businessPhone_1" {...register('businessPhone_1')} />
+                            {errors.businessPhone_1 && <span className={styled.errorMsg}>{errors.businessPhone_1.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="businessPhone_2">Telefone Comercial 2:</label>
+                            <InputMask className={styled.inputRegister} mask="(99) 99999-9999" maskChar="" type="text" id="businessPhone_2" {...register('businessPhone_2')} />
+                            {errors.businessPhone_2 && <span className={styled.errorMsg}>{errors.businessPhone_2.message}</span>}
                         </div>
 
                         <div className={styled.formGroup}>
                             <label htmlFor="businessEmail">E-mail Comercial:</label>
                             <input className={styled.inputRegister} type="text" id="businessEmail" {...register('businessEmail')} />
                             {errors.businessEmail && <span className={styled.errorMsg}>{errors.businessEmail.message}</span>}
+                        </div>
+
+                        <div className={styled.formGroup}>
+                            <label htmlFor="site">Site:</label>
+                            <input className={styled.inputRegister} type="text" id="site" {...register('site')} />
+                            {errors.site && <span className={styled.errorMsg}>{errors.site.message}</span>}
                         </div>
                     
                     </div>
@@ -233,7 +273,7 @@ export const ModalEditaClient = ({ client, setModalEditClient }: iPropsEditClien
 
                             <div className={styled.formGroup}>
                                 <label htmlFor={`phone-${formId}`}>Telefone:</label>
-                                <InputMask className={styled.inputResp} defaultValue={`function-${formId}` ?? ''} mask="(99) 99999-9999" maskChar="" type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
+                                <InputMask className={styled.inputRegister} mask="(99) 99999-9999" maskChar="" type="text" id={`phone-${formId}`} name={`phone-${formId}`} />
                             </div>
 
                         </div>

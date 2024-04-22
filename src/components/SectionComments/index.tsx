@@ -22,17 +22,28 @@ export const SectionComments = () => {
   const filterComments = (comments: iComment[]) => {
     return comments.filter(
       (item) =>
-        item.createdAt?.includes(filter.search) || // Mudança: Buscar em todos os campos
+        item.createdAt?.includes(filter.search) ||
         item.user?.name?.toLowerCase().includes(filter.search.toLowerCase()) ||
-        item.comment?.toLowerCase().includes(filter.search.toLowerCase())
+        item.comment?.toLowerCase().includes(filter.search.toLowerCase()) ||
+        item.title?.toLowerCase().includes(filter.search.toLowerCase()) 
     );
   };
-
+  
+  
   const sortedComments = [...allComments].sort((a, b) => {
-    const dateA: any = new Date(a.createdAt);
-    const dateB: any = new Date(b.createdAt);
-    return dateB - dateA;
+    const convertDate = (dateStr: string): Date => {
+      const [date, time] = dateStr.split(' ');
+      const [day, month, year] = date.split('/');
+      return new Date(`${year}-${month}-${day}T${time}`);
+    };
+  
+    const dateA: Date = convertDate(a.createdAt);
+    const dateB: Date = convertDate(b.createdAt);
+    
+    return dateB.getTime() - dateA.getTime();
   });
+  
+  const filteredAndSortedComments = filterComments(sortedComments);
 
   const { register, handleSubmit, formState: { errors } } = useForm<commentSchemaType>({
     resolver: zodResolver(commentSchema),
@@ -85,7 +96,7 @@ export const SectionComments = () => {
         </form>
       )}
 
-      {sortedComments.map((item: iComment) => (<CommentCard key={item.id} item={item} />))}
+      {filteredAndSortedComments.map((item: iComment) => (<CommentCard key={item.id} item={item} />))}
 
     </section>
   );

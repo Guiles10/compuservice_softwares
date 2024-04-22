@@ -38,12 +38,8 @@ export const UploadFileComponente = ({ infoCard, isAuthorized, isLoading, setIsL
     };
 
     const handleFileDelete = (fileName: string, fileId: string) => {
-        // setDeletingFileId(fileId);
         deleteFile(fileName, infoCard.id);
         setIsLoading(true)
-        // setTimeout(() => {
-        //     setDeletingFileId(null); 
-        // }, 3500);
     };
 
     const handleButtonClick = () => {
@@ -74,13 +70,13 @@ export const UploadFileComponente = ({ infoCard, isAuthorized, isLoading, setIsL
             <div className={styled.divAllFile}>
                 {infoCard.files.map((file: iFiles) => (
                     <div className={styled.divFile} key={file.id}>
-                        <p className={styled.fileName} >{file.filename} </p>
+                        <p className={styled.fileName} >{file.fileName} </p>
                         <div>
                             <a className={styled.fileLink} href={file.url} target="_blank" rel="noopener noreferrer" style={{ pointerEvents: isLoading ? 'none' : 'auto'}}>
                                 Visualizar
                             </a>
                             {isAuthorized && (
-                                <button className={styled.fileExcluir} type='button' disabled={ isLoading} onDoubleClick={() => handleFileDelete(file.filename, file.id)}>
+                                <button className={styled.fileExcluir} type='button' disabled={ isLoading} onDoubleClick={() => handleFileDelete(file.fileName, file.id)}>
                                     {isLoading ? 'Excluindo...' : 'Excluir'}
                                 </button>
                             )}
